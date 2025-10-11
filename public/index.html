@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Capsule Wardrobe — MVP</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Floating Premium Orbs -->
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    
+    <header class="topbar">
+      <div class="brand">
+        <a href="#" class="logo">Capsule Social</a>
+      </div>
+      <nav class="nav">
+        <div id="authSection">
+          <button id="loginBtn" class="btn btn-ghost">Login</button>
+          <button id="signupBtn" class="btn btn-primary">Sign Up</button>
+        </div>
+        <div id="userSection" style="display:none">
+          <span id="userDisplay"></span>
+          <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Professional Fashion Video Hero Section -->
+    <section class="hero-video-section">
+      <div class="video-container">
+        <div class="video-placeholder">
+          <div class="video-overlay"></div>
+          <div class="hero-content">
+            <h1 class="hero-title">Discover Your Style</h1>
+            <p class="hero-subtitle">AI-powered personal styling that knows you better than you know yourself</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary hero-btn">Start Your Journey</button>
+              <button class="btn btn-secondary hero-btn">Watch Story</button>
+            </div>
+          </div>
+          <!-- Simulated fashion video with CSS animations -->
+          <div class="fashion-animation">
+            <div class="model-silhouette model-1"></div>
+            <div class="model-silhouette model-2"></div>
+            <div class="model-silhouette model-3"></div>
+          </div>
+          <div class="floating-items">
+            <div class="fashion-item item-1">👗</div>
+            <div class="fashion-item item-2">👔</div>
+            <div class="fashion-item item-3">👠</div>
+            <div class="fashion-item item-4">🧥</div>
+            <div class="fashion-item item-5">👜</div>
+            <div class="fashion-item item-6">🕶️</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-indicator">
+        <div class="scroll-arrow"></div>
+        <span>Scroll to explore</span>
+      </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal" style="display:none">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="loginForm">
+          <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to your personal style assistant</p>
+          </div>
+          <input id="loginEmail" type="email" placeholder="Email" />
+          <input id="loginPassword" type="password" placeholder="Password" />
+          <button id="doLogin" class="btn btn-primary">Sign In</button>
+          <p><a href="#" id="showSignup">Need an account? Sign up</a></p>
+        </div>
+        <div id="signupForm" style="display:none">
+          <div class="auth-header">
+            <h2>Join Capsule Social</h2>
+            <p>Create your personalized fashion experience</p>
+          </div>
+          <input id="signupName" placeholder="Display Name" />
+          <input id="signupEmail" type="email" placeholder="Email" />
+          <input id="signupPassword" type="password" placeholder="Password" />
+          <button id="doSignup" class="btn btn-primary">Create Account</button>
+          <p><a href="#" id="showLogin">Already have an account? Login</a></p>
+        </div>
+        <div id="authMessage" class="message"></div>
+      </div>
+    </div>
+
+    <main class="container">
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="#" class="active">🏠 Home</a></li>
+          <li><a href="#moodboards">🎨 Moodboards</a></li>
+          <li><a href="#capsules">👗 Capsules</a></li>
+          <li><a href="#discover">✨ Discover</a></li>
+          <li><a href="#closet">🗂️ My Closet</a></li>
+          <li><a href="#analytics">📊 Analytics</a></li>
+        </ul>
+      </nav>
+      
+      <section class="main">
+        <div class="card slide-up">
+          <div class="card-header">
+            <h2 class="card-title">Your Style Journey</h2>
+            <div class="premium-badge">AI-Powered</div>
+          </div>
+          <p class="muted">Upload photos of pieces you already own. Our AI analyzes your style to create personalized recommendations.</p>
+          <form id="uploadForm" class="upload-form">
+            <div class="file-upload">
+              <input type="file" name="image" accept="image/*" />
+              <div class="file-upload-label">
+                <span>📸</span>
+                <span>Drop your style photos here or click to browse</span>
+              </div>
+            </div>
+            <input name="tags" placeholder="Style tags — e.g. minimal, vintage, boho" />
+            <div class="row">
+              <button class="btn btn-primary" type="submit">✨ Analyze Style</button>
+              <div id="uploadResult" class="small-output" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <h2 class="card-title">Create Moodboard</h2>
+          </div>
+          <input id="mbTitle" placeholder="Give your moodboard a name" />
+          <textarea id="mbDesc" placeholder="Describe your vision — colors, vibes, occasions"></textarea>
+          <input id="mbImages" placeholder="Inspiration image URLs (comma separated)" />
+          <div class="row">
+            <button id="createMb" class="btn btn-primary">🎨 Create Moodboard</button>
+            <div id="mbResult" class="small-output"></div>
+          </div>
+        </div>
+
+        <div class="card slide-up">
+          <div class="card-header">
+            <h2 class="card-title">Your Moodboards</h2>
+          </div>
+          <div id="moodList" class="small-output">(Create your first moodboard above)</div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <h2 class="card-title">Generate Capsule Wardrobe</h2>
+            <div class="premium-badge">Smart AI</div>
+          </div>
+          <label class="muted">Moodboard ID (optional)</label>
+          <input id="genMbId" placeholder="Paste moodboard ID for style-matched pieces" />
+          <label class="muted">Describe your perfect wardrobe</label>
+          <textarea id="genDesc" placeholder="Describe your ideal style — minimalist chic, bohemian wanderer, corporate power..." rows="3"></textarea>
+          <div class="filter-row">
+            <input id="minPrice" type="number" value="20" placeholder="Min Budget $" />
+            <input id="maxPrice" type="number" value="200" placeholder="Max Budget $" />
+            <input id="numPieces" type="number" value="12" min="4" max="30" placeholder="# Pieces" />
+          </div>
+          <input id="ethics" placeholder="Sustainability preferences — organic, recycled, fair-trade..." />
+          <div class="row">
+            <button id="genButton" class="btn btn-primary">✨ Generate My Capsule</button>
+          </div>
+          <div id="genResult" class="result-grid" aria-live="polite"></div>
+          <div class="row mt">
+            <button id="matchProducts" class="btn btn-secondary">🛍️ Find Matching Products</button>
+          </div>
+          <div id="matchedProducts" class="product-grid"></div>
+        </div>
+
+        <div class="card slide-up">
+          <div class="card-header">
+            <h2 class="card-title">Trend Analysis</h2> 
+            <div class="premium-badge">Live Data</div>
+          </div>
+          <p class="muted">Discover what's trending in your style universe</p>
+          <input id="trendKeywords" placeholder="Enter style keywords — cottagecore, dark academia, Y2K..." />
+          <div class="row">
+            <button id="runTrend" class="btn btn-secondary">📈 Analyze Trends</button>
+            <div id="trendResult" class="small-output"></div>
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <h2 class="card-title">Discover & Shop</h2>
+            <div class="premium-badge">Curated</div>
+          </div>
+          <p class="muted">Find pieces that match your aesthetic, ethically sourced and perfectly priced</p>
+          <div class="filter-row">
+            <input id="productQuery" placeholder="Search by style, brand, or color..." />
+            <input id="minPriceFilter" type="number" placeholder="Min $" />
+            <input id="maxPriceFilter" type="number" placeholder="Max $" />
+            <input id="ethicsFilter" placeholder="Ethics: sustainable, organic..." />
+          </div>
+          <div class="row">
+            <button id="searchProducts" class="btn btn-primary">🔍 Search</button>
+            <button id="loadAllProducts" class="btn btn-secondary">Show All</button>
+          </div>
+          <div class="suggestion-tags" style="margin-top:16px">
+            <span onclick="document.getElementById('productQuery').value='zara'; performProductSearch('zara')" class="pill">Zara</span>
+            <span onclick="document.getElementById('productQuery').value='hm'; performProductSearch('hm')" class="pill">H&M</span>
+            <span onclick="document.getElementById('productQuery').value='uniqlo'; performProductSearch('uniqlo')" class="pill">Uniqlo</span>
+            <span onclick="document.getElementById('productQuery').value='navy blazer'; performProductSearch('navy blazer')" class="pill">Navy Blazer</span>
+            <span onclick="document.getElementById('productQuery').value='belt'; performProductSearch('belt')" class="pill">Belt</span>
+            <span onclick="document.getElementById('productQuery').value='everlane'; performProductSearch('everlane')" class="pill">Everlane</span>
+          </div>
+          <div id="productResults" class="product-grid"></div>
+        </div>
+
+        <div class="card slide-up">
+          <div class="card-header">
+            <h2 class="card-title">My Capsule Collection</h2>
+          </div>
+          <div class="row">
+            <button id="createCapsule" class="btn btn-secondary">📝 New Capsule</button>
+            <button id="loadCapsules" class="btn btn-ghost">🔄 Refresh</button>
+          </div>
+          <div id="capsulesPanel" class="small-output">(Create your first capsule above)</div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Floating Action Button -->
+    <button class="fab" title="Quick Actions">✨</button>
+
+    <footer class="footer">
+      <p>Capsule Social™ — AI-Powered Personal Style Platform</p>
+      <p>Made with ✨ sustainable fashion principles</p>
+    </footer>
+
+    <script>
+      // Small helper to render JSON safely
+      function pretty(obj){ return typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2) }
+
+      // Hero section interactions
+      document.addEventListener('DOMContentLoaded', () => {
+        // Hero button interactions
+        const heroButtons = document.querySelectorAll('.hero-btn')
+        heroButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            if (btn.textContent.includes('Start')) {
+              // Scroll to main content
+              document.querySelector('.container').scrollIntoView({ 
+                behavior: 'smooth' 
+              })
+            } else if (btn.textContent.includes('Watch')) {
+              // Show video modal or play animation
+              showFashionAnimation()
+            }
+          })
+        })
+
+        // Floating Action Button
+        const fab = document.querySelector('.fab')
+        if (fab) {
+          fab.addEventListener('click', () => {
+            // Quick action menu or scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          })
+        }
+
+        // Enhanced product search with live results
+        setupEnhancedSearch()
+      })
+
+      function showFashionAnimation() {
+        // Add more dramatic animations to the fashion items
+        const items = document.querySelectorAll('.fashion-item')
+        items.forEach((item, index) => {
+          item.style.animation = 'none'
+          setTimeout(() => {
+            item.style.animation = `fashionBurst 2s ease-out`
+          }, index * 200)
+        })
+      }
+
+      function setupEnhancedSearch() {
+        const searchInput = document.getElementById('productQuery')
+        const searchBtn = document.getElementById('searchProducts')
+        const resultsDiv = document.getElementById('productResults')
+
+        // Live search as you type
+        let searchTimeout
+        searchInput?.addEventListener('input', () => {
+          clearTimeout(searchTimeout)
+          searchTimeout = setTimeout(() => {
+            if (searchInput.value.length > 2) {
+              performProductSearch(searchInput.value)
+            }
+          }, 500)
+        })
+
+        searchBtn?.addEventListener('click', () => {
+          performProductSearch(searchInput.value)
+        })
+      }
+
+      async function performProductSearch(query) {
+        const resultsDiv = document.getElementById('productResults')
+        const minPrice = document.getElementById('minPriceFilter')?.value || ''
+        const maxPrice = document.getElementById('maxPriceFilter')?.value || ''
+        const ethics = document.getElementById('ethicsFilter')?.value || ''
+
+        try {
+          resultsDiv.innerHTML = '<div class="loading">Searching for your perfect pieces...</div>'
+          
+          const params = new URLSearchParams()
+          if (query) params.append('q', query)
+          if (minPrice) params.append('min', minPrice)
+          if (maxPrice) params.append('max', maxPrice)
+          if (ethics) params.append('ethics', ethics)
+
+          const res = await fetch(`/api/products?${params}`)
+          const products = await res.json()
+
+          if (products.length === 0) {
+            resultsDiv.innerHTML = `
+              <div class="card fade-in">
+                <p>No items found for "${query}". Try different keywords like:</p>
+                <div class="suggestion-tags">
+                  <span onclick="performProductSearch('navy blazer')" class="pill">navy blazer</span>
+                  <span onclick="performProductSearch('belt')" class="pill">belt</span>
+                  <span onclick="performProductSearch('white shirt')" class="pill">white shirt</span>
+                  <span onclick="performProductSearch('black dress')" class="pill">black dress</span>
+                </div>
+              </div>
+            `
+            return
+          }
+
+          resultsDiv.innerHTML = products.map(p => `
+            <div class="product-card slide-up" style="animation-delay: ${Math.random() * 0.5}s">
+              <img src="${p.image}" alt="${p.title}" loading="lazy" />
+              <div class="product-info">
+                <h4>${p.title}</h4>
+                <div class="price">$${p.price}</div>
+                <div class="shop">${p.shop}</div>
+                ${p.description ? `
+                  <div class="product-description">${p.description}</div>
+                ` : ''}
+                ${p.ethicsFlags.length ? `
+                  <div class="ethics">
+                    ${p.ethicsFlags.map(flag => `<span class="ethics-badge">${flag}</span>`).join('')}
+                  </div>
+                ` : ''}
+                <div class="product-actions">
+                  <button class="btn-add-capsule" onclick="addToCapsule('${p.id}')">Add to Capsule</button>
+                  <button class="btn-buy-now" onclick="trackAndRedirect('${p.id}', '${p.affiliateUrl}')">Shop Now</button>
+                </div>
+              </div>
+            </div>
+          `).join('')
+
+          // Add fade-in animation to results
+          setTimeout(() => {
+            const cards = resultsDiv.querySelectorAll('.product-card')
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('fade-in')
+              }, index * 100)
+            })
+          }, 100)
+
+        } catch (err) {
+          resultsDiv.innerHTML = '<div class="error">Search failed. Please try again.</div>'
+        }
+      }
+
+      function addToCapsule(productId) {
+        // Add to current capsule or create new one
+        console.log('Adding product to capsule:', productId)
+        // Implementation here
+      }
+
+      async function trackAndRedirect(productId, affiliateUrl) {
+        try {
+          // Track affiliate click
+          await fetch('/api/products/click', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId })
+          })
+          
+          // Open affiliate link in new tab
+          window.open(affiliateUrl, '_blank')
+        } catch (err) {
+          console.error('Failed to track click:', err)
+          // Still redirect even if tracking fails
+          window.open(affiliateUrl, '_blank')
+        }
+      }
+
+      // Upload form
+      const uploadForm = document.getElementById('uploadForm')
+      uploadForm.addEventListener('submit', async (e)=>{
+        e.preventDefault()
+        const out = document.getElementById('uploadResult')
+        const f = new FormData(uploadForm)
+        try{
+          const res = await fetch('/api/upload', { method: 'POST', body: f })
+          const j = await res.json()
+          out.textContent = pretty(j)
+        }catch(err){ out.textContent = 'Upload failed' }
+      })
+
+      // Create moodboard
+      document.getElementById('createMb').addEventListener('click', async ()=>{
+        const body = {
+          title: document.getElementById('mbTitle').value,
+          description: document.getElementById('mbDesc').value,
+          images: (document.getElementById('mbImages').value||'').split(',').filter(Boolean).map(u=>({ url: u.trim(), tags: [] }))
+        }
+        const res = await fetch('/api/moodboards', { method: 'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) })
+        const j = await res.json()
+        document.getElementById('mbResult').textContent = pretty(j)
+        loadMoodboards()
+      })
+
+      // Generate capsule
+      document.getElementById('genButton').addEventListener('click', async ()=>{
+        const body = {
+          moodboardId: document.getElementById('genMbId').value || undefined,
+          description: document.getElementById('genDesc').value,
+          priceRange: { min: Number(document.getElementById('minPrice').value||20), max: Number(document.getElementById('maxPrice').value||200) },
+          ethics: (document.getElementById('ethics').value||'').split(',').filter(Boolean),
+          numPieces: Number(document.getElementById('numPieces').value||12)
+        }
+        const out = document.getElementById('genResult')
+        out.innerHTML = '<em>Generating…</em>'
+        const res = await fetch('/api/generate-capsule', { 
+          method: 'POST', 
+          headers: getAuthHeaders(),
+          body: JSON.stringify(body) 
+        })
+        const j = await res.json()
+        generatedPieces = j.pieces // Store for product matching
+        out.innerHTML = ''
+        j.pieces.forEach(p=>{
+          const el = document.createElement('div')
+          el.className = 'piece'
+          el.innerHTML = `<div class="pill">${p.style}</div><strong>${p.label}</strong><div class="muted">${p.color} — $${p.price}</div>`
+          out.appendChild(el)
+        })
+      })
+
+      // Trend analysis
+      document.getElementById('runTrend').addEventListener('click', async ()=>{
+        const k = (document.getElementById('trendKeywords').value||'').split(',').map(s=>s.trim()).filter(Boolean)
+        const out = document.getElementById('trendResult')
+        out.textContent = 'Analyzing…'
+        const res = await fetch('/api/trend-analysis', { method: 'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ keywords: k }) })
+        const j = await res.json()
+        out.textContent = pretty(j.top)
+      })
+
+      // Load saved moodboards
+      async function loadMoodboards(){
+        const el = document.getElementById('moodList')
+        el.textContent = 'Loading…'
+        const res = await fetch('/api/moodboards')
+        const list = await res.json()
+        if (!list.length) return el.textContent = '(none yet)'
+        el.innerHTML = ''
+        list.forEach(m=>{
+          const d = document.createElement('div')
+          d.className = 'mood-item'
+          d.innerHTML = `<strong>${m.title}</strong> — <span class="muted">${m.description||''}</span> <div class="muted">id: ${m.id}</div>`
+          el.appendChild(d)
+        })
+      }
+
+      // Global state
+      let currentCapsuleId = null
+      let currentUser = null
+      let authToken = localStorage.getItem('authToken')
+      let generatedPieces = [] // Store generated capsule pieces for matching
+
+      // Product search and display
+      async function searchProducts(){
+        const q = document.getElementById('productQuery').value.trim()
+        const min = document.getElementById('minPriceFilter').value
+        const max = document.getElementById('maxPriceFilter').value
+        const ethics = document.getElementById('ethicsFilter').value.trim()
+        
+        let url = '/api/products?'
+        if (q) url += 'q=' + encodeURIComponent(q) + '&'
+        if (min) url += 'min=' + min + '&'
+        if (max) url += 'max=' + max + '&'
+        if (ethics) url += 'ethics=' + encodeURIComponent(ethics) + '&'
+        
+        const el = document.getElementById('productResults')
+        el.innerHTML = '<div class="loading">Searching products...</div>'
+        
+        const res = await fetch(url)
+        const products = await res.json()
+        renderProducts(products)
+      }
+
+      function renderProducts(products){
+        const el = document.getElementById('productResults')
+        if (!products.length) return el.innerHTML = '<div class="muted">No products found</div>'
+        
+        el.innerHTML = ''
+        products.forEach(product => {
+          const card = document.createElement('div')
+          card.className = 'product-card'
+          
+          const ethicsBadges = product.ethicsFlags?.map(flag => 
+            `<span class="ethics-badge">${flag}</span>`).join('') || ''
+          
+          card.innerHTML = `
+            <img src="${product.image}" alt="${product.title}" />
+            <div class="product-info">
+              <h4>${product.title}</h4>
+              <div class="price">$${product.price}</div>
+              <div class="shop">${product.shop}</div>
+              <div class="ethics">${ethicsBadges}</div>
+              <div class="product-actions">
+                <button class="btn-add-capsule" data-product-id="${product.id}">Add to Capsule</button>
+                <button class="btn-buy-now" data-product-id="${product.id}">Buy Now</button>
+              </div>
+            </div>
+          `
+          el.appendChild(card)
+        })
+        
+        // Add event listeners for product actions
+        el.querySelectorAll('.btn-add-capsule').forEach(btn => {
+          btn.addEventListener('click', () => addToCapsule(btn.dataset.productId))
+        })
+        el.querySelectorAll('.btn-buy-now').forEach(btn => {
+          btn.addEventListener('click', () => trackAndRedirect(btn.dataset.productId))
+        })
+      }
+
+      document.getElementById('searchProducts').addEventListener('click', searchProducts)
+      document.getElementById('loadAllProducts').addEventListener('click', () => {
+        document.getElementById('productQuery').value = ''
+        document.getElementById('minPriceFilter').value = ''
+        document.getElementById('maxPriceFilter').value = ''
+        document.getElementById('ethicsFilter').value = ''
+        searchProducts()
+      })
+
+      // Capsule management
+      async function addToCapsule(productId){
+        if (!currentCapsuleId) {
+          // Create a new capsule first
+          const res = await fetch('/api/capsules', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({ userId, title: 'My Capsule', productIds: [productId] })
+          })
+          const capsule = await res.json()
+          currentCapsuleId = capsule.id
+          alert(`Added to new capsule: ${capsule.title}`)
+        } else {
+          // Add to existing capsule
+          const res = await fetch(`/api/capsules/${currentCapsuleId}/add-product`, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({ productId })
+          })
+          if (res.ok) {
+            alert('Added to capsule!')
+          } else {
+            const err = await res.json()
+            alert(err.error || 'Failed to add to capsule')
+          }
+        }
+        loadCapsules()
+      }
+
+      async function trackAndRedirect(productId){
+        // Track affiliate click
+        const res = await fetch('/api/affiliate-click', {
+          method: 'POST',
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({ productId, userId })
+        })
+        const result = await res.json()
+        if (result.redirectUrl) {
+          window.open(result.redirectUrl, '_blank')
+        }
+      }
+
+      async function loadCapsules(){
+        const el = document.getElementById('capsulesPanel')
+        el.innerHTML = '<div class="loading">Loading capsules...</div>'
+        
+        const res = await fetch(`/api/capsules?userId=${userId}`)
+        const capsules = await res.json()
+        
+        if (!capsules.length) return el.innerHTML = '<div class="muted">(no capsules yet)</div>'
+        
+        el.innerHTML = ''
+        capsules.forEach(capsule => {
+          const div = document.createElement('div')
+          div.className = 'capsule-item'
+          div.innerHTML = `
+            <strong>${capsule.title}</strong> (${capsule.productIds.length} items)
+            <button class="btn-select-capsule" data-capsule-id="${capsule.id}">Select</button>
+          `
+          el.appendChild(div)
+        })
+        
+        el.querySelectorAll('.btn-select-capsule').forEach(btn => {
+          btn.addEventListener('click', () => {
+            currentCapsuleId = btn.dataset.capsuleId
+            alert('Capsule selected for adding products')
+          })
+        })
+      }
+
+      document.getElementById('createCapsule').addEventListener('click', async () => {
+        const title = prompt('Capsule name:') || 'My Capsule'
+        const res = await fetch('/api/capsules', {
+          method: 'POST',
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({ userId, title, productIds: [] })
+        })
+        const capsule = await res.json()
+        currentCapsuleId = capsule.id
+        loadCapsules()
+      })
+
+      document.getElementById('loadCapsules').addEventListener('click', loadCapsules)
+
+      // Authentication functions
+      function getAuthHeaders() {
+        const headers = {'content-type': 'application/json'}
+        if (authToken) headers['authorization'] = `Bearer ${authToken}`
+        return headers
+      }
+
+      function updateAuthUI() {
+        const authSection = document.getElementById('authSection')
+        const userSection = document.getElementById('userSection')
+        const userDisplay = document.getElementById('userDisplay')
+        
+        if (currentUser) {
+          authSection.style.display = 'none'
+          userSection.style.display = 'flex'
+          userDisplay.textContent = currentUser.displayName || currentUser.email
+        } else {
+          authSection.style.display = 'flex'
+          userSection.style.display = 'none'
+        }
+      }
+
+      // Auth modal handlers
+      const modal = document.getElementById('authModal')
+      const closeModal = document.querySelector('.close')
+      
+      document.getElementById('loginBtn').addEventListener('click', () => {
+        modal.style.display = 'block'
+        document.getElementById('loginForm').style.display = 'block'
+        document.getElementById('signupForm').style.display = 'none'
+      })
+      
+      document.getElementById('signupBtn').addEventListener('click', () => {
+        modal.style.display = 'block'
+        document.getElementById('loginForm').style.display = 'none'
+        document.getElementById('signupForm').style.display = 'block'
+      })
+      
+      closeModal.addEventListener('click', () => modal.style.display = 'none')
+      window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none' })
+      
+      document.getElementById('showSignup').addEventListener('click', (e) => {
+        e.preventDefault()
+        document.getElementById('loginForm').style.display = 'none'
+        document.getElementById('signupForm').style.display = 'block'
+      })
+      
+      document.getElementById('showLogin').addEventListener('click', (e) => {
+        e.preventDefault()
+        document.getElementById('loginForm').style.display = 'block'
+        document.getElementById('signupForm').style.display = 'none'
+      })
+
+      document.getElementById('doLogin').addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value
+        const password = document.getElementById('loginPassword').value
+        const messageEl = document.getElementById('authMessage')
+        
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({ email, password })
+          })
+          const data = await res.json()
+          
+          if (res.ok) {
+            authToken = data.token
+            currentUser = data
+            localStorage.setItem('authToken', authToken)
+            localStorage.setItem('currentUser', JSON.stringify(data))
+            modal.style.display = 'none'
+            updateAuthUI()
+            loadMoodboards()
+            loadCapsules()
+          } else {
+            messageEl.textContent = data.error
+            messageEl.className = 'message error'
+          }
+        } catch (err) {
+          messageEl.textContent = 'Login failed'
+          messageEl.className = 'message error'
+        }
+      })
+
+      document.getElementById('doSignup').addEventListener('click', async () => {
+        const displayName = document.getElementById('signupName').value
+        const email = document.getElementById('signupEmail').value
+        const password = document.getElementById('signupPassword').value
+        const messageEl = document.getElementById('authMessage')
+        
+        try {
+          const res = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({ displayName, email, password })
+          })
+          const data = await res.json()
+          
+          if (res.ok) {
+            authToken = data.token
+            currentUser = data
+            localStorage.setItem('authToken', authToken)
+            localStorage.setItem('currentUser', JSON.stringify(data))
+            modal.style.display = 'none'
+            updateAuthUI()
+            loadMoodboards()
+            loadCapsules()
+          } else {
+            messageEl.textContent = data.error
+            messageEl.className = 'message error'
+          }
+        } catch (err) {
+          messageEl.textContent = 'Signup failed'
+          messageEl.className = 'message error'
+        }
+      })
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        authToken = null
+        currentUser = null
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('currentUser')
+        updateAuthUI()
+        loadMoodboards()
+        loadCapsules()
+      })
+
+      // Product matching for generated capsule
+      document.getElementById('matchProducts').addEventListener('click', async () => {
+        if (!generatedPieces.length) {
+          alert('Generate a capsule first!')
+          return
+        }
+        
+        const matchedEl = document.getElementById('matchedProducts')
+        matchedEl.innerHTML = '<div class="loading">Finding matching products...</div>'
+        
+        const allMatches = []
+        for (const piece of generatedPieces.slice(0, 3)) { // Match first 3 pieces
+          try {
+            const res = await fetch('/api/products/match', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ piece })
+            })
+            const matches = await res.json()
+            allMatches.push(...matches.slice(0, 2)) // Top 2 per piece
+          } catch (err) {
+            console.error('Matching failed for piece:', piece)
+          }
+        }
+        
+        renderProducts(allMatches, matchedEl)
+      })
+
+      function renderProducts(products, container = null){
+        const el = container || document.getElementById('productResults')
+        if (!products.length) return el.innerHTML = '<div class="muted">No products found</div>'
+        
+        el.innerHTML = ''
+        products.forEach(product => {
+          const card = document.createElement('div')
+          card.className = 'product-card'
+          
+          const ethicsBadges = product.ethicsFlags?.map(flag => 
+            `<span class="ethics-badge">${flag}</span>`).join('') || ''
+          
+          const scoreDisplay = product.score ? `<div class="score">Match: ${product.score.toFixed(1)}</div>` : ''
+          
+          card.innerHTML = `
+            <img src="${product.image}" alt="${product.title}" />
+            <div class="product-info">
+              <h4>${product.title}</h4>
+              <div class="price">$${product.price}</div>
+              <div class="shop">${product.shop}</div>
+              ${scoreDisplay}
+              <div class="ethics">${ethicsBadges}</div>
+              <div class="product-actions">
+                <button class="btn-add-capsule" data-product-id="${product.id}">Add to Capsule</button>
+                <button class="btn-buy-now" data-product-id="${product.id}">Buy Now</button>
+              </div>
+            </div>
+          `
+          el.appendChild(card)
+        })
+        
+        // Add event listeners for product actions
+        el.querySelectorAll('.btn-add-capsule').forEach(btn => {
+          btn.addEventListener('click', () => addToCapsule(btn.dataset.productId))
+        })
+        el.querySelectorAll('.btn-buy-now').forEach(btn => {
+          btn.addEventListener('click', () => trackAndRedirect(btn.dataset.productId))
+        })
+      }
+
+      // Check for existing auth on load
+      if (authToken) {
+        try {
+          currentUser = JSON.parse(localStorage.getItem('currentUser'))
+        } catch (e) {
+          authToken = null
+          localStorage.removeItem('authToken')
+        }
+      }
+
+      // initial load
+      updateAuthUI()
+      loadMoodboards()
+      loadCapsules()
+      searchProducts() // load all products initially
+
+      // sample moodboard quick-fill
+      document.getElementById('sampleMbBtn').addEventListener('click', ()=>{
+        document.getElementById('mbTitle').value = 'Minimal Neutrals'
+        document.getElementById('mbDesc').value = 'Soft neutrals, clean lines, natural fibers'
+        document.getElementById('mbImages').value = 'https://placehold.co/600x400,https://placehold.co/400x600'
+      })
+    </script>
+  </body>
+  </html>

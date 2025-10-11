@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Dashboard — Capsule Wardrobe</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:20px 0}
+      .stat-card{background:var(--glass);padding:20px;border-radius:12px;text-align:center}
+      .stat-number{font-size:32px;font-weight:700;color:var(--accent);margin-bottom:8px}
+      .chart{height:200px;background:rgba(255,255,255,0.02);border-radius:8px;margin:16px 0;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+      .product-upload{max-width:600px;margin:0 auto}
+      table{width:100%;border-collapse:collapse;margin:16px 0}
+      th,td{padding:12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06)}
+      th{color:var(--accent);font-weight:600}
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">CW</div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p class="subtitle">Analytics, product management & system health</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="/" class="btn ghost">← Back to App</a>
+      </nav>
+    </header>
+
+    <main class="container" style="grid-template-columns:1fr;max-width:1200px;margin:0 auto">
+      <div class="glass card">
+        <h2>Analytics Overview</h2>
+        <div id="analyticsLoading">Loading analytics...</div>
+        <div id="analyticsData" style="display:none">
+          <div class="admin-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="totalUsers">-</div>
+              <div>Total Users</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalClicks">-</div>
+              <div>Affiliate Clicks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalCapsules">-</div>
+              <div>Capsules Created</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="conversionRate">-</div>
+              <div>Conversion Rate</div>
+            </div>
+          </div>
+          
+          <h3>Top Products by Clicks</h3>
+          <table id="topProductsTable">
+            <thead>
+              <tr><th>Product</th><th>Clicks</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          
+          <h3>Daily Activity</h3>
+          <div class="chart" id="dailyChart">Daily stats chart would go here</div>
+        </div>
+      </div>
+
+      <div class="glass card mt product-upload">
+        <h2>Product Management</h2>
+        <p class="muted">Upload products via JSON or connect to product feeds</p>
+        
+        <h3>Upload Products (JSON)</h3>
+        <textarea id="productJson" rows="10" placeholder='[{"title":"Product Name","price":99,"tags":["tag1","tag2"],"shop":"Shop Name","image":"https://...","affiliateUrl":"https://...","ethicsFlags":["organic"]}]'></textarea>
+        <div class="row">
+          <button id="uploadProducts" class="btn primary">Upload Products</button>
+          <button id="validateJson" class="btn ghost">Validate JSON</button>
+        </div>
+        <div id="uploadResult" class="message" style="display:none"></div>
+        
+        <h3>Current Mock Products</h3>
+        <div id="currentProducts" class="small-output">Loading...</div>
+      </div>
+
+      <div class="glass card mt">
+        <h2>System Health</h2>
+        <div class="row">
+          <button id="refreshData" class="btn">Refresh All Data</button>
+          <button id="exportData" class="btn ghost">Export Data</button>
+        </div>
+        <div id="systemInfo" class="small-output">
+          Server: Running<br>
+          Database: JSON files<br>
+          Last updated: <span id="lastUpdate">-</span>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let adminToken = localStorage.getItem('authToken')
+      
+      async function loadAnalytics() {
+        if (!adminToken) {
+          document.getElementById('analyticsLoading').innerHTML = 'Please login as admin to view analytics'
+          return
+        }
+        
+        try {
+          const res = await fetch('/api/analytics', {
+            headers: { 'authorization': `Bearer ${adminToken}` }
+          })
+          
+          if (!res.ok) {
+            throw new Error('Failed to load analytics')
+          }
+          
+          const data = await res.json()
+          document.getElementById('analyticsLoading').style.display = 'none'
+          document.getElementById('analyticsData').style.display = 'block'
+          
+          document.getElementById('totalUsers').textContent = data.totalUsers
+          document.getElementById('totalClicks').textContent = data.totalClicks
+          document.getElementById('totalCapsules').textContent = data.totalCapsules
+          document.getElementById('conversionRate').textContent = data.conversionRate
+          
+          // Populate top products table
+          const tbody = document.querySelector('#topProductsTable tbody')
+          tbody.innerHTML = ''
+          data.topProducts.forEach(item => {
+            const row = tbody.insertRow()
+            row.insertCell(0).textContent = item.product
+            row.insertCell(1).textContent = item.clicks
+          })
+          
+        } catch (err) {
+          document.getElementById('analyticsLoading').innerHTML = 'Error loading analytics: ' + err.message
+        }
+      }
+      
+      async function loadCurrentProducts() {
+        try {
+          const res = await fetch('/api/products')
+          const products = await res.json()
+          document.getElementById('currentProducts').textContent = 
+            products.map(p => `${p.title} - $${p.price} (${p.shop})`).join('\n')
+        } catch (err) {
+          document.getElementById('currentProducts').textContent = 'Error loading products'
+        }
+      }
+      
+      document.getElementById('validateJson').addEventListener('click', () => {
+        const json = document.getElementById('productJson').value.trim()
+        const result = document.getElementById('uploadResult')
+        result.style.display = 'block'
+        
+        try {
+          const parsed = JSON.parse(json)
+          if (!Array.isArray(parsed)) throw new Error('Must be an array')
+          
+          const required = ['title', 'price', 'shop']
+          const invalid = parsed.find(p => required.some(field => !p[field]))
+          if (invalid) throw new Error(`Missing required fields: ${required.join(', ')}`)
+          
+          result.textContent = `✓ Valid JSON with ${parsed.length} products`
+          result.className = 'message'
+        } catch (err) {
+          result.textContent = `✗ Invalid JSON: ${err.message}`
+          result.className = 'message error'
+        }
+      })
+      
+      document.getElementById('uploadProducts').addEventListener('click', () => {
+        alert('Product upload endpoint not implemented yet. Use the mock products or integrate with a real product feed.')
+      })
+      
+      document.getElementById('refreshData').addEventListener('click', async () => {
+        await loadAnalytics()
+        await loadCurrentProducts()
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString()
+      })
+      
+      document.getElementById('exportData').addEventListener('click', () => {
+        alert('Data export feature coming soon. For now, check the JSON files in the /data directory.')
+      })
+      
+      // Initial load
+      loadAnalytics()
+      loadCurrentProducts()
+      document.getElementById('lastUpdate').textContent = new Date().toLocaleString()
+    </script>
+  </body>
+</html>
