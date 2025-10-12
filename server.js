@@ -75,6 +75,16 @@ function optionalAuth(req, res, next) {
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'Fashion App API is running', 
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  })
+})
+
 // Auth endpoints
 app.post('/api/signup', async (req, res) => {
   const { email, password, displayName } = req.body
@@ -531,6 +541,11 @@ app.post('/api/trend-analysis', (req, res) => {
 
 // Serve uploads
 app.use('/uploads', express.static(UPLOAD_DIR))
+
+// Fallback route - serve index.html for any unmatched routes (SPA support)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`))
