@@ -1,11 +1,13 @@
 {
   "name": "capsule-wardrobe-app",
   "version": "0.1.0",
-  "description": "MVP app for capsule wardrobe generation from moodboards, images and preferences",
+  "description": "Premium fashion capsule wardrobe app with real retailer products",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "build": "echo 'No build step required'",
+    "vercel-build": "echo 'Build completed'",
     "test:smoke": "node test/smoke.js"
   },
   "engines": {
