@@ -1,18 +1,35 @@
 const express = require('express')
-const cors = require('cors')
 const path = require('path')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
 
 const app = express()
-app.use(cors())
-app.use(express.json())
+
+// Add error handling middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
+  next()
+})
+
+app.use(express.json({ limit: '10mb' }))
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200)
+  } else {
+    next()
+  }
+})
 
 const JWT_SECRET = process.env.JWT_SECRET || 'capsule-wardrobe-secret-key'
 
 // In-memory storage for Vercel (replace with database in production)
 let users = []
-let products = [
+let products = []
+
+// Initialize products safely
+try {
+  products = [
   // H&M Products
   { id:'hm1', title:'H&M Oversized Blazer', price:49.99, tags:['blazer','oversized','casual','navy','hm','affordable'], shop:'H&M',
     image:'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=300&h=400&fit=crop',
@@ -64,66 +81,168 @@ let products = [
     image:'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=300&h=400&fit=crop',
     affiliateUrl:'https://www.everlane.com/way-high-drape-pant?ref=capsule', ethicsFlags:['sustainable'], category:'bottoms', color:'black',
     description:'High-waisted pants with a fluid drape and tapered leg.' }
-]
+  ]
+} catch (error) {
+  console.error('Error initializing products:', error)
+  products = []
+}
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')))
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    message: 'Fashion App API is running on Vercel', 
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  })
+  try {
+    res.json({ 
+      status: 'ok', 
+      message: 'Fashion App API is running on Vercel', 
+      timestamp: new Date().toISOString(),
+      version: '1.0.0',
+      productsCount: products.length,
+      usersCount: users.length
+    })
+  } catch (error) {
+    console.error('Health check error:', error)
+    res.status(500).json({ error: 'Health check failed', message: error.message })
+  }
 })
 
 // Products endpoint
 app.get('/api/products', (req, res) => {
-  const q = (req.query.q||'').toLowerCase()
-  let list = products
-  
-  if (q) {
-    const queryWords = q.split(/\s+/).filter(word => word.length > 0)
-    list = products.filter(p => {
-      const searchText = `${p.title} ${p.shop} ${p.tags.join(' ')} ${p.category} ${p.color}`.toLowerCase()
-      return queryWords.some(word => searchText.includes(word))
-    })
+  try {
+    const q = (req.query.q||'').toLowerCase()
+    let list = products || []
+    
+    if (q) {
+      const queryWords = q.split(/\s+/).filter(word => word.length > 0)
+      list = products.filter(p => {
+        try {
+          const searchText = `${p.title} ${p.shop} ${p.tags.join(' ')} ${p.category} ${p.color}`.toLowerCase()
+          return queryWords.some(word => searchText.includes(word))
+        } catch (err) {
+          console.error('Error filtering product:', p, err)
+          return false
+        }
+      })
+    }
+    
+    res.json(list.slice(0, 20)) // Limit to 20 products
+  } catch (error) {
+    console.error('Products endpoint error:', error)
+    res.status(500).json({ error: 'Failed to fetch products', message: error.message })
   }
-  
-  res.json(list.slice(0, 20)) // Limit to 20 products
 })
 
-// Auth endpoints
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working!', timestamp: new Date().toISOString() })
+})
+
+// Auth endpoints (simplified for now)
 app.post('/api/signup', async (req, res) => {
-  const { email, password, displayName } = req.body
-  if (!email || !password) return res.status(400).json({ error: 'Email and password required' })
-  
-  if (users.find(u => u.email === email)) return res.status(400).json({ error: 'Email already exists' })
-  
-  const hashedPassword = await bcrypt.hash(password, 10)
-  const user = { id: Date.now().toString(), email, password: hashedPassword, displayName: displayName || email.split('@')[0], createdAt: new Date().toISOString() }
-  users.push(user)
-  
-  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' })
-  res.json({ user: { id: user.id, email: user.email, displayName: user.displayName }, token })
+  try {
+    const { email, password, displayName } = req.body || {}
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' })
+    }
+    
+    // Simple check without bcrypt for now
+    if (users.find(u => u.email === email)) {
+      return res.status(400).json({ error: 'Email already exists' })
+    }
+    
+    const user = { 
+      id: Date.now().toString(), 
+      email, 
+      password, // Store plaintext for now (NOT for production!)
+      displayName: displayName || email.split('@')[0], 
+      createdAt: new Date().toISOString() 
+    }
+    users.push(user)
+    
+    const token = 'simple-token-' + user.id // Simplified token
+    res.json({ 
+      user: { id: user.id, email: user.email, displayName: user.displayName }, 
+      token 
+    })
+  } catch (error) {
+    console.error('Signup error:', error)
+    res.status(500).json({ error: 'Signup failed', message: error.message })
+  }
 })
 
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body
-  if (!email || !password) return res.status(400).json({ error: 'Email and password required' })
-  
-  const user = users.find(u => u.email === email)
-  if (!user || !await bcrypt.compare(password, user.password)) return res.status(401).json({ error: 'Invalid credentials' })
-  
-  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' })
-  res.json({ user: { id: user.id, email: user.email, displayName: user.displayName }, token })
+  try {
+    const { email, password } = req.body || {}
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' })
+    }
+    
+    const user = users.find(u => u.email === email)
+    if (!user || user.password !== password) { // Simple comparison for now
+      return res.status(401).json({ error: 'Invalid credentials' })
+    }
+    
+    const token = 'simple-token-' + user.id // Simplified token
+    res.json({ 
+      user: { id: user.id, email: user.email, displayName: user.displayName }, 
+      token 
+    })
+  } catch (error) {
+    console.error('Login error:', error)
+    res.status(500).json({ error: 'Login failed', message: error.message })
+  }
+})
+
+// Global error handler
+app.use((error, req, res, next) => {
+  console.error('Global error handler:', error)
+  res.status(500).json({ 
+    error: 'Internal server error', 
+    message: error.message,
+    timestamp: new Date().toISOString()
+  })
 })
 
 // Fallback route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'))
+  try {
+    // For now, just return a simple HTML response
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Fashion App</title>
+        <style>
+          body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; }
+          .api-links { margin: 20px 0; }
+          .api-links a { display: inline-block; background: #f0f0f0; padding: 10px 15px; margin: 5px; text-decoration: none; border-radius: 5px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>🌟 Fashion Capsule Wardrobe App</h1>
+          <p>Premium fashion discovery with real retailer products</p>
+        </div>
+        <div class="api-links">
+          <h2>API Endpoints:</h2>
+          <a href="/api/health">Health Check</a>
+          <a href="/api/test">Test API</a>
+          <a href="/api/products">All Products</a>
+          <a href="/api/products?q=zara">Search Zara</a>
+          <a href="/api/products?q=hm">Search H&M</a>
+        </div>
+        <p><strong>Status:</strong> API is running successfully on Vercel! 🎉</p>
+      </body>
+      </html>
+    `)
+  } catch (error) {
+    console.error('Fallback route error:', error)
+    res.status(500).json({ error: 'Fallback route failed', message: error.message })
+  }
 })
 
 module.exports = app
