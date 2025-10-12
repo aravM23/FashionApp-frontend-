@@ -199,7 +199,17 @@ app.post('/api/login', async (req, res) => {
 // Global error handler
 app.use((error, req, res, next) => {
   console.error('Global error handler:', error)
-  res.status(500).json({ 
+
+  if (error?.type === 'entity.parse.failed') {
+    return res.status(error.statusCode || 400).json({
+      error: 'Invalid JSON payload',
+      message: 'Request body contains invalid JSON',
+      timestamp: new Date().toISOString()
+    })
+  }
+
+  const status = error.statusCode || error.status || 500
+  res.status(status).json({ 
     error: 'Internal server error', 
     message: error.message,
     timestamp: new Date().toISOString()
