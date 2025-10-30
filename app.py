@@ -8,13 +8,13 @@ load_dotenv()
 app = Flask(__name__)
 
 # variables for the supabaseClient
-# url : str = os.getenv("SUPABASE_URL")
-# key : str = os.getenv("SUPABASE_KEY")
+url : str = os.getenv("SUPABASE_URL")
+key : str = os.getenv("SUPABASE_KEY")
 
-# if not url or not key:
-#     raise ValueError("Missing environment variables SUPABASE_URL or SUPABASE_KEY")
-# 
-# supabase : Client = create_client(url, key)
+if not url or not key:
+    raise ValueError("Missing environment variables SUPABASE_URL or SUPABASE_KEY")
+
+supabase : Client = create_client(url, key)
 
 @app.route('/')
 def index():
