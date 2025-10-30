@@ -1,0 +1,56 @@
+/* Basic resets */
+* { box-sizing: border-box; }
+
+/* Critical: Removed height: 100% from html, body to ensure content flow */
+html, body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Each "page" */
+.panel {
+  /* Ensure each panel fills the viewport and participates in horizontal flex layout */
+  flex: 0 0 100vw;
+  min-width: 100vw;
+  height: 100vh; /* Panel defines the viewport height */
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+}
+
+/* Horizontal scroll container: enable horizontal scrolling, snap behavior and smooth scrolling */
+.horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  scroll-snap-type: x mandatory; /* ensure children snap into place */
+  scroll-behavior: smooth;
+  /* Ensure the scroll container itself takes up the full viewport */
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Prevent scroll chaining so wheel events don't start scrolling the body when
+   the horizontal container is at its edge. This keeps wheel-driven horizontal
+   scrolling consistent. */
+.horizontal-scroll {
+  overscroll-behavior: contain;
+}
+
+/* Parallax images */
+.parallax-image {
+  transition: transform 0.2s linear;
+  will-change: transform;
+}
+
+/* Rotated text for the left navbar */
+.nav-rotated {
+  display: inline-block;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  text-decoration: none;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.9);
+}
+.nav-rotated:hover { color: #e5e7eb; }
