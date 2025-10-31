@@ -8,18 +8,22 @@ load_dotenv()
 app = Flask(__name__)
 
 # variables for the supabaseClient
-url : str = os.getenv("SUPABASE_URL")
-key : str = os.getenv("SUPABASE_KEY")
+url: str = os.getenv("SUPABASE_URL")
+# allow using the anon key as a fallback if a service key isn't provided
+key: str = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_ANON_KEY")
 
 if not url or not key:
-    raise ValueError("Missing environment variables SUPABASE_URL or SUPABASE_KEY")
+    raise ValueError("Missing environment variables SUPABASE_URL and SUPABASE_KEY/SUPABASE_ANON_KEY")
 
-supabase : Client = create_client(url, key)
+supabase: Client = create_client(url, key)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# used for debugging TODO: delete later before production
-if __name__ in "__main__":
-    app.run(debug = True)
+# used for debugging - run with `python app.py`
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 5000))
+    host = "0.0.0.0"
+    debug = os.getenv("FLASK_DEBUG", "True").lower() in ("1", "true", "yes")
+    app.run(host=host, port=port, debug=debug)
