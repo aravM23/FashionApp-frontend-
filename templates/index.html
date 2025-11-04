@@ -25,25 +25,396 @@
       </div>
     </section>
 
-        <section id="home" class="panel relative flex items-center justify-center overflow-hidden bg-zinc-800/95 backdrop-blur-sm">
-      <img src="{{ url_for('static', filename='pic1.png') }}" class="parallax-image absolute w-4/5 max-w-4xl" alt="Fashion Image">
-      <h2 class="text-5xl font-bold z-10 bg-black/50 px-6 py-4 rounded-2xl">Your Closet, Reimagined</h2>
+        <section id="home" class="panel relative flex items-center justify-center overflow-hidden bg-white p-8">
+      <img src="{{ url_for('static', filename='pic1.png') }}" class="parallax-image absolute w-4/5 max-w-4xl opacity-5" alt="Fashion Image">
+      
+      <div class="relative z-20 w-full max-w-7xl overflow-y-auto max-h-screen px-4 py-8">
+        <div class="text-center mb-8">
+          <h2 class="text-5xl font-bold mb-3 text-gray-900">Your Capsule Wardrobe</h2>
+          <p class="text-gray-600 text-lg max-w-2xl mx-auto">Build a sustainable wardrobe with versatile pieces you love</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Log Current Wardrobe -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <div class="mb-4">
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">Track Your Closet</h3>
+              <p class="text-gray-600 text-sm">Log items to avoid buying duplicates</p>
+            </div>
+            
+            <div id="upload-area" class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-gray-400 transition-all cursor-pointer bg-gray-50">
+              <input type="file" id="outfit-upload" accept="image/*" capture="environment" class="hidden">
+              <div class="flex flex-col items-center gap-3">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <div class="text-center">
+                  <p class="text-sm font-medium text-gray-900">Take Photo</p>
+                  <p class="text-xs text-gray-500 mt-1">Snap a pic of your item</p>
+                </div>
+              </div>
+            </div>
+            
+            <div id="preview-area" class="hidden mt-4">
+              <img id="preview-image" class="w-full h-48 object-cover rounded-lg mb-3 border border-gray-200" alt="Preview">
+              <button id="analyze-btn" class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all text-sm">
+                Analyze Item
+              </button>
+            </div>
+            
+            <div id="results-area" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p id="results-text" class="text-gray-700 text-sm"></p>
+            </div>
+          </div>
+
+          <!-- Capsule Wardrobe Generator -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <div class="mb-4">
+              <h3 class="text-xl font-semibold mb-2 text-gray-900">Create Outfits</h3>
+              <p class="text-gray-600 text-sm">Mix & match from your closet</p>
+            </div>
+            
+            <textarea 
+              id="capsule-description" 
+              placeholder="E.g., 'Casual brunch outfit' or 'Professional meeting'"
+              class="w-full bg-white border border-gray-300 rounded-lg p-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none resize-none h-32 text-sm"
+            ></textarea>
+            
+            <button id="generate-outfit-btn" class="w-full mt-4 bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all text-sm">
+              Generate Outfit
+            </button>
+            
+            <div id="capsule-results" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 max-h-64 overflow-y-auto">
+              <div id="capsule-outfit-details" class="text-gray-700 text-sm space-y-2"></div>
+            </div>
+          </div>
+
+          <!-- Sustainability Tips -->
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 shadow-sm">
+            <div class="mb-4">
+              <h3 class="text-xl font-semibold mb-2 text-green-900">🌱 Sustainable Fashion</h3>
+              <p class="text-green-700 text-sm">Build a timeless, eco-friendly wardrobe</p>
+            </div>
+            
+            <div class="space-y-3 text-sm">
+              <div class="bg-white/80 rounded-lg p-4 border border-green-200">
+                <p class="font-semibold text-green-900 mb-1">Quality Over Quantity</p>
+                <p class="text-gray-700 text-sm">Invest in versatile pieces that last years, not seasons</p>
+              </div>
+              
+              <div class="mt-4 p-4 bg-white/80 rounded-lg text-center border border-green-200">
+                <p class="text-green-900 font-semibold mb-1 text-sm">Your Impact</p>
+                <p class="text-gray-700 text-xs">Capsule wardrobes reduce fashion waste by up to 80%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-        <section id="about" class="panel flex flex-col justify-center items-center bg-gray-900/95 backdrop-blur-sm">
-      <h1 class="text-6xl font-extrabold mb-4">AI-Driven Outfit Suggestions</h1>
-      <p class="text-lg text-gray-300 max-w-lg text-center px-8">
-        Our AI analyzes your wardrobe and preferences to recommend trendy, personalized looks every day.
-      </p>
+        <section id="about" class="panel flex flex-col justify-center items-center bg-gray-50 p-8 overflow-y-auto">
+      <div class="max-w-7xl w-full px-4 py-8">
+        <div class="text-center mb-8">
+          <h1 class="text-5xl font-bold mb-3 text-gray-900">Discover Your Style</h1>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Upload moodboards, set your values, shop consciously
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Left: Moodboard Upload & Preferences -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <div class="mb-5">
+              <h3 class="text-2xl font-semibold mb-2 text-gray-900">Build Your Profile</h3>
+              <p class="text-gray-600 text-sm">Tell us about your style preferences</p>
+            </div>
+            
+            <!-- Context Input -->
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Style Context</label>
+              <input 
+                type="text" 
+                id="moodboard-context" 
+                placeholder="E.g., 'Clothes for 8:30 AM classes'"
+                class="w-full bg-white border border-gray-300 rounded-lg p-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
+              >
+            </div>
+            
+            <!-- Price Range Selector -->
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Price Range</label>
+              <select 
+                id="price-range" 
+                class="w-full bg-white border border-gray-300 rounded-lg p-3 text-gray-900 focus:border-black focus:outline-none text-sm"
+              >
+                <option value="budget">Budget Friendly ($10-$30)</option>
+                <option value="moderate" selected>Moderate ($30-$80)</option>
+                <option value="premium">Premium ($80-$150)</option>
+                <option value="luxury">Luxury ($150+)</option>
+              </select>
+            </div>
+
+            <!-- Sustainability Ethics -->
+            <div class="mb-4">
+              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">🌱 Sustainability Values</label>
+              <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-3">
+                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
+                  <input type="checkbox" id="eco-materials" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4">
+                  <span>Eco-friendly materials (organic, recycled, bamboo)</span>
+                </label>
+                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
+                  <input type="checkbox" id="fair-trade" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4">
+                  <span>Fair trade & ethical production</span>
+                </label>
+                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
+                  <input type="checkbox" id="timeless" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4" checked>
+                  <span>Timeless designs (avoid fast fashion)</span>
+                </label>
+                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
+                  <input type="checkbox" id="quality-focus" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4" checked>
+                  <span>Quality over quantity</span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Moodboard Upload Area -->
+            <div id="moodboard-upload-area" class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-gray-400 transition-all cursor-pointer bg-gray-50 mb-4">
+              <input type="file" id="moodboard-upload" accept="image/*" multiple class="hidden">
+              <div class="flex flex-col items-center gap-3">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <div class="text-center">
+                  <p class="text-sm font-medium text-gray-900">Upload Moodboard</p>
+                  <p class="text-xs text-gray-500 mt-1">Select images from Pinterest</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Preview Grid -->
+            <div id="moodboard-preview-grid" class="hidden mb-4 grid grid-cols-3 gap-2"></div>
+            
+            <button id="learn-style-btn" class="hidden w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all text-sm uppercase tracking-wider">
+              Analyze My Style
+            </button>
+            
+            <!-- Style Learning Results -->
+            <div id="style-learning-results" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <h4 class="text-base font-semibold mb-3 text-gray-900">Your Style Profile</h4>
+              <div id="style-profile-details" class="text-gray-700 text-sm space-y-2"></div>
+            </div>
+          </div>
+
+          <!-- Right: Shopping Results -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <div class="mb-5">
+              <h3 class="text-2xl font-semibold mb-2 text-gray-900">Your Style Insights</h3>
+              <p class="text-gray-600 text-sm">Personalized recommendations based on your aesthetic</p>
+            </div>
+            
+            <div id="shopping-loader" class="hidden text-center py-12">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-3"></div>
+              <p class="text-gray-600 text-sm">Analyzing your style...</p>
+            </div>
+            
+            <!-- Shopping Results Grid -->
+            <div id="style-shopping-results" class="hidden space-y-3 max-h-[600px] overflow-y-auto pr-2">
+              <!-- Results will be dynamically inserted here -->
+            </div>
+            
+            <div id="empty-shopping-state" class="text-center py-8 text-gray-600 px-4">
+              <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <p class="text-base font-medium text-gray-900 mb-2">Style Analysis Powered by AI</p>
+              <p class="text-sm text-gray-600 mb-3">Upload your moodboard and we'll analyze:</p>
+              <div class="text-left max-w-sm mx-auto space-y-2 text-sm">
+                <p class="text-gray-700">✨ Color palettes you gravitate toward</p>
+                <p class="text-gray-700">👗 Aesthetic vibes (minimalist, bohemian, edgy...)</p>
+                <p class="text-gray-700">🎯 Style patterns across your inspiration</p>
+                <p class="text-gray-700">🌱 Sustainable brands matching your values</p>
+              </div>
+              <p class="text-xs text-gray-500 mt-4 italic">"From your moodboard, we can see you like minimalist earth tones and sustainable fabrics"</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-        <section id="features" class="panel relative flex items-center justify-center overflow-hidden bg-gray-800/95 backdrop-blur-sm">
-      <div class="absolute text-6xl font-extrabold bg-black/50 px-8 py-6 rounded-xl z-20">Wear Confidence</div>
-      <img src="{{ url_for('static', filename='pic2.png') }}" class="parallax-image absolute w-[90%] opacity-70" alt="Style">
+        <section id="features" class="panel relative flex items-center justify-center overflow-hidden bg-white p-8">
+      <img src="{{ url_for('static', filename='pic2.png') }}" class="parallax-image absolute w-[90%] opacity-5" alt="Style">
+      
+      <div class="relative z-20 max-w-7xl w-full px-4">
+        <div class="text-center mb-8">
+          <h2 class="text-5xl font-bold text-gray-900 mb-2">Shop Your Style</h2>
+          <p class="text-gray-600 text-lg">Curated pieces within your budget</p>
+        </div>
+        
+        <!-- Search & Filter Bar (H&M Style) -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg mb-8 border border-gray-200">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Budget Input -->
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Budget</label>
+              <div class="flex">
+                <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg px-4 py-2.5 text-gray-700 text-sm flex items-center font-medium">$</span>
+                <input 
+                  type="number" 
+                  id="budget-input" 
+                  placeholder="100"
+                  min="0"
+                  step="10"
+                  class="flex-1 bg-white border border-gray-300 rounded-r-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
+                >
+              </div>
+            </div>
+            
+            <!-- Style Preference -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">What are you looking for?</label>
+              <input 
+                type="text"
+                id="shopping-description" 
+                placeholder="E.g., 'Versatile blazer for work' or 'Comfortable sneakers'"
+                class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
+              >
+            </div>
+          </div>
+          
+          <button id="find-items-btn" class="mt-4 w-full bg-black hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg transition-all text-sm uppercase tracking-wider">
+            Find Items
+          </button>
+        </div>
+        
+        <!-- Shopping Results Grid (H&M Style) -->
+        <div id="shopping-results" class="hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Your Recommendations</h3>
+            <p class="text-sm text-gray-600"><span id="items-count">0</span> items found</p>
+          </div>
+          
+          <div id="shopping-items" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        </div>
+        
+        <!-- Empty State -->
+        <div id="shopping-empty" class="text-center py-16">
+          <div class="max-w-md mx-auto">
+            <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Start Shopping</h3>
+            <p class="text-gray-600 text-sm">Enter your budget and tell us what you're looking for</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="panel relative flex items-center justify-center overflow-hidden bg-gray-900 p-8">
+      <div class="relative z-20 max-w-4xl w-full px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-5xl font-bold mb-4 text-white">Get in Touch</h2>
+          <p class="text-gray-400 text-lg">Have questions? We'd love to hear from you</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Contact Form -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-900">Send us a message</h3>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Name</label>
+                <input 
+                  type="text" 
+                  placeholder="Your name"
+                  class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Email</label>
+                <input 
+                  type="email" 
+                  placeholder="your@email.com"
+                  class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Message</label>
+                <textarea 
+                  rows="4"
+                  placeholder="Tell us what's on your mind..."
+                  class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none resize-none text-sm"
+                ></textarea>
+              </div>
+              
+              <button type="submit" class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-all text-sm uppercase tracking-wider">
+                Send Message
+              </button>
+            </form>
+          </div>
+          
+          <!-- Contact Info -->
+          <div class="space-y-6">
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+              <div class="flex items-start gap-4">
+                <div class="bg-white/20 rounded-full p-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1">Email</h4>
+                  <p class="text-gray-400 text-sm">hello@stylesync.com</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+              <div class="flex items-start gap-4">
+                <div class="bg-white/20 rounded-full p-3">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold mb-1">Location</h4>
+                  <p class="text-gray-400 text-sm">Available Worldwide</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+              <h4 class="text-white font-semibold mb-3">Follow Us</h4>
+              <div class="flex gap-3">
+                <a href="#" class="bg-white/20 hover:bg-white/30 rounded-full p-3 transition-colors">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </a>
+                <a href="#" class="bg-white/20 hover:bg-white/30 rounded-full p-3 transition-colors">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </a>
+                <a href="#" class="bg-white/20 hover:bg-white/30 rounded-full p-3 transition-colors">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
-    <nav class="fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md z-50 space-y-16">
+    <nav class="fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-center bg-white/95 backdrop-blur-md z-50 gap-6 shadow-lg">
     <a href="#intro" class="nav-rotated">INTRO</a>
     <a href="#home" class="nav-rotated">CLOSET</a>
     <a href="#about" class="nav-rotated">AI-SUGGEST</a>
