@@ -256,3 +256,358 @@ input:focus, textarea:focus, select:focus {
   transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
   overflow: hidden;
 }
+
+/* ========== STEP-BY-STEP WIZARD STYLES ========== */
+
+/* Suggestion Chips */
+.suggestion-chip {
+  padding: 0.625rem 1rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.suggestion-chip:hover {
+  border-color: #8b5cf6;
+  background: linear-gradient(135deg, #ede9fe, #faf5ff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);
+}
+
+.suggestion-chip:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+}
+
+/* Price Cards */
+.price-card {
+  position: relative;
+  padding: 1.25rem 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  display: block;
+}
+
+.price-card:hover {
+  border-color: #8b5cf6;
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+}
+
+.price-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.price-card input[type="radio"]:checked + .card-content {
+  background: linear-gradient(135deg, #f5f3ff, #faf5ff);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin: -0.75rem;
+}
+
+.price-card:has(input[type="radio"]:checked) {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+}
+
+.price-card input[type="radio"]:checked + .card-content::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+}
+
+/* Value Cards */
+.value-card {
+  position: relative;
+  padding: 1.25rem 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  display: block;
+}
+
+.value-card:hover {
+  border-color: #8b5cf6;
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+}
+
+.value-card input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.value-card input[type="checkbox"]:checked + .card-content {
+  background: linear-gradient(135deg, #f5f3ff, #faf5ff);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin: -0.75rem;
+}
+
+.value-card:has(input[type="checkbox"]:checked) {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+}
+
+.value-card input[type="checkbox"]:checked + .card-content::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .suggestion-chip {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
+  }
+  
+  .price-card, .value-card {
+    padding: 1rem 1.25rem;
+  }
+  
+  .price-card input[type="radio"]:checked + .card-content::after,
+  .value-card input[type="checkbox"]:checked + .card-content::after {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 24px;
+    right: 1rem;
+  }
+}
+
+.card-content {
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  .suggestion-chip {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
+  }
+}
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  min-width: 80px;
+}
+
+.step-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.step-indicator.active .step-number {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-indicator.active .step-label {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.step-indicator.completed .step-number {
+  background: #10b981;
+  color: white;
+}
+
+.step-indicator.completed .step-label {
+  color: #10b981;
+}
+
+/* Step Content Styles */
+.step-content {
+  display: none;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.step-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style Cards */
+.style-card {
+  position: relative;
+  padding: 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 140px;
+}
+
+.style-card:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(139, 92, 246, 0.15);
+}
+
+.style-card input[type="checkbox"]:checked + .card-content,
+.style-card input[type="checkbox"]:checked ~ .card-content {
+  border-color: #8b5cf6;
+}
+
+.style-card input[type="checkbox"]:checked ~ * {
+  color: #8b5cf6;
+}
+
+/* Checkmark Badge */
+.style-card input[type="checkbox"]:checked::before {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .style-card {
+    padding: 1rem;
+    min-height: 120px;
+  }
+}
+
+/* Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #6b7280;
+  padding: 0.875rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}

@@ -733,3 +733,297 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ========== STEP-BY-STEP WIZARD LOGIC ==========
+
+let currentStep = 1;
+const totalSteps = 5;
+let formData = {
+  styleContext: [],
+  priceRange: '',
+  values: [],
+  moodboard: null
+};
+
+function updateProgressBar() {
+  const progress = (currentStep / totalSteps) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  
+  // Update step indicators
+  document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+    const stepNum = index + 1;
+    indicator.classList.remove('active', 'completed');
+    
+    if (stepNum < currentStep) {
+      indicator.classList.add('completed');
+    } else if (stepNum === currentStep) {
+      indicator.classList.add('active');
+    }
+  });
+}
+
+function showStep(step) {
+  // Hide all steps
+  document.querySelectorAll('.step-content').forEach(content => {
+    content.classList.remove('active');
+  });
+  
+  // Show current step
+  document.getElementById(`step${step}`).classList.add('active');
+  
+  // Update button visibility
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  if (step === 1) {
+    prevBtn.style.visibility = 'hidden';
+  } else {
+    prevBtn.style.visibility = 'visible';
+  }
+  
+  if (step === totalSteps) {
+    nextBtn.style.display = 'none';
+  } else {
+    nextBtn.style.display = 'inline-block';
+  }
+  
+  updateProgressBar();
+}
+
+function nextStep() {
+  // Validate current step
+  if (!validateStep(currentStep)) {
+    return;
+  }
+  
+  // Save current step data
+  saveStepData(currentStep);
+  
+  if (currentStep < totalSteps) {
+    currentStep++;
+    showStep(currentStep);
+    
+    // Update summary on final step
+    if (currentStep === totalSteps) {
+      updateSummary();
+    }
+  }
+}
+
+function previousStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+function validateStep(step) {
+  switch(step) {
+    case 1: // Style Context
+      const styleVibeInput = document.getElementById('styleVibeInput');
+      if (!styleVibeInput || !styleVibeInput.value.trim()) {
+        alert('Please describe your style vibe for today');
+        return false;
+      }
+      return true;
+      
+    case 2: // Price Range
+      const priceChecked = document.querySelector('input[name="priceRange"]:checked');
+      if (!priceChecked) {
+        alert('Please select a price range');
+        return false;
+      }
+      return true;
+      
+    case 3: // Values
+      const valuesChecked = document.querySelectorAll('input[name="values"]:checked');
+      if (valuesChecked.length === 0) {
+        alert('Please select at least one value');
+        return false;
+      }
+      return true;
+      
+    case 4: // Moodboard
+      const moodboardInput = document.getElementById('moodboardInput');
+      if (!moodboardInput.files || moodboardInput.files.length === 0) {
+        alert('Please upload a moodboard image');
+        return false;
+      }
+      return true;
+      
+    default:
+      return true;
+  }
+}
+
+function saveStepData(step) {
+  switch(step) {
+    case 1: // Style Context
+      const styleVibeInput = document.getElementById('styleVibeInput');
+      formData.styleContext = styleVibeInput ? styleVibeInput.value.trim() : '';
+      break;
+      
+    case 2: // Price Range
+      const priceRadio = document.querySelector('input[name="priceRange"]:checked');
+      formData.priceRange = priceRadio ? priceRadio.value : '';
+      break;
+      
+    case 3: // Values
+      formData.values = Array.from(
+        document.querySelectorAll('input[name="values"]:checked')
+      ).map(cb => cb.value);
+      break;
+      
+    case 4: // Moodboard
+      const moodboardInput = document.getElementById('moodboardInput');
+      if (moodboardInput.files && moodboardInput.files.length > 0) {
+        formData.moodboard = moodboardInput.files[0];
+      }
+      break;
+  }
+}
+
+function updateSummary() {
+  // Style - now displays the text input
+  const styleText = formData.styleContext || 'Not specified';
+  document.getElementById('summaryStyle').textContent = styleText;
+  
+  // Budget
+  const budgetLabels = {
+    'budget': 'Budget Friendly (Under $50)',
+    'moderate': 'Moderate ($50-$150)',
+    'premium': 'Premium ($150-$500)',
+    'luxury': 'Luxury ($500+)'
+  };
+  document.getElementById('summaryBudget').textContent = 
+    budgetLabels[formData.priceRange] || '-';
+  
+  // Values
+  document.getElementById('summaryValues').textContent = 
+    formData.values.map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(', ');
+  
+  // Moodboard
+  document.getElementById('summaryMoodboard').textContent = 
+    formData.moodboard ? '✓ Uploaded' : 'Not uploaded';
+}
+
+// Moodboard preview
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize suggestion chips
+  const suggestionChips = document.querySelectorAll('.suggestion-chip');
+  const styleVibeInput = document.getElementById('styleVibeInput');
+  
+  if (suggestionChips && styleVibeInput) {
+    suggestionChips.forEach(chip => {
+      chip.addEventListener('click', function() {
+        const value = this.getAttribute('data-value');
+        styleVibeInput.value = value;
+        styleVibeInput.focus();
+        
+        // Add visual feedback
+        suggestionChips.forEach(c => {
+          c.style.background = 'white';
+          c.style.borderColor = '#e5e7eb';
+        });
+        this.style.background = 'linear-gradient(135deg, #ede9fe, #faf5ff)';
+        this.style.borderColor = '#8b5cf6';
+      });
+    });
+  }
+
+  const moodboardInput = document.getElementById('moodboardInput');
+  if (moodboardInput) {
+    moodboardInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const preview = document.getElementById('moodboardPreview');
+          const img = preview.querySelector('img');
+          img.src = event.target.result;
+          preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+  
+  // Initialize first step
+  showStep(1);
+});
+
+async function findItems() {
+  const btn = event.target;
+  const btnText = btn.querySelector('.btn-text');
+  const btnLoader = btn.querySelector('.btn-loader');
+  
+  btnText.classList.add('hidden');
+  btnLoader.classList.remove('hidden');
+  btn.disabled = true;
+  
+  try {
+    // Create FormData
+    const formDataToSend = new FormData();
+    formDataToSend.append('style', formData.styleContext.join(','));
+    formDataToSend.append('priceRange', formData.priceRange);
+    formDataToSend.append('values', formData.values.join(','));
+    
+    if (formData.moodboard) {
+      formDataToSend.append('moodboard', formData.moodboard);
+    }
+    
+    // Send to backend
+    const response = await fetch('/api/learn-style-and-shop', {
+      method: 'POST',
+      body: formDataToSend
+    });
+    
+    const data = await response.json();
+    
+    // Display results
+    const resultsDiv = document.getElementById('itemResults');
+    resultsDiv.innerHTML = '<h4 class="text-2xl font-bold mb-6 text-gray-900">Your Personalized Picks</h4>';
+    
+    if (data.items && data.items.length > 0) {
+      const grid = document.createElement('div');
+      grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+      
+      data.items.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'result-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300';
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.innerHTML = `
+          <div class="aspect-[3/4] overflow-hidden bg-gray-100">
+            <img src="${item.image_url || 'https://via.placeholder.com/300x400'}" 
+                 alt="${item.title}" 
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+          </div>
+          <div class="p-4">
+            <h5 class="font-semibold text-gray-900 mb-2 line-clamp-2">${item.title}</h5>
+            <p class="text-2xl font-bold text-purple-600 mb-2">$${item.price.toFixed(2)}</p>
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2">${item.description || ''}</p>
+            ${item.sustainability_badge ? `<span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mb-3">🌱 ${item.sustainability_badge}</span>` : ''}
+            <a href="${item.link}" target="_blank" class="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+              View Item
+            </a>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+      
+      resultsDiv.appendChild(grid);
+    } else {
+      resultsDiv.innerHTML += '<p class="text-gray-600 text-center py-8">No items found. Try adjusting your preferences.</p>';
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('itemResults').innerHTML = '<p class="text-red-600 text-center py-8">Failed to find items. Please try again.</p>';
+  } finally {
+    btnText.classList.remove('hidden');
+    btnLoader.classList.add('hidden');
+    btn.disabled = false;
+  }
+}

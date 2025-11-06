@@ -113,130 +113,304 @@
       </div>
     </section>
 
-        <section id="about" class="panel flex flex-col justify-center items-center bg-gray-50 p-8 overflow-y-auto">
-      <div class="max-w-7xl w-full px-4 py-8">
-        <div class="text-center mb-8">
-          <h1 class="text-5xl font-bold mb-3 text-gray-900">Discover Your Style</h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload moodboards, set your values, shop consciously
-          </p>
+            <section id="about" class="panel relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-8">
+      <div class="relative z-20 w-full max-w-6xl h-[90vh] flex flex-col px-2 sm:px-4 py-4 sm:py-6">
+        <div class="text-center mb-4 sm:mb-6 flex-shrink-0">
+          <h2 class="text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 text-gray-900">Build Your Style Profile</h2>
+          <p class="text-gray-600 text-sm sm:text-base">Let's personalize your shopping experience in 5 easy steps</p>
         </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Left: Moodboard Upload & Preferences -->
-          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <div class="mb-5">
-              <h3 class="text-2xl font-semibold mb-2 text-gray-900">Build Your Profile</h3>
-              <p class="text-gray-600 text-sm">Tell us about your style preferences</p>
-            </div>
-            
-            <!-- Context Input -->
-            <div class="mb-4">
-              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Style Context</label>
-              <input 
-                type="text" 
-                id="moodboard-context" 
-                placeholder="E.g., 'Clothes for 8:30 AM classes'"
-                class="w-full bg-white border border-gray-300 rounded-lg p-3 text-gray-900 placeholder-gray-400 focus:border-black focus:outline-none text-sm"
-              >
-            </div>
-            
-            <!-- Price Range Selector -->
-            <div class="mb-4">
-              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Price Range</label>
-              <select 
-                id="price-range" 
-                class="w-full bg-white border border-gray-300 rounded-lg p-3 text-gray-900 focus:border-black focus:outline-none text-sm"
-              >
-                <option value="budget">Budget Friendly ($10-$30)</option>
-                <option value="moderate" selected>Moderate ($30-$80)</option>
-                <option value="premium">Premium ($80-$150)</option>
-                <option value="luxury">Luxury ($150+)</option>
-              </select>
-            </div>
 
-            <!-- Sustainability Ethics -->
-            <div class="mb-4">
-              <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">🌱 Sustainability Values</label>
-              <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-3">
-                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" id="eco-materials" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4">
-                  <span>Eco-friendly materials (organic, recycled, bamboo)</span>
-                </label>
-                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" id="fair-trade" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4">
-                  <span>Fair trade & ethical production</span>
-                </label>
-                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" id="timeless" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4" checked>
-                  <span>Timeless designs (avoid fast fashion)</span>
-                </label>
-                <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" id="quality-focus" class="rounded border-gray-300 text-green-600 focus:ring-green-500 w-4 h-4" checked>
-                  <span>Quality over quantity</span>
-                </label>
+        <!-- Progress Bar -->
+        <div class="mb-4 sm:mb-6 flex-shrink-0">
+          <div class="flex justify-between mb-3 gap-1 sm:gap-2 overflow-x-auto pb-2">
+            <span class="step-indicator active" data-step="1">
+              <span class="step-number">1</span>
+              <span class="step-label hidden sm:inline">Style</span>
+            </span>
+            <span class="step-indicator" data-step="2">
+              <span class="step-number">2</span>
+              <span class="step-label hidden sm:inline">Budget</span>
+            </span>
+            <span class="step-indicator" data-step="3">
+              <span class="step-number">3</span>
+              <span class="step-label hidden sm:inline">Values</span>
+            </span>
+            <span class="step-indicator" data-step="4">
+              <span class="step-number">4</span>
+              <span class="step-label hidden sm:inline">Moodboard</span>
+            </span>
+            <span class="step-indicator" data-step="5">
+              <span class="step-number">5</span>
+              <span class="step-label hidden sm:inline">Find</span>
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-2.5 rounded-full transition-all duration-500" style="width: 20%"></div>
+          </div>
+        </div>
+
+        <!-- Step Container -->
+        <div class="bg-white rounded-2xl shadow-2xl flex-1 flex flex-col overflow-hidden">
+          <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+          
+          <!-- Step 1: Style Context -->
+          <div id="step1" class="step-content active">
+            <div class="max-w-3xl mx-auto">
+              <div class="text-center mb-6">
+                <div class="inline-block p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-3">
+                  <span class="text-3xl">✨</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">What's your style vibe for today?</h3>
+                <p class="text-gray-500 text-sm sm:text-base">Tell us about your occasion or mood</p>
               </div>
-            </div>
-            
-            <!-- Moodboard Upload Area -->
-            <div id="moodboard-upload-area" class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-gray-400 transition-all cursor-pointer bg-gray-50 mb-4">
-              <input type="file" id="moodboard-upload" accept="image/*" multiple class="hidden">
-              <div class="flex flex-col items-center gap-3">
-                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                <div class="text-center">
-                  <p class="text-sm font-medium text-gray-900">Upload Moodboard</p>
-                  <p class="text-xs text-gray-500 mt-1">Select images from Pinterest</p>
+              
+              <!-- Main Text Input -->
+              <div class="mb-6">
+                <input 
+                  type="text" 
+                  id="styleVibeInput"
+                  name="styleContext" 
+                  placeholder="e.g., date night, casual brunch, job interview..."
+                  class="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all placeholder-gray-400"
+                  autocomplete="off"
+                />
+              </div>
+
+              <!-- Quick Suggestions -->
+              <div>
+                <p class="text-xs sm:text-sm text-gray-500 mb-3 text-center">Quick suggestions:</p>
+                <div class="flex flex-wrap justify-center gap-2">
+                  <button type="button" class="suggestion-chip" data-value="date night">💝 Date Night</button>
+                  <button type="button" class="suggestion-chip" data-value="casual weekend">👟 Casual Weekend</button>
+                  <button type="button" class="suggestion-chip" data-value="work meeting">💼 Work Meeting</button>
+                  <button type="button" class="suggestion-chip" data-value="coffee with friends">☕ Coffee Date</button>
+                  <button type="button" class="suggestion-chip" data-value="night out">🎉 Night Out</button>
+                  <button type="button" class="suggestion-chip" data-value="gym session">💪 Gym Session</button>
+                  <button type="button" class="suggestion-chip" data-value="art gallery">🎨 Art Gallery</button>
+                  <button type="button" class="suggestion-chip" data-value="beach day">🏖️ Beach Day</button>
                 </div>
               </div>
             </div>
-            
-            <!-- Preview Grid -->
-            <div id="moodboard-preview-grid" class="hidden mb-4 grid grid-cols-3 gap-2"></div>
-            
-            <button id="learn-style-btn" class="hidden w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all text-sm uppercase tracking-wider">
-              Analyze My Style
-            </button>
-            
-            <!-- Style Learning Results -->
-            <div id="style-learning-results" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <h4 class="text-base font-semibold mb-3 text-gray-900">Your Style Profile</h4>
-              <div id="style-profile-details" class="text-gray-700 text-sm space-y-2"></div>
+          </div>
+
+          <!-- Step 2: Price Range -->
+          <div id="step2" class="step-content">
+            <div class="max-w-2xl mx-auto">
+              <div class="text-center mb-8">
+                <div class="inline-block p-3 bg-gradient-to-r from-green-100 to-blue-100 rounded-full mb-3">
+                  <span class="text-3xl">💰</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">What's your budget?</h3>
+                <p class="text-gray-500 text-sm sm:text-base">Choose your comfortable price range per item</p>
+              </div>
+              
+              <div class="space-y-3">
+                <label class="price-card">
+                  <input type="radio" name="priceRange" value="budget" />
+                  <div class="card-content">
+                    <div class="flex items-center justify-between w-full">
+                      <div class="flex items-center gap-4">
+                        <span class="text-3xl">💵</span>
+                        <div class="text-left">
+                          <span class="font-bold text-xl block">$</span>
+                          <span class="text-sm text-gray-500">Budget Friendly</span>
+                        </div>
+                      </div>
+                      <span class="text-gray-600 font-medium">Under $50</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="price-card">
+                  <input type="radio" name="priceRange" value="moderate" />
+                  <div class="card-content">
+                    <div class="flex items-center justify-between w-full">
+                      <div class="flex items-center gap-4">
+                        <span class="text-3xl">💳</span>
+                        <div class="text-left">
+                          <span class="font-bold text-xl block">$$</span>
+                          <span class="text-sm text-gray-500">Moderate</span>
+                        </div>
+                      </div>
+                      <span class="text-gray-600 font-medium">$50 - $150</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="price-card">
+                  <input type="radio" name="priceRange" value="premium" />
+                  <div class="card-content">
+                    <div class="flex items-center justify-between w-full">
+                      <div class="flex items-center gap-4">
+                        <span class="text-3xl">💎</span>
+                        <div class="text-left">
+                          <span class="font-bold text-xl block">$$$</span>
+                          <span class="text-sm text-gray-500">Premium</span>
+                        </div>
+                      </div>
+                      <span class="text-gray-600 font-medium">$150 - $500</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="price-card">
+                  <input type="radio" name="priceRange" value="luxury" />
+                  <div class="card-content">
+                    <div class="flex items-center justify-between w-full">
+                      <div class="flex items-center gap-4">
+                        <span class="text-3xl">👑</span>
+                        <div class="text-left">
+                          <span class="font-bold text-xl block">$$$$</span>
+                          <span class="text-sm text-gray-500">Luxury</span>
+                        </div>
+                      </div>
+                      <span class="text-gray-600 font-medium">$500+</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
 
-          <!-- Right: Shopping Results -->
-          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <div class="mb-5">
-              <h3 class="text-2xl font-semibold mb-2 text-gray-900">Your Style Insights</h3>
-              <p class="text-gray-600 text-sm">Personalized recommendations based on your aesthetic</p>
-            </div>
-            
-            <div id="shopping-loader" class="hidden text-center py-12">
-              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-3"></div>
-              <p class="text-gray-600 text-sm">Analyzing your style...</p>
-            </div>
-            
-            <!-- Shopping Results Grid -->
-            <div id="style-shopping-results" class="hidden space-y-3 max-h-[600px] overflow-y-auto pr-2">
-              <!-- Results will be dynamically inserted here -->
-            </div>
-            
-            <div id="empty-shopping-state" class="text-center py-8 text-gray-600 px-4">
-              <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-              </svg>
-              <p class="text-base font-medium text-gray-900 mb-2">Style Analysis Powered by AI</p>
-              <p class="text-sm text-gray-600 mb-3">Upload your moodboard and we'll analyze:</p>
-              <div class="text-left max-w-sm mx-auto space-y-2 text-sm">
-                <p class="text-gray-700">✨ Color palettes you gravitate toward</p>
-                <p class="text-gray-700">👗 Aesthetic vibes (minimalist, bohemian, edgy...)</p>
-                <p class="text-gray-700">🎯 Style patterns across your inspiration</p>
-                <p class="text-gray-700">🌱 Sustainable brands matching your values</p>
+          <!-- Step 3: Values -->
+          <div id="step3" class="step-content">
+            <div class="max-w-2xl mx-auto">
+              <div class="text-center mb-8">
+                <div class="inline-block p-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full mb-3">
+                  <span class="text-3xl">💎</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-2 text-gray-900">What matters to you?</h3>
+                <p class="text-gray-500 text-sm sm:text-base">Select your shopping values (choose multiple)</p>
               </div>
-              <p class="text-xs text-gray-500 mt-4 italic">"From your moodboard, we can see you like minimalist earth tones and sustainable fabrics"</p>
+              
+              <div class="space-y-3">
+                <label class="value-card">
+                  <input type="checkbox" name="values" value="sustainability" />
+                  <div class="card-content">
+                    <div class="flex items-center gap-4 w-full">
+                      <span class="text-3xl flex-shrink-0">🌱</span>
+                      <div class="text-left flex-1">
+                        <span class="font-semibold text-lg block">Sustainability</span>
+                        <span class="text-sm text-gray-500">Eco-friendly & ethical production</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <label class="value-card">
+                  <input type="checkbox" name="values" value="quality" />
+                  <div class="card-content">
+                    <div class="flex items-center gap-4 w-full">
+                      <span class="text-3xl flex-shrink-0">⭐</span>
+                      <div class="text-left flex-1">
+                        <span class="font-semibold text-lg block">Quality Over Quantity</span>
+                        <span class="text-sm text-gray-500">Long-lasting, well-made pieces</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <label class="value-card">
+                  <input type="checkbox" name="values" value="fairtrade" />
+                  <div class="card-content">
+                    <div class="flex items-center gap-4 w-full">
+                      <span class="text-3xl flex-shrink-0">🤝</span>
+                      <div class="text-left flex-1">
+                        <span class="font-semibold text-lg block">Fair Trade</span>
+                        <span class="text-sm text-gray-500">Support ethical labor practices</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <label class="value-card">
+                  <input type="checkbox" name="values" value="local" />
+                  <div class="card-content">
+                    <div class="flex items-center gap-4 w-full">
+                      <span class="text-3xl flex-shrink-0">📍</span>
+                      <div class="text-left flex-1">
+                        <span class="font-semibold text-lg block">Local Brands</span>
+                        <span class="text-sm text-gray-500">Support small & local businesses</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <label class="value-card">
+                  <input type="checkbox" name="values" value="timeless" />
+                  <div class="card-content">
+                    <div class="flex items-center gap-4 w-full">
+                      <span class="text-3xl flex-shrink-0">♾️</span>
+                      <div class="text-left flex-1">
+                        <span class="font-semibold text-lg block">Timeless Style</span>
+                        <span class="text-sm text-gray-500">Classic pieces that won't go out of style</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
             </div>
+          </div>
+
+          <!-- Step 4: Moodboard -->
+          <div id="step4" class="step-content">
+            <h3 class="text-3xl font-bold mb-6 text-gray-900">Upload your inspiration</h3>
+            <p class="text-gray-600 mb-8">Share a Pinterest moodboard or any style inspo image</p>
+            <div class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-purple-500 transition-all duration-300">
+              <input type="file" id="moodboardInput" accept="image/*" class="hidden" />
+              <label for="moodboardInput" class="cursor-pointer">
+                <div class="mb-4">
+                  <svg class="w-20 h-20 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <p class="text-lg font-semibold text-gray-700 mb-2">Drop your image here or click to upload</p>
+                <p class="text-sm text-gray-500">PNG, JPG up to 10MB</p>
+              </label>
+              <div id="moodboardPreview" class="mt-6 hidden">
+                <img src="" alt="Preview" class="max-w-full h-48 mx-auto rounded-lg shadow-lg" />
+                <p class="mt-3 text-sm text-green-600 font-semibold">✓ Image uploaded successfully</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5: Find Items -->
+          <div id="step5" class="step-content">
+            <div class="text-center py-12">
+              <div class="mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-6">
+                  <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-3xl font-bold mb-4 text-gray-900">Ready to find your perfect items?</h3>
+              <p class="text-gray-600 mb-8 text-lg">We'll search for pieces that match your unique style profile</p>
+              <div id="profileSummary" class="bg-gray-50 rounded-xl p-6 mb-8 text-left max-w-2xl mx-auto">
+                <h4 class="font-semibold text-lg mb-4 text-gray-900">Your Style Profile:</h4>
+                <div class="space-y-2 text-sm text-gray-700">
+                  <p><strong>Style:</strong> <span id="summaryStyle">-</span></p>
+                  <p><strong>Budget:</strong> <span id="summaryBudget">-</span></p>
+                  <p><strong>Values:</strong> <span id="summaryValues">-</span></p>
+                  <p><strong>Moodboard:</strong> <span id="summaryMoodboard">-</span></p>
+                </div>
+              </div>
+              <button onclick="findItems()" class="btn-primary text-lg px-12 py-4">
+                <span class="btn-text">Find My Items</span>
+                <span class="btn-loader hidden">
+                  <svg class="animate-spin h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Searching...
+                </span>
+              </button>
+            </div>
+            <div id="itemResults" class="mt-8"></div>
+          </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="flex justify-between px-4 sm:px-8 py-4 border-t border-gray-200 flex-shrink-0 bg-white rounded-b-2xl">
+            <button id="prevBtn" onclick="previousStep()" class="btn-secondary px-6 py-3" style="visibility: hidden;">
+              ← Previous
+            </button>
+            <button id="nextBtn" onclick="nextStep()" class="btn-primary px-6 py-3">
+              Next →
+            </button>
           </div>
         </div>
       </div>
