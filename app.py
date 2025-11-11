@@ -152,6 +152,13 @@ def generate_realistic_mock_items(search_query, price_min, price_max, limit=6):
 def index():
     return render_template('index.html')
 
+# --- NEW ROUTE ADDED HERE ---
+@app.route('/dashboard')
+def dashboard():
+    # In a real app, you'd add login protection here
+    return render_template('dashboard.html')
+# --- END NEW ROUTE ---
+
 @app.route('/api/upload-outfit', methods=['POST'])
 def upload_outfit():
     """

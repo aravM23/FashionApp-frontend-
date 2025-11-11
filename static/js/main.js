@@ -11,13 +11,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // Parallax effect for images inside the container
   const parallaxElements = Array.from(document.querySelectorAll('.parallax-image'));
   
+  // --- UPDATED applyParallax FUNCTION ---
   function applyParallax() {
     const scrollLeft = container.scrollLeft;
+    
     parallaxElements.forEach((el, i) => {
+      // Find the element's parent panel
+      const panel = el.closest('.panel');
+      if (!panel) return;
+
+      // Calculate the scroll position *relative* to the start of this panel
+      // This is the key change.
+      const panelOffsetLeft = panel.offsetLeft;
+      const relativeScroll = scrollLeft - panelOffsetLeft;
+
       const speed = 0.25 + (i % 3) * 0.08;
-      el.style.transform = `translateX(${ -scrollLeft * speed }px)`;
+      
+      // Apply translation based on the relative scroll
+      el.style.transform = `translateX(${ -relativeScroll * speed }px)`;
     });
   }
+  // --- END OF UPDATE ---
 
   // --- 1. Panel Navigation Function ---
   function goToPanel(index) {
@@ -178,46 +192,47 @@ document.addEventListener("DOMContentLoaded", () => {
             resultsArea.style.opacity = '0';
             resultsArea.style.transform = 'translateY(10px)';
             
+            // UPDATED: Dark theme for results
             const analysis = data.analysis;
             resultsText.innerHTML = `
               <div class="space-y-4">
-                <div class="text-center pb-3 border-b border-gray-200">
-                  <p class="font-bold text-gray-900 text-lg mb-1">✨ ${analysis.style_profile}</p>
-                  <p class="text-xs text-gray-500">Your item analysis</p>
+                <div class="text-center pb-3 border-b border-gray-700">
+                  <p class="font-bold text-white text-lg mb-1">✨ ${analysis.style_profile}</p>
+                  <p class="text-xs text-gray-400">Your item analysis</p>
                 </div>
-                <div class="result-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-200">
-                  <p class="font-semibold text-purple-900 mb-2 text-sm">Color Palette</p>
+                <div class="result-card bg-gradient-to-br from-purple-900/30 to-gray-800 rounded-lg p-3 border border-purple-700/50">
+                  <p class="font-semibold text-purple-300 mb-2 text-sm">Color Palette</p>
                   <div class="flex flex-wrap gap-2">
                     ${analysis.colors.map(color => `
-                      <span class="px-3 py-1 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-gray-200">${color}</span>
+                      <span class="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300 shadow-sm border border-gray-600">${color}</span>
                     `).join('')}
                   </div>
                 </div>
-                <div class="result-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-3 border border-blue-200" style="animation-delay: 0.1s">
-                  <p class="font-semibold text-blue-900 mb-2 text-sm">Perfect For</p>
+                <div class="result-card bg-gradient-to-br from-blue-900/30 to-gray-800 rounded-lg p-3 border border-blue-700/50" style="animation-delay: 0.1s">
+                  <p class="font-semibold text-blue-300 mb-2 text-sm">Perfect For</p>
                   <div class="flex flex-wrap gap-2">
                     ${analysis.occasion.map(occ => `
-                      <span class="px-3 py-1 bg-white rounded-full text-sm text-gray-700 shadow-sm border border-gray-200">${occ}</span>
+                      <span class="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300 shadow-sm border border-gray-600">${occ}</span>
                     `).join('')}
                   </div>
                 </div>
-                <div class="result-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200" style="animation-delay: 0.2s">
+                <div class="result-card bg-gradient-to-br from-green-900/30 to-gray-800 rounded-lg p-4 border border-green-700/50" style="animation-delay: 0.2s">
                   <div class="flex items-center gap-2 mb-3">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <p class="font-semibold text-green-900 text-sm">Style Suggestions</p>
+                    <p class="font-semibold text-green-300 text-sm">Style Suggestions</p>
                   </div>
-                  <ul class="text-gray-700 space-y-2 text-sm">
+                  <ul class="text-gray-300 space-y-2 text-sm">
                     ${analysis.suggestions.map(s => `
                       <li class="flex items-start gap-2">
-                        <span class="text-green-500 mt-0.5">•</span>
+                        <span class="text-green-400 mt-0.5">•</span>
                         <span>${s}</span>
                       </li>
                     `).join('')}
                   </ul>
                 </div>
-                <p class="text-center text-xs text-gray-500 italic pt-2">Building your style profile... Upload more for better recommendations!</p>
+                <p class="text-center text-xs text-gray-400 italic pt-2">Building your style profile... Upload more for better recommendations!</p>
               </div>
             `;
             
@@ -234,13 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
               analyzeBtn.style.background = '';
             }, 300);
           } else {
-            resultsText.innerHTML = `<p class="text-red-600 text-sm">Error: ${data.error}</p>`;
+            resultsText.innerHTML = `<p class="text-red-400 text-sm">Error: ${data.error}</p>`;
             resultsArea.classList.remove('hidden');
           }
           
         } catch (error) {
           console.error('Error:', error);
-          resultsText.innerHTML = `<p class="text-red-600 text-sm">Failed to analyze. Please try again.</p>`;
+          resultsText.innerHTML = `<p class="text-red-400 text-sm">Failed to analyze. Please try again.</p>`;
           resultsArea.classList.remove('hidden');
           
           // Error feedback
@@ -314,38 +329,39 @@ document.addEventListener("DOMContentLoaded", () => {
           capsuleResults.style.opacity = '0';
           capsuleResults.style.transform = 'translateY(10px)';
           
+          // UPDATED: Dark theme for results
           capsuleOutfitDetails.innerHTML = `
             <div class="space-y-4">
-              <div class="text-center pb-3 border-b border-gray-200">
-                <p class="font-bold text-gray-900 text-lg mb-1">✨ ${data.outfit.name}</p>
-                <p class="text-xs text-gray-500">Perfect for your occasion</p>
+              <div class="text-center pb-3 border-b border-gray-600">
+                <p class="font-bold text-white text-lg mb-1">✨ ${data.outfit.name}</p>
+                <p class="text-xs text-gray-400">Perfect for your occasion</p>
               </div>
               <div class="grid grid-cols-1 gap-3">
                 ${data.outfit.pieces.map((piece, index) => `
-                  <div class="result-card bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-all" style="animation-delay: ${index * 0.1}s">
+                  <div class="result-card bg-gradient-to-br from-gray-700 to-gray-700/50 rounded-lg p-4 border border-gray-600 hover:shadow-md transition-all" style="animation-delay: ${index * 0.1}s">
                     <div class="flex items-start gap-3">
-                      <div class="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      <div class="flex-shrink-0 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center font-bold text-sm">
                         ${index + 1}
                       </div>
                       <div class="flex-1">
-                        <p class="font-semibold text-gray-900 mb-1">${piece.item}</p>
-                        <p class="text-sm text-gray-600">${piece.description}</p>
+                        <p class="font-semibold text-white mb-1">${piece.item}</p>
+                        <p class="text-sm text-gray-300">${piece.description}</p>
                       </div>
                     </div>
                   </div>
                 `).join('')}
               </div>
-              <div class="mt-4 pt-4 border-t border-gray-200 bg-blue-50 rounded-lg p-4">
+              <div class="mt-4 pt-4 border-t border-gray-600 bg-blue-900/30 rounded-lg p-4">
                 <div class="flex items-center gap-2 mb-2">
-                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                   </svg>
-                  <p class="text-sm font-semibold text-blue-900">Styling Tips</p>
+                  <p class="text-sm font-semibold text-blue-300">Styling Tips</p>
                 </div>
-                <ul class="text-sm text-gray-700 space-y-2">
+                <ul class="text-sm text-gray-300 space-y-2">
                   ${data.outfit.tips.map(tip => `
                     <li class="flex items-start gap-2">
-                      <span class="text-blue-500 mt-0.5">•</span>
+                      <span class="text-blue-400 mt-0.5">•</span>
                       <span>${tip}</span>
                     </li>
                   `).join('')}
@@ -489,12 +505,13 @@ document.addEventListener("DOMContentLoaded", () => {
           if (timeless) sustainabilityFilters.push('Timeless designs');
           if (qualityFocus) sustainabilityFilters.push('Quality focus');
           
+          // UPDATED: Dark theme for results
           const sustainabilityDisplay = sustainabilityFilters.length > 0 ? `
-            <div class="pt-3 border-t border-gray-200">
-              <p class="font-medium text-green-700 text-xs mb-2">🌱 Active Filters:</p>
+            <div class="pt-3 border-t border-gray-600">
+              <p class="font-medium text-green-400 text-xs mb-2">🌱 Active Filters:</p>
               <div class="flex flex-wrap gap-2">
                 ${sustainabilityFilters.map(filter => `
-                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">${filter}</span>
+                  <span class="bg-green-700/30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">${filter}</span>
                 `).join('')}
               </div>
             </div>
@@ -503,21 +520,21 @@ document.addEventListener("DOMContentLoaded", () => {
           styleProfileDetails.innerHTML = `
             <div class="space-y-3">
               <div>
-                <p class="font-semibold text-gray-900 text-sm mb-1">Context: ${data.profile.context}</p>
+                <p class="font-semibold text-white text-sm mb-1">Context: ${data.profile.context}</p>
               </div>
               <div>
-                <p class="font-medium text-gray-700 text-xs mb-2">Aesthetics:</p>
+                <p class="font-medium text-gray-400 text-xs mb-2">Aesthetics:</p>
                 <div class="flex flex-wrap gap-2">
                   ${data.profile.aesthetics.map(a => `
-                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">${a}</span>
+                    <span class="bg-gray-700 text-gray-200 px-3 py-1 rounded-full text-xs font-medium">${a}</span>
                   `).join('')}
                 </div>
               </div>
               <div>
-                <p class="font-medium text-gray-700 text-xs mb-2">Colors:</p>
+                <p class="font-medium text-gray-400 text-xs mb-2">Colors:</p>
                 <div class="flex gap-2">
                   ${data.profile.colors.map(c => `
-                    <div class="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm" style="background-color: ${c}"></div>
+                    <div class="w-8 h-8 rounded-full border-2 border-gray-600 shadow-sm" style="background-color: ${c}"></div>
                   `).join('')}
                 </div>
               </div>
@@ -529,6 +546,8 @@ document.addEventListener("DOMContentLoaded", () => {
           if (shoppingLoader) shoppingLoader.classList.add('hidden');
           if (styleShoppingResults) {
             styleShoppingResults.classList.remove('hidden');
+            
+            // UPDATED: Dark theme for shopping items
             styleShoppingResults.innerHTML = data.shopping_items.map(item => {
               // Determine if item is sustainable based on brand or description
               const isSustainable = item.brand && (
@@ -543,28 +562,28 @@ document.addEventListener("DOMContentLoaded", () => {
               );
               
               return `
-              <div class="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-all">
+              <div class="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:shadow-lg transition-all">
                 <div class="flex gap-4">
-                  <div class="w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                    <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs font-medium">
+                  <div class="w-20 h-20 flex-shrink-0 bg-gray-700 rounded-lg overflow-hidden">
+                    <div class="w-full h-full flex items-center justify-center text-gray-500 text-xs font-medium">
                       ${item.brand}
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-start mb-1">
-                      <h5 class="font-semibold text-gray-900 text-sm truncate">${item.name}</h5>
-                      <span class="text-gray-900 font-bold text-sm ml-2">${item.price}</span>
+                      <h5 class="font-semibold text-white text-sm truncate">${item.name}</h5>
+                      <span class="text-white font-bold text-sm ml-2">${item.price}</span>
                     </div>
-                    <p class="text-xs text-gray-600 mb-1">
+                    <p class="text-xs text-gray-300 mb-1">
                       ${item.brand}
-                      ${isSustainable ? '<span class="ml-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">🌱 Eco</span>' : ''}
+                      ${isSustainable ? '<span class="ml-1 px-2 py-0.5 bg-green-700/30 text-green-300 rounded-full text-xs font-medium">🌱 Eco</span>' : ''}
                     </p>
-                    <p class="text-xs text-gray-700 line-clamp-2 mb-2">${item.description}</p>
+                    <p class="text-xs text-gray-400 line-clamp-2 mb-2">${item.description}</p>
                     <div class="flex gap-2">
-                      <a href="${item.url}" target="_blank" class="text-xs bg-black text-white hover:bg-gray-800 px-3 py-1 rounded transition-colors font-medium">
+                      <a href="${item.url}" target="_blank" class="text-xs bg-white text-black hover:bg-gray-200 px-3 py-1 rounded transition-colors font-medium">
                         View Item
                       </a>
-                      <span class="text-xs ${item.available ? 'text-green-600' : 'text-gray-400'} flex items-center">
+                      <span class="text-xs ${item.available ? 'text-green-400' : 'text-gray-500'} flex items-center">
                         ${item.available ? '✓ Available' : 'Out of Stock'}
                       </span>
                     </div>
@@ -589,9 +608,10 @@ document.addEventListener("DOMContentLoaded", () => {
               return isSustainable;
             }).length;
             
+            // UPDATED: Dark theme for summary
             styleShoppingResults.innerHTML += `
-              <div class="mt-4 pt-4 border-t border-gray-200 text-center">
-                <p class="text-sm text-gray-700">
+              <div class="mt-4 pt-4 border-t border-gray-700 text-center">
+                <p class="text-sm text-gray-300">
                   ${data.shopping_items.length} items • ${priceRangeValue} range
                   ${sustainableCount > 0 ? ` • ${sustainableCount} sustainable 🌱` : ''}
                 </p>
@@ -655,7 +675,7 @@ document.addEventListener("DOMContentLoaded", () => {
           shoppingResults.classList.remove('hidden');
           if (itemsCount) itemsCount.textContent = data.items.length;
           
-          // H&M-style product cards
+          // UPDATED: Dark theme for H&M-style product cards
           shoppingItems.innerHTML = data.items.map(item => {
             const isSustainable = item.store && (
               item.store.toLowerCase().includes('everlane') ||
@@ -667,48 +687,45 @@ document.addEventListener("DOMContentLoaded", () => {
             
             return `
             <div class="group cursor-pointer">
-              <!-- Product Image -->
-              <div class="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+              <div class="relative aspect-[3/4] bg-gray-700 rounded-lg overflow-hidden mb-3">
                 <div class="absolute inset-0 flex items-center justify-center">
                   <div class="text-center p-4">
                     <div class="text-4xl mb-2">👕</div>
-                    <p class="text-xs text-gray-500 font-medium">${item.store}</p>
+                    <p class="text-xs text-gray-400 font-medium">${item.store}</p>
                   </div>
                 </div>
                 ${isSustainable ? '<div class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">🌱 Eco</div>' : ''}
                 ${item.inBudget ? '' : '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-medium">Near Budget</div>'}
                 
-                <!-- Hover overlay -->
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
               </div>
               
-              <!-- Product Info -->
               <div class="space-y-1">
-                <h3 class="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-2">${item.name}</h3>
-                <p class="text-xs text-gray-600 line-clamp-1">${item.description}</p>
+                <h3 class="text-sm font-medium text-white group-hover:text-gray-300 transition-colors line-clamp-2">${item.name}</h3>
+                <p class="text-xs text-gray-400 line-clamp-1">${item.description}</p>
                 <div class="flex items-center justify-between pt-1">
-                  <span class="text-sm font-bold text-gray-900">$${item.price}</span>
-                  <span class="text-xs text-gray-500">${item.store}</span>
+                  <span class="text-sm font-bold text-white">$${item.price}</span>
+                  <span class="text-xs text-gray-400">${item.store}</span>
                 </div>
                 ${item.inBudget ? 
-                  '<span class="inline-block text-xs text-green-600 font-medium">✓ Within budget</span>' : 
-                  '<span class="inline-block text-xs text-yellow-600 font-medium">Slightly over</span>'}
+                  '<span class="inline-block text-xs text-green-400 font-medium">✓ Within budget</span>' : 
+                  '<span class="inline-block text-xs text-yellow-400 font-medium">Slightly over</span>'}
               </div>
             </div>
             `;
           }).join('');
 
-          // Add budget summary
+          // UPDATED: Dark theme for budget summary
           const totalSpent = data.items.reduce((sum, item) => sum + item.price, 0);
           const remaining = budget - totalSpent;
           
           shoppingItems.innerHTML += `
-            <div class="col-span-full mt-4 pt-6 border-t border-gray-200">
-              <div class="bg-gray-50 rounded-lg p-4 text-center">
-                <p class="text-sm text-gray-700 mb-1">
+            <div class="col-span-full mt-4 pt-6 border-t border-gray-700">
+              <div class="bg-gray-700 rounded-lg p-4 text-center">
+                <p class="text-sm text-gray-300 mb-1">
                   <span class="font-semibold">Total:</span> $${totalSpent.toFixed(2)} of $${budget.toFixed(2)} budget
                 </p>
-                <p class="text-xs ${remaining >= 0 ? 'text-green-600' : 'text-red-600'} font-medium">
+                <p class="text-xs ${remaining >= 0 ? 'text-green-400' : 'text-red-400'} font-medium">
                   ${remaining >= 0 ? `$${remaining.toFixed(2)} remaining in budget` : `$${Math.abs(remaining).toFixed(2)} over budget`}
                 </p>
               </div>
@@ -717,14 +734,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           if (shoppingEmpty) {
             shoppingEmpty.classList.remove('hidden');
-            shoppingEmpty.innerHTML = '<p class="text-red-600 text-sm">No items found. Try adjusting your budget or description.</p>';
+            shoppingEmpty.innerHTML = '<p class="text-red-400 text-sm">No items found. Try adjusting your budget or description.</p>';
           }
         }
       } catch (error) {
         console.error('Error:', error);
         if (shoppingEmpty) {
           shoppingEmpty.classList.remove('hidden');
-          shoppingEmpty.innerHTML = '<p class="text-red-600 text-sm">Failed to find items. Please try again.</p>';
+          shoppingEmpty.innerHTML = '<p class="text-red-400 text-sm">Failed to find items. Please try again.</p>';
         }
       }
 
@@ -802,7 +819,7 @@ function nextStep() {
   if (currentStep < totalSteps) {
     currentStep++;
     showStep(currentStep);
-    
+
     // Update summary on final step
     if (currentStep === totalSteps) {
       updateSummary();
@@ -920,13 +937,15 @@ document.addEventListener('DOMContentLoaded', () => {
         styleVibeInput.value = value;
         styleVibeInput.focus();
         
-        // Add visual feedback
+        // UPDATED: Dark theme visual feedback
         suggestionChips.forEach(c => {
-          c.style.background = 'white';
-          c.style.borderColor = '#e5e7eb';
+          c.style.background = '#374151'; // gray-700
+          c.style.borderColor = '#4b5563'; // gray-600
+          c.style.color = '#d1d5db'; // gray-300
         });
-        this.style.background = 'linear-gradient(135deg, #ede9fe, #faf5ff)';
+        this.style.background = 'linear-gradient(135deg, #4c1d95, #3b0764)'; // dark purple
         this.style.borderColor = '#8b5cf6';
+        this.style.color = '#c4b5fd'; // violet-300
       });
     });
   }
@@ -964,47 +983,67 @@ async function findItems() {
   try {
     // Create FormData
     const formDataToSend = new FormData();
-    formDataToSend.append('style', formData.styleContext.join(','));
-    formDataToSend.append('priceRange', formData.priceRange);
-    formDataToSend.append('values', formData.values.join(','));
+    // formData.styleContext is a string, not array. Adjusting.
+    formDataToSend.append('context', formData.styleContext); 
+    formDataToSend.append('price_range', formData.priceRange);
     
     if (formData.moodboard) {
-      formDataToSend.append('moodboard', formData.moodboard);
+      formDataToSend.append('images', formData.moodboard); // Use 'images' key
     }
+    
+    // Add sustainability prefs from 'values'
+    const sustainabilityPrefs = {
+        ecoMaterials: formData.values.includes('sustainability'),
+        fairTrade: formData.values.includes('fairtrade'),
+        timeless: formData.values.includes('timeless'),
+        qualityFocus: formData.values.includes('quality')
+    };
+    formDataToSend.append('sustainability_prefs', JSON.stringify(sustainabilityPrefs));
+
     
     // Send to backend
     const response = await fetch('/api/learn-style-and-shop', {
       method: 'POST',
-      body: formDataToSend
+      body: formDataToSend // Use the corrected FormData
     });
     
     const data = await response.json();
     
     // Display results
+    // UPDATED: Dark theme results
     const resultsDiv = document.getElementById('itemResults');
-    resultsDiv.innerHTML = '<h4 class="text-2xl font-bold mb-6 text-gray-900">Your Personalized Picks</h4>';
+    resultsDiv.innerHTML = '<h4 class="text-2xl font-bold mb-6 text-white">Your Personalized Picks</h4>';
     
-    if (data.items && data.items.length > 0) {
+    if (data.shopping_items && data.shopping_items.length > 0) {
       const grid = document.createElement('div');
       grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
       
-      data.items.forEach((item, index) => {
+      data.shopping_items.forEach((item, index) => {
         const card = document.createElement('div');
-        card.className = 'result-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300';
+        card.className = 'result-card bg-gray-700 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300';
         card.style.animationDelay = `${index * 0.1}s`;
         
+        // Determine sustainability
+        const isSustainable = item.brand && (
+            item.brand.toLowerCase().includes('organic') ||
+            item.brand.toLowerCase().includes('patagonia') ||
+            item.brand.toLowerCase().includes('everlane') ||
+            item.description?.toLowerCase().includes('organic') ||
+            item.description?.toLowerCase().includes('recycled')
+        );
+        
         card.innerHTML = `
-          <div class="aspect-[3/4] overflow-hidden bg-gray-100">
-            <img src="${item.image_url || 'https://via.placeholder.com/300x400'}" 
-                 alt="${item.title}" 
+          <div class="aspect-[3/4] overflow-hidden bg-gray-800">
+            <img src="${item.image || 'https://via.placeholder.com/300x400'}" 
+                 alt="${item.name}" 
                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
           </div>
           <div class="p-4">
-            <h5 class="font-semibold text-gray-900 mb-2 line-clamp-2">${item.title}</h5>
-            <p class="text-2xl font-bold text-purple-600 mb-2">$${item.price.toFixed(2)}</p>
-            <p class="text-sm text-gray-600 mb-3 line-clamp-2">${item.description || ''}</p>
-            ${item.sustainability_badge ? `<span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mb-3">🌱 ${item.sustainability_badge}</span>` : ''}
-            <a href="${item.link}" target="_blank" class="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+            <h5 class="font-semibold text-white mb-2 line-clamp-2">${item.name}</h5>
+            <p class="text-2xl font-bold text-purple-400 mb-2">${item.price}</p>
+            <p class="text-sm text-gray-400 mb-3 line-clamp-2">${item.description || ''}</p>
+            ${isSustainable ? `<span class="inline-block bg-green-700/30 text-green-300 text-xs px-2 py-1 rounded-full mb-3">🌱 Eco-Friendly</span>` : ''}
+            <a href="${item.url}" target="_blank" class="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity">
               View Item
             </a>
           </div>
@@ -1015,12 +1054,12 @@ async function findItems() {
       
       resultsDiv.appendChild(grid);
     } else {
-      resultsDiv.innerHTML += '<p class="text-gray-600 text-center py-8">No items found. Try adjusting your preferences.</p>';
+      resultsDiv.innerHTML += '<p class="text-gray-400 text-center py-8">No items found. Try adjusting your preferences.</p>';
     }
     
   } catch (error) {
     console.error('Error:', error);
-    document.getElementById('itemResults').innerHTML = '<p class="text-red-600 text-center py-8">Failed to find items. Please try again.</p>';
+    document.getElementById('itemResults').innerHTML = '<p class="text-red-400 text-center py-8">Failed to find items. Please try again.</p>';
   } finally {
     btnText.classList.remove('hidden');
     btnLoader.classList.add('hidden');
