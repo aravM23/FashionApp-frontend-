@@ -169,33 +169,10 @@ Fashion-Sense/
 └── OUTFIT_UPLOAD_DOCS.md    # This file
 ```
 
-## Security Considerations
 
-1. **File Validation**: Only image files are accepted (MIME type checking)
-2. **File Size Limits**: Configured via `MAX_UPLOAD_SIZE_MB` env variable
-3. **Storage Security**: Files stored in private Supabase bucket
-4. **RLS Policies**: Users can only access their own outfit data
-5. **Input Sanitization**: Filenames are sanitized and timestamped
 
-## User Privacy
 
-- All outfit photos are private by default
-- RLS policies ensure data isolation between users
-- Option to delete uploaded outfits (implement deletion endpoint)
-- No sharing without explicit user consent
 
-## Next Steps
-
-1. ✅ Basic upload and preview functionality
-2. ✅ Backend API endpoint
-3. ✅ Supabase storage integration
-4. ✅ Mock AI analysis
-5. 🔄 Integrate real ML model for style analysis
-6. 🔄 Add user authentication
-7. 🔄 Build outfit history/gallery view
-8. 🔄 Implement outfit deletion
-9. 🔄 Add outfit tagging and search
-10. 🔄 Create personalized recommendation engine
 
 ## Testing
 
@@ -209,9 +186,4 @@ python app.py
 # Verify API response in browser console
 ```
 
-## Support
 
-For issues or questions, check:
-- Supabase logs for storage errors
-- Flask server logs (`server.log`)
-- Browser console for frontend errors
