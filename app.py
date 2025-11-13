@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, jsonify
+from flask import Flask, render_template, redirect, request, jsonify, session
 import os
 from dotenv import load_dotenv, dotenv_values 
 from supabase import create_client, Client
@@ -6,11 +6,13 @@ from datetime import datetime
 import base64
 import requests
 import random
+import secrets
 
 load_dotenv()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv("MAX_UPLOAD_SIZE_MB", 10)) * 1024 * 1024  # Max upload size
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
 
 # variables for the supabaseClient
 url: str = os.getenv("SUPABASE_URL")
@@ -432,6 +434,117 @@ def budget_shopping():
     except Exception as e:
         print(f"Error generating shopping recommendations: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+# ==================== AUTHENTICATION ROUTES ====================
+
+@app.route('/api/auth/signup', methods=['POST'])
+def signup():
+    """Handle user signup"""
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        full_name = data.get('full_name', '')
+        
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
+        
+        # Sign up with Supabase
+        response = supabase.auth.sign_up({
+            "email": email,
+            "password": password,
+            "options": {
+                "data": {
+                    "full_name": full_name
+                }
+            }
+        })
+        
+        if response.user:
+            session['user_id'] = response.user.id
+            session['user_email'] = response.user.email
+            session['user_name'] = full_name or email.split('@')[0]
+            
+            return jsonify({
+                'success': True,
+                'message': 'Account created successfully!',
+                'user': {
+                    'id': response.user.id,
+                    'email': response.user.email,
+                    'name': session['user_name']
+                }
+            }), 201
+        else:
+            return jsonify({'error': 'Signup failed'}), 400
+            
+    except Exception as e:
+        print(f"Signup error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """Handle user login"""
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
+        
+        # Sign in with Supabase
+        response = supabase.auth.sign_in_with_password({
+            "email": email,
+            "password": password
+        })
+        
+        if response.user:
+            session['user_id'] = response.user.id
+            session['user_email'] = response.user.email
+            # Get name from user metadata or use email prefix
+            user_metadata = response.user.user_metadata or {}
+            session['user_name'] = user_metadata.get('full_name') or email.split('@')[0]
+            
+            return jsonify({
+                'success': True,
+                'message': 'Logged in successfully!',
+                'user': {
+                    'id': response.user.id,
+                    'email': response.user.email,
+                    'name': session['user_name']
+                }
+            }), 200
+        else:
+            return jsonify({'error': 'Invalid credentials'}), 401
+            
+    except Exception as e:
+        print(f"Login error: {str(e)}")
+        return jsonify({'error': 'Invalid email or password'}), 401
+
+@app.route('/api/auth/logout', methods=['POST'])
+def logout():
+    """Handle user logout"""
+    try:
+        supabase.auth.sign_out()
+        session.clear()
+        return jsonify({'success': True, 'message': 'Logged out successfully'}), 200
+    except Exception as e:
+        print(f"Logout error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/auth/user', methods=['GET'])
+def get_current_user():
+    """Get current logged-in user"""
+    if 'user_id' in session:
+        return jsonify({
+            'authenticated': True,
+            'user': {
+                'id': session['user_id'],
+                'email': session['user_email'],
+                'name': session['user_name']
+            }
+        }), 200
+    return jsonify({'authenticated': False}), 200
 
 # used for debugging - run with `python app.py`
 if __name__ == "__main__":
