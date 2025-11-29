@@ -756,25 +756,91 @@ document.addEventListener("DOMContentLoaded", () => {
 let currentStep = 1;
 const totalSteps = 5;
 let formData = {
-  styleContext: [],
+  styleContext: '',
   priceRange: '',
   values: [],
   moodboard: null
 };
 
-function updateProgressBar() {
-  const progress = (currentStep / totalSteps) * 100;
-  document.getElementById('progressBar').style.width = progress + '%';
+// Initialize luxury wizard
+function initLuxuryWizard() {
+  // Occasion card click handlers
+  document.querySelectorAll('.occasion-card').forEach(card => {
+    card.addEventListener('click', function() {
+      // Remove selected from all
+      document.querySelectorAll('.occasion-card').forEach(c => c.classList.remove('selected'));
+      // Add selected to clicked
+      this.classList.add('selected');
+      // Update input
+      const value = this.dataset.value;
+      const input = document.getElementById('styleVibeInput');
+      if (input) input.value = value;
+    });
+  });
   
-  // Update step indicators
-  document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+  // Budget tier click handlers
+  document.querySelectorAll('.budget-tier').forEach(tier => {
+    tier.addEventListener('click', function() {
+      const radio = this.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+    });
+  });
+  
+  // Value pill click handlers
+  document.querySelectorAll('.value-pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      const checkbox = this.querySelector('input[type="checkbox"]');
+      // The label click already toggles, just add visual feedback
+    });
+  });
+  
+  // Moodboard upload handler
+  const moodboardInput = document.getElementById('moodboardInput');
+  if (moodboardInput) {
+    moodboardInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('moodboardPreview');
+          const uploadLabel = document.querySelector('.moodboard-upload-label');
+          const previewImg = preview.querySelector('.preview-image');
+          
+          previewImg.src = e.target.result;
+          preview.classList.remove('hidden');
+          if (uploadLabel) uploadLabel.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+}
+
+// Call init on DOM ready
+document.addEventListener('DOMContentLoaded', initLuxuryWizard);
+
+function updateStepIndicators() {
+  // Update step dots
+  document.querySelectorAll('.style-step-dot').forEach((dot, index) => {
     const stepNum = index + 1;
-    indicator.classList.remove('active', 'completed');
+    dot.classList.remove('active', 'completed');
     
     if (stepNum < currentStep) {
-      indicator.classList.add('completed');
+      dot.classList.add('completed');
     } else if (stepNum === currentStep) {
-      indicator.classList.add('active');
+      dot.classList.add('active');
+    }
+  });
+  
+  // Update step labels
+  document.querySelectorAll('.style-step-label').forEach((label, index) => {
+    const stepNum = index + 1;
+    label.classList.remove('active', 'completed');
+    
+    if (stepNum < currentStep) {
+      label.classList.add('completed');
+    } else if (stepNum === currentStep) {
+      label.classList.add('active');
     }
   });
 }
@@ -786,25 +852,51 @@ function showStep(step) {
   });
   
   // Show current step
-  document.getElementById(`step${step}`).classList.add('active');
+  const stepElement = document.getElementById(`step${step}`);
+  if (stepElement) {
+    stepElement.classList.add('active');
+  }
   
-  // Update button visibility
+  // Update navigation buttons
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   
-  if (step === 1) {
-    prevBtn.style.visibility = 'hidden';
-  } else {
-    prevBtn.style.visibility = 'visible';
+  if (prevBtn) {
+    if (step === 1) {
+      prevBtn.classList.add('opacity-0', 'pointer-events-none');
+    } else {
+      prevBtn.classList.remove('opacity-0', 'pointer-events-none');
+    }
   }
   
-  if (step === totalSteps) {
-    nextBtn.style.display = 'none';
-  } else {
-    nextBtn.style.display = 'inline-block';
+  if (nextBtn) {
+    if (step === totalSteps) {
+      nextBtn.style.display = 'none';
+    } else {
+      nextBtn.style.display = 'flex';
+    }
   }
   
-  updateProgressBar();
+  updateStepIndicators();
+}
+
+// Allow direct navigation to steps
+function goToStep(step) {
+  if (step < currentStep || step === currentStep + 1) {
+    // Can go back or go to next step
+    if (step > currentStep && !validateStep(currentStep)) {
+      return;
+    }
+    if (step > currentStep) {
+      saveStepData(currentStep);
+    }
+    currentStep = step;
+    showStep(currentStep);
+    
+    if (currentStep === totalSteps) {
+      updateSummary();
+    }
+  }
 }
 
 function nextStep() {
@@ -834,12 +926,28 @@ function previousStep() {
   }
 }
 
+// Luxury notification instead of alert
+function showNotice(message, type = 'info') {
+  const notice = document.createElement('div');
+  notice.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-sm font-medium z-50 transition-all duration-300 ${
+    type === 'error' ? 'bg-red-500/90 text-white' : 'bg-purple-500/90 text-white'
+  }`;
+  notice.textContent = message;
+  document.body.appendChild(notice);
+  
+  setTimeout(() => {
+    notice.style.opacity = '0';
+    setTimeout(() => notice.remove(), 300);
+  }, 3000);
+}
+
 function validateStep(step) {
   switch(step) {
     case 1: // Style Context
       const styleVibeInput = document.getElementById('styleVibeInput');
       if (!styleVibeInput || !styleVibeInput.value.trim()) {
-        alert('Please describe your style vibe for today');
+        showNotice('Tell us about your occasion ✨', 'error');
+        styleVibeInput?.focus();
         return false;
       }
       return true;
@@ -847,25 +955,15 @@ function validateStep(step) {
     case 2: // Price Range
       const priceChecked = document.querySelector('input[name="priceRange"]:checked');
       if (!priceChecked) {
-        alert('Please select a price range');
+        showNotice('Select your investment level 💎', 'error');
         return false;
       }
       return true;
       
-    case 3: // Values
-      const valuesChecked = document.querySelectorAll('input[name="values"]:checked');
-      if (valuesChecked.length === 0) {
-        alert('Please select at least one value');
-        return false;
-      }
+    case 3: // Values - Optional, can skip
       return true;
       
-    case 4: // Moodboard
-      const moodboardInput = document.getElementById('moodboardInput');
-      if (!moodboardInput.files || moodboardInput.files.length === 0) {
-        alert('Please upload a moodboard image');
-        return false;
-      }
+    case 4: // Moodboard - Optional, can skip
       return true;
       
     default:
@@ -893,7 +991,7 @@ function saveStepData(step) {
       
     case 4: // Moodboard
       const moodboardInput = document.getElementById('moodboardInput');
-      if (moodboardInput.files && moodboardInput.files.length > 0) {
+      if (moodboardInput && moodboardInput.files && moodboardInput.files.length > 0) {
         formData.moodboard = moodboardInput.files[0];
       }
       break;
@@ -901,27 +999,37 @@ function saveStepData(step) {
 }
 
 function updateSummary() {
-  // Style - now displays the text input
-  const styleText = formData.styleContext || 'Not specified';
-  document.getElementById('summaryStyle').textContent = styleText;
+  // Style/Occasion
+  const styleEl = document.getElementById('summaryStyle');
+  if (styleEl) {
+    styleEl.textContent = formData.styleContext || 'Not specified';
+  }
   
-  // Budget
+  // Budget with elegant labels
   const budgetLabels = {
-    'budget': 'Budget Friendly (Under $50)',
-    'moderate': 'Moderate ($50-$150)',
-    'premium': 'Premium ($150-$500)',
-    'luxury': 'Luxury ($500+)'
+    'budget': 'Essential • Under $50',
+    'moderate': 'Elevated • $50–$150',
+    'premium': 'Premium • $150–$500',
+    'luxury': 'Luxury • $500+'
   };
-  document.getElementById('summaryBudget').textContent = 
-    budgetLabels[formData.priceRange] || '-';
+  const budgetEl = document.getElementById('summaryBudget');
+  if (budgetEl) {
+    budgetEl.textContent = budgetLabels[formData.priceRange] || 'Not selected';
+  }
   
   // Values
-  document.getElementById('summaryValues').textContent = 
-    formData.values.map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(', ');
+  const valuesEl = document.getElementById('summaryValues');
+  if (valuesEl) {
+    valuesEl.textContent = formData.values.length > 0 
+      ? formData.values.map(v => v.charAt(0).toUpperCase() + v.slice(1)).join(', ')
+      : 'None selected';
+  }
   
   // Moodboard
-  document.getElementById('summaryMoodboard').textContent = 
-    formData.moodboard ? '✓ Uploaded' : 'Not uploaded';
+  const moodboardEl = document.getElementById('summaryMoodboard');
+  if (moodboardEl) {
+    moodboardEl.textContent = formData.moodboard ? '✓ Uploaded' : 'Skipped';
+  }
 }
 
 // Moodboard preview
