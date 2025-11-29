@@ -546,6 +546,273 @@ def get_current_user():
         }), 200
     return jsonify({'authenticated': False}), 200
 
+
+# ========== AI VIDEO GENERATION ENDPOINTS ==========
+
+def generate_video_placeholder(video_type, duration=5):
+    """
+    Generate placeholder video data for AI video features.
+    In production, this would integrate with AI video services like:
+    - Runway ML
+    - Pika Labs
+    - HeyGen
+    - Synthesia
+    """
+    video_templates = {
+        'try-on': {
+            'title': 'Virtual Try-On',
+            'description': 'AI-generated try-on video showing how the garment looks in motion',
+            'thumbnail': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',
+            'duration': duration
+        },
+        'styling-reel': {
+            'title': 'Styling Reel',
+            'description': 'Three ways to style this piece for different occasions',
+            'thumbnail': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400',
+            'duration': 15
+        },
+        'runway': {
+            'title': 'Your Personal Runway',
+            'description': 'Weekly fashion show featuring your closet items',
+            'thumbnail': 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400',
+            'duration': 60
+        }
+    }
+    
+    template = video_templates.get(video_type, video_templates['try-on'])
+    
+    return {
+        'video_id': f'{video_type}_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+        'status': 'ready',
+        'video_url': f'/static/videos/placeholder_{video_type}.mp4',
+        'thumbnail_url': template['thumbnail'],
+        'title': template['title'],
+        'description': template['description'],
+        'duration': template['duration'],
+        'created_at': datetime.now().isoformat()
+    }
+
+
+@app.route('/api/video/generate-tryon', methods=['POST'])
+def generate_tryon_video():
+    """
+    Generate a micro try-on video (5 seconds) showing the garment on an AI model
+    with similar body type, styled with items from the user's closet.
+    """
+    try:
+        data = request.get_json()
+        
+        product_id = data.get('product_id')
+        product_name = data.get('product_name', 'Fashion Item')
+        body_type = data.get('body_type', 'average')
+        closet_items = data.get('closet_items', [])
+        
+        # In production, this would:
+        # 1. Select AI model matching user's body type
+        # 2. Generate outfit combining the new piece with closet items
+        # 3. Create 5-second motion video using AI video generation
+        
+        video_data = generate_video_placeholder('try-on', 5)
+        video_data.update({
+            'product_name': product_name,
+            'body_type': body_type,
+            'paired_items': closet_items[:3] if closet_items else ['White sneakers', 'Blue jeans'],
+            'styling_notes': f'Paired with classic pieces from your closet for a polished look.'
+        })
+        
+        return jsonify({
+            'success': True,
+            'video': video_data
+        }), 200
+        
+    except Exception as e:
+        print(f"Try-on video error: {str(e)}")
+        return jsonify({'error': 'Failed to generate try-on video'}), 500
+
+
+@app.route('/api/video/generate-styling-reel', methods=['POST'])
+def generate_styling_reel():
+    """
+    Generate a styling reel showing 3 different ways to wear an outfit.
+    """
+    try:
+        data = request.get_json()
+        
+        outfit_id = data.get('outfit_id')
+        outfit_items = data.get('outfit_items', [])
+        style_preferences = data.get('style_preferences', ['casual', 'smart-casual', 'dressy'])
+        
+        # In production, this would generate a short video showing:
+        # - Look 1: Casual daytime styling
+        # - Look 2: Smart-casual work styling
+        # - Look 3: Evening/dressy styling
+        
+        video_data = generate_video_placeholder('styling-reel', 15)
+        
+        styling_looks = [
+            {
+                'name': 'Day Casual',
+                'description': 'Perfect for brunch or weekend errands',
+                'accessories': ['Canvas sneakers', 'Leather tote', 'Sunglasses'],
+                'timestamp': '0:00'
+            },
+            {
+                'name': 'Work Ready',
+                'description': 'Polished look for the office',
+                'accessories': ['Loafers', 'Structured bag', 'Minimal jewelry'],
+                'timestamp': '0:05'
+            },
+            {
+                'name': 'Night Out',
+                'description': 'Elevated for dinner or drinks',
+                'accessories': ['Heeled boots', 'Clutch', 'Statement earrings'],
+                'timestamp': '0:10'
+            }
+        ]
+        
+        video_data.update({
+            'outfit_items': outfit_items,
+            'looks': styling_looks,
+            'total_looks': 3
+        })
+        
+        return jsonify({
+            'success': True,
+            'video': video_data
+        }), 200
+        
+    except Exception as e:
+        print(f"Styling reel error: {str(e)}")
+        return jsonify({'error': 'Failed to generate styling reel'}), 500
+
+
+@app.route('/api/video/generate-runway', methods=['POST'])
+def generate_runway_show():
+    """
+    Generate a weekly runway show using items from the user's closet.
+    Creates a personalized fashion show featuring their wardrobe.
+    """
+    try:
+        data = request.get_json()
+        
+        user_id = data.get('user_id') or session.get('user_id')
+        closet_items = data.get('closet_items', [])
+        theme = data.get('theme', 'Weekly Highlights')
+        music_mood = data.get('music_mood', 'elegant')
+        
+        # In production, this would:
+        # 1. Select 8-12 best outfit combinations from closet
+        # 2. Generate AI models walking runway with each look
+        # 3. Add professional lighting, music, transitions
+        # 4. Create 60-90 second compilation
+        
+        video_data = generate_video_placeholder('runway', 60)
+        
+        # Sample runway looks
+        runway_looks = [
+            {'name': 'Opening Look', 'items': ['Tailored blazer', 'Wide-leg pants', 'Silk blouse']},
+            {'name': 'Street Style', 'items': ['Denim jacket', 'Graphic tee', 'Sneakers']},
+            {'name': 'Office Chic', 'items': ['Pencil skirt', 'Cashmere sweater', 'Loafers']},
+            {'name': 'Weekend Ease', 'items': ['Linen shirt', 'Chinos', 'White sneakers']},
+            {'name': 'Evening Glamour', 'items': ['Little black dress', 'Heels', 'Statement jewelry']},
+            {'name': 'Finale Look', 'items': ['Signature coat', 'Tailored trousers', 'Ankle boots']}
+        ]
+        
+        video_data.update({
+            'theme': theme,
+            'music_mood': music_mood,
+            'total_looks': len(runway_looks),
+            'looks': runway_looks,
+            'week_of': datetime.now().strftime('%B %d, %Y'),
+            'share_url': f'/runway/{video_data["video_id"]}'
+        })
+        
+        return jsonify({
+            'success': True,
+            'video': video_data
+        }), 200
+        
+    except Exception as e:
+        print(f"Runway show error: {str(e)}")
+        return jsonify({'error': 'Failed to generate runway show'}), 500
+
+
+@app.route('/api/video/status/<video_id>', methods=['GET'])
+def get_video_status(video_id):
+    """
+    Check the generation status of a video.
+    """
+    try:
+        # In production, this would check actual video generation status
+        # from the AI video service
+        
+        # Simulate processing states
+        states = ['queued', 'processing', 'rendering', 'ready']
+        
+        return jsonify({
+            'video_id': video_id,
+            'status': 'ready',
+            'progress': 100,
+            'estimated_time': 0,
+            'message': 'Your video is ready to view'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': 'Failed to get video status'}), 500
+
+
+@app.route('/api/video/history', methods=['GET'])
+def get_video_history():
+    """
+    Get user's generated video history.
+    """
+    try:
+        user_id = session.get('user_id')
+        video_type = request.args.get('type', 'all')
+        
+        # In production, fetch from database
+        # For now, return sample history
+        
+        sample_videos = [
+            {
+                'video_id': 'tryon_001',
+                'type': 'try-on',
+                'title': 'Cashmere Sweater Try-On',
+                'thumbnail': 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300',
+                'created_at': '2024-01-15T10:30:00',
+                'duration': 5
+            },
+            {
+                'video_id': 'reel_001',
+                'type': 'styling-reel',
+                'title': '3 Ways: Navy Blazer',
+                'thumbnail': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300',
+                'created_at': '2024-01-14T15:45:00',
+                'duration': 15
+            },
+            {
+                'video_id': 'runway_001',
+                'type': 'runway',
+                'title': 'Week 2 Runway Show',
+                'thumbnail': 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300',
+                'created_at': '2024-01-12T09:00:00',
+                'duration': 60
+            }
+        ]
+        
+        if video_type != 'all':
+            sample_videos = [v for v in sample_videos if v['type'] == video_type]
+        
+        return jsonify({
+            'success': True,
+            'videos': sample_videos,
+            'total': len(sample_videos)
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': 'Failed to get video history'}), 500
+
+
 # used for debugging - run with `python app.py`
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))

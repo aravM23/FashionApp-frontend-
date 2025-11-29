@@ -1066,3 +1066,398 @@ async function findItems() {
     btn.disabled = false;
   }
 }
+
+
+// ========== AI VIDEO FEATURES ==========
+
+/**
+ * Video Modal Controller
+ */
+const VideoModal = {
+  modal: null,
+  videoElement: null,
+  
+  init() {
+    this.createModal();
+    this.bindEvents();
+  },
+  
+  createModal() {
+    const modalHTML = `
+      <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+          <button class="video-modal-close" onclick="VideoModal.close()">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+          <video id="modalVideo" class="video-player" controls playsinline>
+            <source src="" type="video/mp4">
+          </video>
+          <div id="videoInfo" class="p-6 bg-gray-900/80 backdrop-blur">
+            <h3 id="videoTitle" class="text-xl font-bold text-white mb-2"></h3>
+            <p id="videoDescription" class="text-gray-400"></p>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    this.modal = document.getElementById('videoModal');
+    this.videoElement = document.getElementById('modalVideo');
+  },
+  
+  bindEvents() {
+    this.modal?.addEventListener('click', (e) => {
+      if (e.target === this.modal) this.close();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.close();
+    });
+  },
+  
+  open(videoData) {
+    if (!this.modal) return;
+    
+    this.videoElement.src = videoData.video_url || '';
+    document.getElementById('videoTitle').textContent = videoData.title || 'Video';
+    document.getElementById('videoDescription').textContent = videoData.description || '';
+    
+    this.modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    this.videoElement.play().catch(() => {});
+  },
+  
+  close() {
+    if (!this.modal) return;
+    
+    this.videoElement.pause();
+    this.videoElement.src = '';
+    this.modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+};
+
+
+/**
+ * AI Video Generator - handles all video generation API calls
+ */
+const AIVideoGenerator = {
+  
+  // Generate Try-On Video
+  async generateTryOn(productId, productName, bodyType = 'average') {
+    const btn = document.querySelector(`[data-product-id="${productId}"] .tryon-btn`);
+    const originalText = btn?.innerHTML;
+    
+    try {
+      if (btn) {
+        btn.innerHTML = '<span class="video-loading-spinner inline-block w-4 h-4 mr-2"></span>Generating...';
+        btn.disabled = true;
+      }
+      
+      const response = await fetch('/api/video/generate-tryon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: productId,
+          product_name: productName,
+          body_type: bodyType,
+          closet_items: await this.getClosetItems()
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        this.showVideoPreview(data.video, 'try-on');
+        this.showNotification('Your try-on video is ready!', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to generate video');
+      }
+      
+    } catch (error) {
+      console.error('Try-on error:', error);
+      this.showNotification('Failed to generate video. Please try again.', 'error');
+    } finally {
+      if (btn) {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  },
+  
+  // Generate Styling Reel
+  async generateStylingReel(outfitId, outfitItems = []) {
+    const btn = document.querySelector(`[data-outfit-id="${outfitId}"] .reel-btn`);
+    const originalText = btn?.innerHTML;
+    
+    try {
+      if (btn) {
+        btn.innerHTML = '<span class="video-loading-spinner inline-block w-4 h-4 mr-2"></span>Creating...';
+        btn.disabled = true;
+      }
+      
+      const response = await fetch('/api/video/generate-styling-reel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          outfit_id: outfitId,
+          outfit_items: outfitItems,
+          style_preferences: ['casual', 'smart-casual', 'evening']
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        this.showStylingReelPreview(data.video);
+        this.showNotification('Your styling reel is ready!', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to generate reel');
+      }
+      
+    } catch (error) {
+      console.error('Styling reel error:', error);
+      this.showNotification('Failed to generate reel. Please try again.', 'error');
+    } finally {
+      if (btn) {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  },
+  
+  // Generate Weekly Runway Show
+  async generateRunwayShow(theme = 'Weekly Highlights') {
+    const btn = document.getElementById('generateRunwayBtn');
+    const progressContainer = document.getElementById('runwayProgress');
+    
+    try {
+      if (btn) {
+        btn.innerHTML = '<span class="video-loading-spinner inline-block w-5 h-5 mr-2"></span>Generating...';
+        btn.disabled = true;
+      }
+      
+      if (progressContainer) {
+        progressContainer.classList.remove('hidden');
+        this.animateProgress(progressContainer);
+      }
+      
+      const response = await fetch('/api/video/generate-runway', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          theme: theme,
+          closet_items: await this.getClosetItems(),
+          music_mood: 'elegant'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        this.displayRunwayShow(data.video);
+        this.showNotification('Your runway show is ready!', 'success');
+      } else {
+        throw new Error(data.error || 'Failed to generate runway show');
+      }
+      
+    } catch (error) {
+      console.error('Runway show error:', error);
+      this.showNotification('Failed to generate runway show. Please try again.', 'error');
+    } finally {
+      if (btn) {
+        btn.innerHTML = '✨ Generate This Week\'s Show';
+        btn.disabled = false;
+      }
+      if (progressContainer) {
+        progressContainer.classList.add('hidden');
+      }
+    }
+  },
+  
+  // Helper: Get user's closet items
+  async getClosetItems() {
+    // In production, fetch from API
+    return ['White sneakers', 'Blue jeans', 'Black blazer', 'Grey sweater'];
+  },
+  
+  // Helper: Show video preview in card
+  showVideoPreview(videoData, type) {
+    const previewContainer = document.getElementById(`${type}Preview`);
+    if (!previewContainer) return;
+    
+    previewContainer.innerHTML = `
+      <div class="video-container cursor-pointer" onclick="VideoModal.open(${JSON.stringify(videoData).replace(/"/g, '&quot;')})">
+        <img src="${videoData.thumbnail_url}" alt="${videoData.title}" class="w-full aspect-video object-cover rounded-xl">
+        <div class="play-button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-timestamp">${videoData.duration}s</div>
+      </div>
+      <div class="mt-4">
+        <h4 class="text-white font-semibold">${videoData.title}</h4>
+        <p class="text-gray-400 text-sm mt-1">${videoData.description}</p>
+      </div>
+    `;
+  },
+  
+  // Helper: Show styling reel preview
+  showStylingReelPreview(videoData) {
+    const container = document.getElementById('stylingReelPreview');
+    if (!container) return;
+    
+    const looksHTML = videoData.looks?.map(look => `
+      <div class="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg">
+        <span class="text-purple-400 font-mono text-sm">${look.timestamp}</span>
+        <div>
+          <h5 class="text-white font-medium">${look.name}</h5>
+          <p class="text-gray-500 text-xs">${look.description}</p>
+        </div>
+      </div>
+    `).join('') || '';
+    
+    container.innerHTML = `
+      <div class="video-container cursor-pointer mb-4" onclick="VideoModal.open(${JSON.stringify(videoData).replace(/"/g, '&quot;')})">
+        <img src="${videoData.thumbnail_url}" alt="${videoData.title}" class="w-full aspect-[9/16] object-cover rounded-xl">
+        <div class="play-button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-timestamp">${videoData.duration}s</div>
+      </div>
+      <div class="space-y-2">${looksHTML}</div>
+    `;
+  },
+  
+  // Helper: Display runway show
+  displayRunwayShow(videoData) {
+    const container = document.getElementById('runwayShowDisplay');
+    if (!container) return;
+    
+    const looksGrid = videoData.looks?.map((look, i) => `
+      <div class="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg border border-gray-700/50">
+        <span class="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 font-bold text-sm">${i + 1}</span>
+        <div>
+          <h5 class="text-white font-medium text-sm">${look.name}</h5>
+          <p class="text-gray-500 text-xs">${look.items.join(' • ')}</p>
+        </div>
+      </div>
+    `).join('') || '';
+    
+    container.innerHTML = `
+      <div class="runway-card overflow-hidden">
+        <div class="relative cursor-pointer" onclick="VideoModal.open(${JSON.stringify(videoData).replace(/"/g, '&quot;')})">
+          <img src="${videoData.thumbnail_url}" alt="Runway Show" class="w-full aspect-video object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          <div class="play-button">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="ai-badge mb-2">AI Generated</div>
+            <h3 class="text-xl font-bold text-white">${videoData.theme}</h3>
+            <p class="text-gray-300 text-sm">Week of ${videoData.week_of}</p>
+          </div>
+        </div>
+        <div class="p-4">
+          <h4 class="text-white font-semibold mb-3">${videoData.total_looks} Featured Looks</h4>
+          <div class="grid grid-cols-2 gap-2">${looksGrid}</div>
+        </div>
+      </div>
+    `;
+  },
+  
+  // Helper: Animate progress bar
+  animateProgress(container) {
+    const bar = container.querySelector('.generation-progress-bar');
+    if (!bar) return;
+    
+    bar.style.width = '0%';
+    let progress = 0;
+    
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+      }
+      bar.style.width = `${progress}%`;
+    }, 500);
+  },
+  
+  // Helper: Show notification
+  showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-6 right-6 px-6 py-4 rounded-xl shadow-2xl z-50 transform transition-all duration-300 translate-y-4 opacity-0 ${
+      type === 'success' ? 'bg-green-500/90 text-white' :
+      type === 'error' ? 'bg-red-500/90 text-white' :
+      'bg-gray-800/90 text-white'
+    }`;
+    notification.innerHTML = `
+      <div class="flex items-center gap-3">
+        ${type === 'success' ? '<span class="text-xl">✨</span>' : type === 'error' ? '<span class="text-xl">⚠️</span>' : ''}
+        <span class="font-medium">${message}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    requestAnimationFrame(() => {
+      notification.classList.remove('translate-y-4', 'opacity-0');
+    });
+    
+    setTimeout(() => {
+      notification.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => notification.remove(), 300);
+    }, 4000);
+  }
+};
+
+
+/**
+ * Initialize video features on page load
+ */
+function initVideoFeatures() {
+  // Initialize modal
+  VideoModal.init();
+  
+  // Bind try-on buttons
+  document.querySelectorAll('.tryon-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const card = this.closest('[data-product-id]');
+      const productId = card?.dataset.productId;
+      const productName = card?.dataset.productName;
+      if (productId) {
+        AIVideoGenerator.generateTryOn(productId, productName);
+      }
+    });
+  });
+  
+  // Bind styling reel buttons
+  document.querySelectorAll('.reel-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const card = this.closest('[data-outfit-id]');
+      const outfitId = card?.dataset.outfitId;
+      if (outfitId) {
+        AIVideoGenerator.generateStylingReel(outfitId);
+      }
+    });
+  });
+  
+  // Bind runway show generation
+  const runwayBtn = document.getElementById('generateRunwayBtn');
+  if (runwayBtn) {
+    runwayBtn.addEventListener('click', () => {
+      const themeInput = document.getElementById('runwayTheme');
+      const theme = themeInput?.value || 'Weekly Highlights';
+      AIVideoGenerator.generateRunwayShow(theme);
+    });
+  }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initVideoFeatures);
+} else {
+  initVideoFeatures();
+}
