@@ -37,11 +37,19 @@ export default function WaitlistModal({ onClose }) {
 
     // insert into google sheets
     try {
-      await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+      const res = await fetch(import.meta.env.GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
+
+      if (!res.ok) {
+        const text = await res.text()
+        console.error('Sheets returned an error:', res.status, text)
+      } else {
+        const json = await res.json()
+        console.log('Added to Google Sheets successfully', json)
+      }
     } catch (err) {
       console.error('Error adding to Sheets:', err);
     }
