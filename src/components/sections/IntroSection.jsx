@@ -28,8 +28,8 @@ export default function IntroSection() {
         </div>
         
         {/* Main Heading */}
-        <h1 className="text-8xl md:text-9xl font-bold mb-6 tracking-tight leading-none">
-          <span className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">Oro</span>
+        <h1 className="text-8xl md:text-9xl font-light mb-6 tracking-[0.15em] leading-none" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <span className="text-white">Oro</span>
         </h1>
         
         {/* Subtitle */}
