@@ -1,5 +1,5 @@
-import './WaitlistModal.css'; 
-import { useState } from 'react'; 
+import './WaitlistModal.css';
+import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -13,11 +13,14 @@ export default function WaitlistModal({ onClose }) {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(null)
 
+  const GOOGLE_SHEETS_WEBHOOK_URL = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
+    // insert into supabase
     const { error } = await supabase
       .from('waitlist')
       .insert([{ email }])
@@ -28,10 +31,22 @@ export default function WaitlistModal({ onClose }) {
       } else {
         setError('Something went wrong.')
       }
-    } else {
-      setSuccess(true)
+      setLoading(false)
+      return
     }
 
+    // insert into google sheets
+    try {
+      await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+    } catch (err) {
+      console.error('Error adding to Sheets:', err);
+    }
+
+    setSuccess(true)
     setLoading(false)
   }
 
