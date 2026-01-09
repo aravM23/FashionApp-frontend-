@@ -29,11 +29,11 @@ export default function IntroSection() {
         
         {/* Main Heading */}
         <h1 className="text-8xl md:text-9xl font-light mb-6 tracking-[0.15em] leading-none" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-          <span className="text-white">Oro</span>
+          <span className="text-yellow-400">Oro</span>
         </h1>
         
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-gray-300 max-w-2xl font-light tracking-wide leading-relaxed px-8">
+        <p className="text-xl md:text-2xl text-white max-w-2xl font-light tracking-wide leading-relaxed px-8">
           Discover Your Unique Style: Upload your wardrobe, and let our AI help you create stunning outfit combinations.
         </p>
       </div>
