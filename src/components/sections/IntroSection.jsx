@@ -27,14 +27,16 @@ export default function IntroSection() {
           </span>
         </div>
         
-        {/* Main Heading */}
-        <h1 className="text-8xl md:text-9xl font-light mb-6 tracking-[0.15em] leading-none" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-          <span className="text-yellow-400">Oro</span>
-        </h1>
+        {/* Logo */}
+        <img 
+          src="/static/oro-logo.png" 
+          alt="Oro" 
+          className="h-48 md:h-64 mb-6 object-contain"
+        />
         
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-white max-w-2xl font-light tracking-wide leading-relaxed px-8">
-          Discover Your Unique Style: Upload your wardrobe, and let our AI help you create stunning outfit combinations.
+        <p className="text-base md:text-lg text-white max-w-2xl font-light tracking-wide leading-relaxed px-8">
+          Your wardrobe, computed.
         </p>
       </div>
     </section>
