@@ -1,0 +1,43 @@
+.waitlist {
+  min-height: 90vh;
+  background: black;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waitlist-inner {
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.waitlist-inner h2 {
+  font-size: 3.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.waitlist-inner p {
+  font-size: 1.05rem;
+  color: #6b7280;
+  margin-bottom: 2.5rem;
+}
+
+.waitlist-btn {
+  padding: 0.9rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  background: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.waitlist-btn:hover {
+  opacity: 0.9;
+}
