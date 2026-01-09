@@ -37,7 +37,7 @@ export default function WaitlistModal({ onClose }) {
 
     // insert into google sheets
     try {
-      const res = await fetch(import.meta.env.GOOGLE_SHEETS_WEBHOOK_URL, {
+      const res = await fetch(import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
