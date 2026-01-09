@@ -38,8 +38,8 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-400/20 rounded-full blur-3xl"></div>
       </div>
 
       {/* Login Required Overlay */}
@@ -48,7 +48,7 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
           <div className="text-center max-w-lg mx-auto p-8">
             <div className="mb-8">
               <div className="relative inline-block mb-6">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 blur-3xl rounded-full"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/30 to-yellow-400/30 blur-3xl rounded-full"></div>
                 <div className="relative w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 flex items-center justify-center">
                   <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -72,12 +72,12 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="h-px w-12 bg-gradient-to-r from-transparent to-blue-500"></div>
-            <span className="text-xs font-bold text-blue-400 uppercase tracking-[0.3em]">Smart Shopping</span>
-            <div className="h-px w-12 bg-gradient-to-l from-transparent to-blue-500"></div>
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-500"></div>
+            <span className="text-xs font-bold text-yellow-400 uppercase tracking-[0.3em]">Smart Shopping</span>
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-500"></div>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight mb-4 text-white tracking-tight">
-            Budget <span className="font-semibold italic bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Finder</span>
+            Budget <span className="font-semibold italic bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">Finder</span>
           </h2>
           <p className="text-gray-400 text-lg font-light max-w-2xl mx-auto">
             Find the perfect pieces within your budget. Tell us what you're looking for.
@@ -94,7 +94,7 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="e.g., Navy blazer for work, summer dress under $100..."
-                className="w-full px-6 py-5 text-lg bg-white/5 border border-white/10 rounded-2xl focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-500 text-white"
+                className="w-full px-6 py-5 text-lg bg-white/5 border border-white/10 rounded-2xl focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20 outline-none transition-all placeholder-gray-500 text-white"
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                 <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
                   onClick={() => setSelectedBudget(option.value)}
                   className={`px-6 py-3 rounded-xl font-medium transition-all ${
                     selectedBudget === option.value
-                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/30'
                       : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
                   }`}
                 >
@@ -132,7 +132,7 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
               <button
                 type="submit"
                 disabled={isSearching || !searchQuery.trim()}
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-10 py-4 rounded-2xl font-bold uppercase tracking-wider text-sm shadow-xl shadow-purple-500/20 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-500 text-black px-10 py-4 rounded-2xl font-bold uppercase tracking-wider text-sm shadow-xl shadow-yellow-500/20 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isSearching ? (
                   <>
@@ -161,7 +161,7 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
             {results.map((item, index) => (
               <div
                 key={index}
-                className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10"
+                className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-yellow-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-500/10"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="aspect-[3/4] overflow-hidden bg-gray-800">
@@ -173,13 +173,13 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
                 </div>
                 <div className="p-5">
                   <h5 className="font-semibold text-white mb-2 line-clamp-2">{item.name}</h5>
-                  <p className="text-2xl font-bold text-blue-400 mb-2">{item.price}</p>
+                  <p className="text-2xl font-bold text-yellow-400 mb-2">{item.price}</p>
                   <p className="text-sm text-gray-400 mb-4 line-clamp-2">{item.description || ''}</p>
                   <a
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500 hover:to-purple-500 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300"
+                    className="block w-full bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 hover:from-yellow-500 hover:to-yellow-400 text-white hover:text-black text-center py-3 rounded-xl font-semibold transition-all duration-300"
                   >
                     Shop Now
                   </a>
@@ -204,8 +204,8 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
           <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 text-center">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
-              <svg className="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-yellow-500/20 flex items-center justify-center">
+              <svg className="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
@@ -214,8 +214,8 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
           </div>
           
           <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 text-center">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center">
-              <svg className="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-yellow-500/20 flex items-center justify-center">
+              <svg className="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
               </svg>
             </div>
@@ -224,8 +224,8 @@ export default function ShopSection({ onLoginClick, isLoggedIn }) {
           </div>
           
           <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 text-center">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-pink-500/20 flex items-center justify-center">
-              <svg className="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-yellow-500/20 flex items-center justify-center">
+              <svg className="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
               </svg>
             </div>

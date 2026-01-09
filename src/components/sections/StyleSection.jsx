@@ -97,7 +97,7 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
   const showNotice = (message, type = 'info') => {
     const notice = document.createElement('div')
     notice.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-sm font-medium z-50 transition-all duration-300 ${
-      type === 'error' ? 'bg-red-500/90 text-white' : 'bg-purple-500/90 text-white'
+      type === 'error' ? 'bg-red-500/90 text-white' : 'bg-yellow-500/90 text-black'
     }`
     notice.textContent = message
     document.body.appendChild(notice)
@@ -174,14 +174,14 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
         return (
           <div className="max-w-2xl mx-auto text-center">
             <div className="relative inline-block mb-4">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
-              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
+              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-400/20 border border-white/10 flex items-center justify-center">
                 <span className="text-xl">✨</span>
               </div>
             </div>
             
             <h3 className="text-2xl md:text-3xl font-light mb-1 text-white">
-              What's the <span className="italic font-medium text-purple-300">occasion</span>?
+              What's the <span className="italic font-medium text-yellow-300">occasion</span>?
             </h3>
             <p className="text-gray-500 text-sm mb-4">Tell us where you're headed</p>
             
@@ -191,7 +191,7 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
                 value={formData.styleContext}
                 onChange={(e) => setFormData(prev => ({ ...prev, styleContext: e.target.value }))}
                 placeholder="A romantic dinner, weekend getaway..."
-                className="w-full px-5 py-3 text-base bg-black/40 border border-white/10 rounded-xl focus:border-purple-500/50 focus:ring-0 outline-none transition-all placeholder-gray-600 text-white text-center font-light tracking-wide"
+                className="w-full px-5 py-3 text-base bg-black/40 border border-white/10 rounded-xl focus:border-yellow-500/50 focus:ring-0 outline-none transition-all placeholder-gray-600 text-white text-center font-light tracking-wide"
               />
             </div>
 
@@ -215,14 +215,14 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
         return (
           <div className="max-w-xl mx-auto text-center">
             <div className="relative inline-block mb-4">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
-              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-white/10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
+              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-400/20 border border-white/10 flex items-center justify-center">
                 <span className="text-xl">💎</span>
               </div>
             </div>
             
             <h3 className="text-2xl md:text-3xl font-light mb-1 text-white">
-              Your <span className="italic font-medium text-emerald-300">investment</span> level?
+              Your <span className="italic font-medium text-yellow-300">investment</span> level?
             </h3>
             <p className="text-gray-500 text-sm mb-4">Per piece, not the whole look</p>
             
@@ -252,14 +252,14 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
         return (
           <div className="max-w-2xl mx-auto text-center">
             <div className="relative inline-block mb-4">
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-500 to-orange-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
-              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-rose-500/20 to-orange-500/20 border border-white/10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
+              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-400/20 border border-white/10 flex items-center justify-center">
                 <span className="text-xl">💫</span>
               </div>
             </div>
             
             <h3 className="text-2xl md:text-3xl font-light mb-1 text-white">
-              What do you <span className="italic font-medium text-rose-300">value</span>?
+              What do you <span className="italic font-medium text-yellow-300">value</span>?
             </h3>
             <p className="text-gray-500 text-sm mb-4">Select all that resonate with you</p>
             
@@ -286,14 +286,14 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
         return (
           <div className="max-w-2xl mx-auto text-center">
             <div className="relative inline-block mb-4">
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
-              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-white/10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
+              <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-400/20 border border-white/10 flex items-center justify-center">
                 <span className="text-xl">🎭</span>
               </div>
             </div>
             
             <h3 className="text-2xl md:text-3xl font-light mb-1 text-white">
-              Show us your <span className="italic font-medium text-violet-300">inspiration</span>
+              Show us your <span className="italic font-medium text-yellow-300">inspiration</span>
             </h3>
             <p className="text-gray-500 text-sm mb-4">Upload a Pinterest board, outfit screenshot, or style inspo</p>
             
@@ -428,13 +428,13 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
                       </div>
                       <div className="p-4">
                         <h5 className="font-semibold text-white mb-2 line-clamp-2">{item.name}</h5>
-                        <p className="text-2xl font-bold text-purple-400 mb-2">{item.price}</p>
+                        <p className="text-2xl font-bold text-yellow-400 mb-2">{item.price}</p>
                         <p className="text-sm text-gray-400 mb-3 line-clamp-2">{item.description || ''}</p>
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+                          className="block w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-black text-center py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity"
                         >
                           View Item
                         </a>
@@ -458,12 +458,12 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
       className="panel relative flex items-center justify-center overflow-hidden bg-black"
     >
       {/* Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-900/30 via-black to-black"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-900/20 via-transparent to-transparent"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-yellow-900/30 via-black to-black"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-yellow-800/20 via-transparent to-transparent"></div>
       
       {/* Floating Orbs */}
-      <div className="absolute top-20 right-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-20 right-20 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
       {/* Login Required Overlay */}
       {!isLoggedIn && (
@@ -471,7 +471,7 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
           <div className="text-center max-w-lg mx-auto p-8">
             <div className="mb-8">
               <div className="relative inline-block mb-6">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 blur-3xl rounded-full"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/30 to-yellow-400/30 blur-3xl rounded-full"></div>
                 <div className="relative w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 flex items-center justify-center">
                   <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -495,12 +495,12 @@ export default function StyleSection({ onLoginClick, isLoggedIn }) {
         {/* Header */}
         <div className="text-center mb-4 flex-shrink-0">
           <div className="inline-flex items-center gap-2 mb-3">
-            <div className="h-px w-8 bg-gradient-to-r from-transparent to-purple-500"></div>
-            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-[0.4em]">Personal Stylist</span>
-            <div className="h-px w-8 bg-gradient-to-l from-transparent to-purple-500"></div>
+            <div className="h-px w-8 bg-gradient-to-r from-transparent to-yellow-500"></div>
+            <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.4em]">Personal Stylist</span>
+            <div className="h-px w-8 bg-gradient-to-l from-transparent to-yellow-500"></div>
           </div>
           <h2 className="text-3xl md:text-4xl font-extralight mb-1 text-white tracking-tight">
-            Curate Your <span className="font-semibold italic bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">Style</span>
+            Curate Your <span className="font-semibold italic bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-300 bg-clip-text text-transparent">Style</span>
           </h2>
           <p className="text-gray-500 text-xs font-light tracking-wide">Five questions. Infinite possibilities.</p>
         </div>

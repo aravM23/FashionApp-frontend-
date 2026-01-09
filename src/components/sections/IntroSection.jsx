@@ -28,11 +28,8 @@ export default function IntroSection() {
         </div>
         
         {/* Main Heading */}
-        <h1 className="text-8xl md:text-9xl font-light mb-6 tracking-tight leading-none">
-          <span className="text-white">Style</span>
-          <span className="font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-            Sync
-          </span>
+        <h1 className="text-8xl md:text-9xl font-bold mb-6 tracking-tight leading-none">
+          <span className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">Oro</span>
         </h1>
         
         {/* Subtitle */}
