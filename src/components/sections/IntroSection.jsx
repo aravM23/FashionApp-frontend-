@@ -12,7 +12,7 @@ export default function IntroSection() {
         playsInline 
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/public/static/background.mp4" type="video/mp4" />
+        <source src="/static/background.mp4" type="video/mp4" />
       </video>
       
       {/* Gradient Overlay */}
@@ -29,7 +29,7 @@ export default function IntroSection() {
         
         {/* Logo */}
         <img 
-          src="/public/static/oro-logo.png" 
+          src="/static/oro-logo.png" 
           alt="Oro" 
           className="h-48 md:h-64 mb-6 object-contain"
         />
