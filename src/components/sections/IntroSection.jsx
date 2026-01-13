@@ -2,42 +2,49 @@ export default function IntroSection() {
   return (
     <section 
       id="intro" 
-      className="panel relative w-screen h-screen flex flex-col justify-center items-center overflow-hidden"
+      className="relative w-screen h-screen overflow-hidden bg-white"
     >
-      {/* Background Video */}
-      <video 
-        autoPlay 
-        muted 
-        loop 
-        playsInline 
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/static/background.mp4" type="video/mp4" />
-      </video>
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-black/40"></div>
-      
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center">
-        {/* Badge */}
-        <div className="inline-block mb-6">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.4em] border border-gray-700/50 px-6 py-2 rounded-full bg-black/30 backdrop-blur-sm">
-            Welcome To
-          </span>
-        </div>
-        
-        {/* Logo */}
+      {/* Full-Bleed Editorial Image */}
+      <div className="absolute inset-0">
         <img 
-          src="/static/oro-logo.png" 
-          alt="Oro" 
-          className="h-48 md:h-64 mb-6 object-contain"
+          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2940&auto=format&fit=crop"
+          alt="Fashion Editorial"
+          className="w-full h-full object-cover"
+          style={{ objectPosition: 'center 30%' }}
         />
-        
-        {/* Subtitle */}
-        <p className="text-base md:text-lg text-white max-w-2xl font-light tracking-wide leading-relaxed px-8">
-          Your wardrobe, computed.
-        </p>
+        {/* Subtle gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/40"></div>
+      </div>
+
+      {/* Minimal Content Overlay */}
+      <div className="relative h-full flex flex-col justify-between p-8 md:p-16">
+        {/* Top - Logo */}
+        <div className="flex justify-center md:justify-start">
+          <img 
+            src="/static/oro-logo.png" 
+            alt="Oro" 
+            className="h-16 md:h-20 object-contain drop-shadow-lg"
+          />
+        </div>
+
+        {/* Bottom - Headline */}
+        <div className="text-center md:text-left max-w-2xl">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-4 tracking-tight leading-[0.95]"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            Your wardrobe,<br />
+            <span className="font-normal italic">computed.</span>
+          </h1>
+          <p className="text-white/90 text-sm md:text-base font-light tracking-wide">
+            Luxury style intelligence for the modern wardrobe.
+          </p>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
+          <div className="w-1.5 h-1.5 bg-white/60 rounded-full"></div>
+        </div>
       </div>
     </section>
   )

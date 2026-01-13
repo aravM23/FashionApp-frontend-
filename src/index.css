@@ -708,3 +708,32 @@ button:active, .btn:active {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+/* Hero Section Enhancements */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#intro h1 {
+  animation: heroFadeIn 1.2s ease-out 0.3s backwards;
+}
+
+#intro p {
+  animation: heroFadeIn 1.2s ease-out 0.6s backwards;
+}
+
+#intro img[alt="Oro"] {
+  animation: heroFadeIn 1s ease-out backwards;
+}
+
+/* Smooth image loading */
+#intro img[alt="Fashion Editorial"] {
+  animation: fadeIn 0.8s ease-out;
+}
