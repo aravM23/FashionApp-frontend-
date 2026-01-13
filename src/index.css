@@ -737,3 +737,23 @@ button:active, .btn:active {
 #intro img[alt="Fashion Editorial"] {
   animation: fadeIn 0.8s ease-out;
 }
+
+/* Hero Section Polish */
+#intro {
+  will-change: opacity;
+}
+
+#intro img[alt="Oro"] {
+  will-change: transform, opacity;
+}
+
+/* Smooth scroll behavior for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Anti-aliasing for smoother text */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
