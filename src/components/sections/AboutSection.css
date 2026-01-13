@@ -1,24 +1,35 @@
 .about {
   background: white;
   color: black;
+  overflow: hidden;
 }
 
 .about-block {
-  min-height: 85vh;
-  padding: 0 2rem;
+  min-height: 40vh;
+  padding: 80px 2rem;
   max-width: 900px;
   margin: 0 auto;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .about-block h2 {
   font-size: 3.2rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-block.visible h2 {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .about-block p {
@@ -31,4 +42,15 @@
 /* Slightly stronger opening statement */
 .about-block.intro h2 {
   font-size: 3.8rem;
+}
+
+@media (max-width: 600px) {
+  .about-block {
+    min-height: 30vh;
+    padding: 60px 1.5rem;
+  }
+  
+  .about-block.intro h2 {
+    font-size: 2.4rem;
+  }
 }

@@ -1,13 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import WaitlistModal from './WaitlistModal'
 import './WaitlistSection.css'
 
 export default function WaitlistSection() {
   const [open, setOpen] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+        }
+      },
+      { threshold: 0.25 }
+    )
+    
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+    
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <section className="waitlist">
-      <div className="waitlist-inner">
+      <div ref={ref} className={`waitlist-inner${visible ? ' visible' : ''}`}>
         <h2>Get early access.</h2>
         <p>Join 2,000+ people shaping the future of personal style.</p>
 

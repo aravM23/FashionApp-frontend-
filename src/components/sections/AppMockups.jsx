@@ -11,7 +11,7 @@ const screens = [
 const screenContent = {
   home: {
     title: "Your taste, decoded.",
-    desc: "Upload moodboards. Oro learns what you like — using our own AI model, built to understand taste, not trends."
+    desc: "Upload moodboards. Oro learns what you like, using our own AI model, built to understand taste, not trends."
   },
   shop: {
     title: "A wardrobe that fits.",
@@ -101,10 +101,10 @@ export default function AppMockups() {
                       transition: dragging ? 'none' : 'transform 0.55s cubic-bezier(.4,.0,.2,1)'
                     }}
                   >
-                    <HomeScreen />
-                    <ShopScreen />
-                    <ClosetScreen />
-                    <RunwayScreen />
+                    <HomeScreen goToScreen={goToScreen} />
+                    <ShopScreen goToScreen={goToScreen} />
+                    <ClosetScreen goToScreen={goToScreen} />
+                    <RunwayScreen goToScreen={goToScreen} />
                   </div>
                 </div>
                 <div className="phone-bar" />
@@ -134,7 +134,7 @@ export default function AppMockups() {
 /* ═══════════════════════════════════════════════════════════
    RUNWAY SCREEN — Your Outfits of the Month
    ═══════════════════════════════════════════════════════════ */
-function RunwayScreen() {
+function RunwayScreen({ goToScreen }) {
   const [currentLook, setCurrentLook] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
   const [isMuted, setIsMuted] = useState(true)
@@ -330,7 +330,7 @@ function UnifiedNav({ active, onNavigate }) {
 /* ═══════════════════════════════════════════════════════════
    HOME SCREEN
    ═══════════════════════════════════════════════════════════ */
-function HomeScreen() {
+function HomeScreen({ goToScreen }) {
   return (
     <div className="screen home">
       <div className="home-hero">
@@ -371,7 +371,7 @@ function HomeScreen() {
 /* ═══════════════════════════════════════════════════════════
    SHOP SCREEN
    ═══════════════════════════════════════════════════════════ */
-function ShopScreen() {
+function ShopScreen({ goToScreen }) {
   const items = [
     { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80', name: 'Tailored Wool Coat', brand: 'COS', price: '$350', sale: '$245' },
     { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&q=80', name: 'Relaxed Cashmere', brand: 'ARKET', price: '$189', sale: null },
@@ -420,7 +420,7 @@ function ShopScreen() {
 /* ═══════════════════════════════════════════════════════════
    CLOSET SCREEN
    ═══════════════════════════════════════════════════════════ */
-function ClosetScreen() {
+function ClosetScreen({ goToScreen }) {
   const pieces = [
     { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80', name: 'Cashmere Sweater' },
     { img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80', name: 'Wide Leg Pants' },
