@@ -4,14 +4,14 @@ export default function IntroSection() {
       id="intro" 
       className="relative w-screen h-screen overflow-hidden bg-black"
     >
-      {/* Full-Bleed Editorial Image with Balanced Exposure */}
+      {/* Full-Bleed Wardrobe Image with Balanced Exposure */}
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2940&auto=format&fit=crop"
-          alt="Fashion Editorial"
+          src="https://images.unsplash.com/photo-1558769132-cb1aea1c8348?q=80&w=2874&auto=format&fit=crop"
+          alt="Luxury Wardrobe"
           className="w-full h-full object-cover opacity-70"
           style={{ 
-            objectPosition: 'center 30%',
+            objectPosition: 'center',
             filter: 'brightness(0.7) contrast(1.05)'
           }}
         />
