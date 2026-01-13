@@ -4,20 +4,18 @@ export default function IntroSection() {
       id="intro" 
       className="relative w-screen h-screen overflow-hidden bg-black"
     >
-      {/* Full-Bleed Wardrobe Image with Balanced Exposure */}
-      <div className="absolute inset-0">
-        <img 
-          src="https://images.unsplash.com/photo-1558769132-cb1aea1c8348?q=80&w=2874&auto=format&fit=crop"
-          alt="Luxury Wardrobe"
-          className="w-full h-full object-cover"
-          style={{ 
-            objectPosition: 'center',
-            filter: 'brightness(0.85) contrast(1.1)'
-          }}
-        />
-        {/* Subtle dark overlay for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50"></div>
-      </div>
+      {/* Full-Bleed Wardrobe Image */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.6)'
+        }}
+      />
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40"></div>
 
       {/* Centered Content */}
       <div className="relative h-full flex flex-col items-center justify-center text-center px-8">
