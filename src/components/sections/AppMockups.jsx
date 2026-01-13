@@ -8,6 +8,25 @@ const screens = [
   { id: 'runway', label: 'Runway' }
 ]
 
+const screenContent = {
+  home: {
+    title: "Your taste, decoded.",
+    desc: "Upload moodboards. Oro learns what you like — using our own AI model, built to understand taste, not trends."
+  },
+  shop: {
+    title: "A wardrobe that fits.",
+    desc: "Set a budget. Oro finds capsule pieces across the web that match your style and your price."
+  },
+  closet: {
+    title: "Your closet, remembered.",
+    desc: "Upload your outfits. Oro learns what you own and how you actually dress."
+  },
+  runway: {
+    title: "Outfits for every context.",
+    desc: "Tell Oro the occasion. It styles what you already have, tuned to the moment."
+  }
+}
+
 export default function AppMockups() {
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(false)
@@ -45,49 +64,69 @@ export default function AppMockups() {
     setDragging(false)
   }
 
+  const currentContent = screenContent[screens[active].id]
+
+  const goToScreen = (index) => {
+    go(index)
+  }
+
   return (
     <section ref={ref} className={`mockup-section${visible ? ' in' : ''}`}>
       <div className="mockup-bg" />
       
-      <header className="mockup-header">
-        <p className="mockup-label">The App</p>
-        <h2 className="mockup-headline">Fashion,<br/>redefined.</h2>
-      </header>
+      <div className="mockup-container">
+        {/* Floating Text - Left */}
+        <div className="floating-text left">
+          <h3 className="float-title">{currentContent.title}</h3>
+          <p className="float-desc">{currentContent.desc}</p>
+        </div>
 
-      <div className="phone-wrap">
-        <div 
-          className={`phone${dragging ? ' drag' : ''}`}
-          onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}
-          onMouseDown={onStart} onMouseMove={dragging ? onMove : null} onMouseUp={onEnd} onMouseLeave={onEnd}
-        >
-          <div className="phone-body">
-            <div className="phone-speaker" />
-            <div className="phone-screen">
-              <div 
-                className="screen-inner"
-                style={{ 
-                  transform: `translateX(calc(-${active * 100}% + ${dragX}px))`,
-                  transition: dragging ? 'none' : 'transform 0.55s cubic-bezier(.4,.0,.2,1)'
-                }}
-              >
-                <HomeScreen />
-                <ShopScreen />
-                <ClosetScreen />
-                <RunwayScreen />
+        {/* Phone Center */}
+        <div className="phone-center">
+          <p className="mockup-label">The App</p>
+          
+          <div className="phone-wrap">
+            <div 
+              className={`phone${dragging ? ' drag' : ''}`}
+              onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}
+              onMouseDown={onStart} onMouseMove={dragging ? onMove : null} onMouseUp={onEnd} onMouseLeave={onEnd}
+            >
+              <div className="phone-body">
+                <div className="phone-speaker" />
+                <div className="phone-screen">
+                  <div 
+                    className="screen-inner"
+                    style={{ 
+                      transform: `translateX(calc(-${active * 100}% + ${dragX}px))`,
+                      transition: dragging ? 'none' : 'transform 0.55s cubic-bezier(.4,.0,.2,1)'
+                    }}
+                  >
+                    <HomeScreen />
+                    <ShopScreen />
+                    <ClosetScreen />
+                    <RunwayScreen />
+                  </div>
+                </div>
+                <div className="phone-bar" />
               </div>
             </div>
-            <div className="phone-bar" />
           </div>
+
+          <nav className="mockup-nav">
+            {screens.map((s, i) => (
+              <button key={s.id} onClick={() => go(i)} className={`nav-pill${i === active ? ' on' : ''}`}>
+                {s.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Floating Text - Right */}
+        <div className="floating-text right">
+          <h3 className="float-title">{currentContent.title}</h3>
+          <p className="float-desc">{currentContent.desc}</p>
         </div>
       </div>
-
-      <nav className="mockup-nav">
-        {screens.map((s, i) => (
-          <button key={s.id} onClick={() => go(i)} className={`nav-pill${i === active ? ' on' : ''}`}>
-            {s.label}
-          </button>
-        ))}
-      </nav>
     </section>
   )
 }
@@ -228,13 +267,20 @@ function RunwayScreen() {
         </button>
       </div>
       
-      <UnifiedNav active="runway" />
+      <UnifiedNav active="runway" onNavigate={goToScreen} />
     </div>
   )
 }
 
 /* Unified Bottom Tab Bar */
-function UnifiedNav({ active }) {
+function UnifiedNav({ active, onNavigate }) {
+  const handleNav = (screenId) => {
+    const screenIndex = screens.findIndex(s => s.id === screenId)
+    if (screenIndex !== -1 && onNavigate) {
+      onNavigate(screenIndex)
+    }
+  }
+
   return (
     <nav className="unified-nav">
       <button className="unav-item">
@@ -242,19 +288,31 @@ function UnifiedNav({ active }) {
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
       </button>
-      <button className={`unav-item unav-text${active === 'home' ? ' on' : ''}`}>
+      <button 
+        className={`unav-item unav-text${active === 'home' ? ' on' : ''}`}
+        onClick={() => handleNav('home')}
+      >
         Home
         {active === 'home' && <span className="unav-dot" />}
       </button>
-      <button className={`unav-item unav-text${active === 'shop' ? ' on' : ''}`}>
+      <button 
+        className={`unav-item unav-text${active === 'shop' ? ' on' : ''}`}
+        onClick={() => handleNav('shop')}
+      >
         Shop
         {active === 'shop' && <span className="unav-dot" />}
       </button>
-      <button className={`unav-item unav-text${active === 'closet' ? ' on' : ''}`}>
+      <button 
+        className={`unav-item unav-text${active === 'closet' ? ' on' : ''}`}
+        onClick={() => handleNav('closet')}
+      >
         You
         {active === 'closet' && <span className="unav-dot" />}
       </button>
-      <button className={`unav-item unav-text${active === 'runway' ? ' on' : ''}`}>
+      <button 
+        className={`unav-item unav-text${active === 'runway' ? ' on' : ''}`}
+        onClick={() => handleNav('runway')}
+      >
         Runway
         {active === 'runway' && <span className="unav-dot" />}
       </button>
@@ -305,7 +363,7 @@ function HomeScreen() {
         </div>
       </div>
       
-      <UnifiedNav active="home" />
+      <UnifiedNav active="home" onNavigate={goToScreen} />
     </div>
   )
 }
@@ -354,7 +412,7 @@ function ShopScreen() {
         ))}
       </div>
       
-      <UnifiedNav active="shop" />
+      <UnifiedNav active="shop" onNavigate={goToScreen} />
     </div>
   )
 }
@@ -407,7 +465,7 @@ function ClosetScreen() {
         <button className="cta-go">→</button>
       </div>
       
-      <UnifiedNav active="closet" />
+      <UnifiedNav active="closet" onNavigate={goToScreen} />
     </div>
   )
 }

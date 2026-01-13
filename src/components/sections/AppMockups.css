@@ -11,37 +11,81 @@
   --red: #C41E3A;
   
   position: relative;
-  padding: 100px 24px 80px;
-  background: var(--ink);
+  padding: 80px 24px;
+  background: var(--paper);
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .mockup-bg {
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(191,164,92,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(191,164,92,0.04) 0%, transparent 50%);
+    radial-gradient(ellipse 50% 40% at 30% 20%, rgba(191,164,92,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 70% 80%, rgba(191,164,92,0.02) 0%, transparent 50%);
   pointer-events: none;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════════════════════════ */
-.mockup-header {
-  text-align: center;
-  margin-bottom: 48px;
+/* Container with Text Floating Around Phone */
+.mockup-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 60px;
+  align-items: center;
   opacity: 0;
-  transform: translateY(24px);
-  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.mockup-section.in .mockup-header {
+.mockup-section.in .mockup-container {
   opacity: 1;
   transform: none;
+}
+
+/* Floating Text */
+.floating-text {
+  max-width: 280px;
+}
+
+.floating-text.left {
+  text-align: right;
+  justify-self: end;
+}
+
+.floating-text.right {
+  text-align: left;
+  justify-self: start;
+}
+
+.float-title {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.float-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--stone);
+  margin: 0;
+}
+
+/* Phone Center */
+.phone-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
 
 .mockup-label {
@@ -50,16 +94,6 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gold);
-  margin: 0 0 16px;
-}
-
-.mockup-headline {
-  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-size: 42px;
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: #fff;
   margin: 0;
 }
 
@@ -67,14 +101,7 @@
    PHONE
    ═══════════════════════════════════════════════════════════ */
 .phone-wrap {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
-}
-
-.mockup-section.in .phone-wrap {
-  opacity: 1;
-  transform: none;
+  position: relative;
 }
 
 .phone {
@@ -143,15 +170,6 @@
 .mockup-nav {
   display: flex;
   gap: 8px;
-  margin-top: 40px;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: all 0.6s ease 0.25s;
-}
-
-.mockup-section.in .mockup-nav {
-  opacity: 1;
-  transform: none;
 }
 
 .nav-pill {
@@ -159,17 +177,18 @@
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.4);
+  color: var(--ink);
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(0,0,0,0.15);
   border-radius: 24px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .nav-pill:hover {
-  color: rgba(255,255,255,0.7);
-  border-color: rgba(255,255,255,0.15);
+  color: var(--ink);
+  border-color: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.03);
 }
 
 .nav-pill.on {
@@ -927,7 +946,43 @@
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
-@media (max-width: 400px) {
+@media (max-width: 1100px) {
+  .mockup-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .floating-text.left {
+    text-align: center;
+    justify-self: center;
+  }
+  
+  .floating-text.right {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .mockup-section {
+    padding: 60px 20px;
+  }
+  
+  .mockup-container {
+    gap: 32px;
+  }
+  
+  .floating-text {
+    max-width: 100%;
+  }
+  
+  .float-title {
+    font-size: 22px;
+  }
+  
+  .float-desc {
+    font-size: 14px;
+  }
+  
   .phone-body {
     width: 256px;
     height: 524px;
@@ -935,6 +990,4 @@
   }
   
   .phone-screen { border-radius: 32px; }
-  
-  .mockup-headline { font-size: 36px; }
 }
