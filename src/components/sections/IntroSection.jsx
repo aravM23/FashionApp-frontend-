@@ -9,14 +9,14 @@ export default function IntroSection() {
         <img 
           src="https://images.unsplash.com/photo-1558769132-cb1aea1c8348?q=80&w=2874&auto=format&fit=crop"
           alt="Luxury Wardrobe"
-          className="w-full h-full object-cover opacity-70"
+          className="w-full h-full object-cover"
           style={{ 
             objectPosition: 'center',
-            filter: 'brightness(0.7) contrast(1.05)'
+            filter: 'brightness(0.85) contrast(1.1)'
           }}
         />
-        {/* Subtle dark overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Subtle dark overlay for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50"></div>
       </div>
 
       {/* Centered Content */}
