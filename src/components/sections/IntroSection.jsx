@@ -4,19 +4,19 @@ export default function IntroSection() {
       id="intro" 
       className="relative w-screen h-screen overflow-hidden bg-black"
     >
-      {/* Full-Bleed Editorial Image with Low Exposure */}
+      {/* Full-Bleed Editorial Image with Balanced Exposure */}
       <div className="absolute inset-0">
         <img 
           src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2940&auto=format&fit=crop"
           alt="Fashion Editorial"
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-70"
           style={{ 
             objectPosition: 'center 30%',
-            filter: 'brightness(0.5) contrast(1.1)'
+            filter: 'brightness(0.7) contrast(1.05)'
           }}
         />
-        {/* Heavy dark overlay for low exposure */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        {/* Subtle dark overlay */}
+        <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
       {/* Centered Content */}
