@@ -11,7 +11,7 @@ export default function IntroSection() {
           backgroundImage: 'url(https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1920&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'brightness(0.5)'
+          filter: 'brightness(0.45)'
         }}
       />
       {/* Subtle gradient overlay */}
