@@ -1,7 +1,7 @@
 .waitlist {
   min-height: 90vh;
-  background: rgb(252, 236, 211);
-  color: black;
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 
   display: flex;
   align-items: center;
@@ -33,11 +33,12 @@
 
   background: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
-  border: none;
+  border: solid 1px rgb(255, 255, 255);
   border-radius: 14px;
   cursor: pointer;
 }
 
 .waitlist-btn:hover {
   opacity: 0.9;
+  scale: 1.02;
 }
