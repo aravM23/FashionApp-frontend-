@@ -4,6 +4,7 @@ import './AppMockups.css'
 const screens = [
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
+  { id: 'budget', label: 'Budget' },
   { id: 'closet', label: 'Closet' },
   { id: 'runway', label: 'Runway' },
   { id: 'moodboard', label: 'Moodboard' }
@@ -17,6 +18,10 @@ const screenContent = {
   shop: {
     title: "A wardrobe that fits.",
     desc: "Set a budget. Oro finds capsule pieces across the web that match your style and your price."
+  },
+  budget: {
+    title: "Shop smarter.",
+    desc: "Set your outfit budget. Oro curates pieces across brands that fit your style and your wallet."
   },
   closet: {
     title: "Your closet, remembered.",
@@ -102,6 +107,7 @@ export default function AppMockups() {
                   >
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
+                    <BudgetScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
                     <RunwayScreen goToScreen={goToScreen} />
                     <MoodboardScreen goToScreen={goToScreen} />
@@ -284,7 +290,7 @@ function UnifiedNav({ active, onNavigate }) {
   return (
     <nav className="unified-nav">
       <button className="unav-item">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
       </button>
@@ -301,6 +307,15 @@ function UnifiedNav({ active, onNavigate }) {
       >
         Shop
         {active === 'shop' && <span className="unav-dot" />}
+      </button>
+      <button 
+        className={`unav-item${active === 'budget' ? ' on' : ''}`}
+        onClick={() => handleNav('budget')}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+        </svg>
+        {active === 'budget' && <span className="unav-dot" />}
       </button>
       <button 
         className={`unav-item unav-text${active === 'closet' ? ' on' : ''}`}
@@ -320,12 +335,13 @@ function UnifiedNav({ active, onNavigate }) {
         className={`unav-item${active === 'moodboard' ? ' on' : ''}`}
         onClick={() => handleNav('moodboard')}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <rect x="3" y="3" width="7" height="7" rx="1"/>
           <rect x="14" y="3" width="7" height="7" rx="1"/>
           <rect x="3" y="14" width="7" height="7" rx="1"/>
           <rect x="14" y="14" width="7" height="7" rx="1"/>
         </svg>
+        {active === 'moodboard' && <span className="unav-dot" />}
       </button>
     </nav>
   )
@@ -470,6 +486,114 @@ function ClosetScreen({ goToScreen }) {
       </div>
       
       <UnifiedNav active="closet" onNavigate={goToScreen} />
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUDGET SCREEN — Set Your Outfit Budget
+   ═══════════════════════════════════════════════════════════ */
+function BudgetScreen({ goToScreen }) {
+  const [budget, setBudget] = useState(250)
+  const [occasion, setOccasion] = useState('casual')
+  
+  const occasions = [
+    { id: 'casual', label: 'Casual', icon: '☀️' },
+    { id: 'work', label: 'Work', icon: '💼' },
+    { id: 'date', label: 'Date Night', icon: '✨' },
+    { id: 'event', label: 'Event', icon: '🥂' },
+  ]
+  
+  const suggestions = [
+    { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80', name: 'Cashmere Knit', brand: 'COS', price: '$145' },
+    { img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80', name: 'Wide Trousers', brand: 'ARKET', price: '$89' },
+  ]
+  
+  return (
+    <div className="screen budget-screen">
+      <div className="budget-header">
+        <h1 className="budget-title">Set Budget</h1>
+        <p className="budget-sub">For your next outfit</p>
+      </div>
+      
+      {/* Budget Amount Display */}
+      <div className="budget-display">
+        <span className="budget-currency">$</span>
+        <span className="budget-amount">{budget}</span>
+      </div>
+      
+      {/* Budget Slider */}
+      <div className="budget-slider-wrap">
+        <input 
+          type="range" 
+          className="budget-slider"
+          min="50"
+          max="1000"
+          step="25"
+          value={budget}
+          onChange={(e) => setBudget(Number(e.target.value))}
+        />
+        <div className="budget-range">
+          <span>$50</span>
+          <span>$1000</span>
+        </div>
+      </div>
+      
+      {/* Quick Presets */}
+      <div className="budget-presets">
+        {[100, 250, 500, 750].map(amt => (
+          <button 
+            key={amt}
+            className={`preset-btn${budget === amt ? ' on' : ''}`}
+            onClick={() => setBudget(amt)}
+          >
+            ${amt}
+          </button>
+        ))}
+      </div>
+      
+      {/* Occasion Selector */}
+      <div className="budget-occasion">
+        <p className="occasion-label">What's the occasion?</p>
+        <div className="occasion-grid">
+          {occasions.map(o => (
+            <button 
+              key={o.id}
+              className={`occasion-btn${occasion === o.id ? ' on' : ''}`}
+              onClick={() => setOccasion(o.id)}
+            >
+              <span className="occasion-icon">{o.icon}</span>
+              <span className="occasion-text">{o.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      {/* Preview Suggestions */}
+      <div className="budget-preview">
+        <p className="preview-label">Within your budget</p>
+        <div className="preview-items">
+          {suggestions.map((item, i) => (
+            <div key={i} className="preview-item">
+              <img src={item.img} alt="" />
+              <div className="preview-info">
+                <span className="preview-brand">{item.brand}</span>
+                <span className="preview-price">{item.price}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* CTA Button */}
+      <button className="budget-cta">
+        <span>Find My Outfit</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+      
+      <UnifiedNav active="budget" onNavigate={goToScreen} />
     </div>
   )
 }
