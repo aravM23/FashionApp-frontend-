@@ -567,13 +567,16 @@
    ═══════════════════════════════════════════════════════════ */
 .screen.generate {
   background: #fff;
-  padding: 0 0 70px;
+  padding: 0;
+  padding-bottom: 58px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .gen-header {
-  padding: 52px 16px 20px;
+  padding: 48px 16px 14px;
+  flex-shrink: 0;
 }
 
 .gen-label {
@@ -602,7 +605,8 @@
 
 /* Search Box */
 .gen-search-wrap {
-  padding: 0 16px 16px;
+  padding: 0 16px 12px;
+  flex-shrink: 0;
 }
 
 .gen-search {
@@ -642,10 +646,11 @@
 
 /* Occasion Pills */
 .gen-occasions {
-  padding: 0 16px 16px;
+  padding: 0 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .gen-occasion-row {
@@ -680,6 +685,8 @@
 .gen-recent {
   padding: 0 16px;
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .gen-section-label {
@@ -736,7 +743,7 @@
 
 /* Generate CTA */
 .gen-cta {
-  margin: auto 16px 16px;
+  margin: 12px 16px;
   padding: 14px 24px;
   background: var(--ink);
   border: none;
@@ -746,6 +753,7 @@
   letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .gen-cta:hover {
