@@ -188,10 +188,14 @@
    ═══════════════════════════════════════════════════════════ */
 .mockup-nav {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
   opacity: 0;
   transform: translateY(15px);
   transition: all 0.6s ease;
+  padding: 0 16px;
+  max-width: 100%;
 }
 
 .mockup-section.in .mockup-nav {
@@ -211,6 +215,7 @@
   border-radius: 24px;
   cursor: pointer;
   transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
 .nav-pill:hover {
@@ -223,6 +228,27 @@
   color: var(--ink);
   background: var(--gold);
   border-color: var(--gold);
+}
+
+/* Mobile nav adjustments */
+@media (max-width: 420px) {
+  .mockup-nav {
+    gap: 6px;
+    padding: 0 12px;
+  }
+  
+  .nav-pill {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-pill {
+    padding: 7px 12px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
