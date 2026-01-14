@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import './AppMockups.css'
 
 const screens = [
+  { id: 'generate', label: 'Generate' },
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
   { id: 'closet', label: 'Closet' },
@@ -10,6 +11,10 @@ const screens = [
 ]
 
 const screenContent = {
+  generate: {
+    title: "Style for any moment.",
+    desc: "Tell Oro where you're headed. It builds the perfect outfit from your closet, tailored to the occasion."
+  },
   home: {
     title: "Your taste, decoded.",
     desc: "Upload moodboards. Oro learns what you like, using our own AI model, built to understand taste, not trends."
@@ -100,6 +105,7 @@ export default function AppMockups() {
                       transition: dragging ? 'none' : 'transform 0.55s cubic-bezier(.4,.0,.2,1)'
                     }}
                   >
+                    <GenerateScreen goToScreen={goToScreen} />
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
@@ -283,10 +289,14 @@ function UnifiedNav({ active, onNavigate }) {
 
   return (
     <nav className="unified-nav">
-      <button className="unav-item">
+      <button 
+        className={`unav-item${active === 'generate' ? ' on' : ''}`}
+        onClick={() => handleNav('generate')}
+      >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
+        {active === 'generate' && <span className="unav-dot" />}
       </button>
       <button 
         className={`unav-item unav-text${active === 'home' ? ' on' : ''}`}
@@ -329,6 +339,102 @@ function UnifiedNav({ active, onNavigate }) {
         {active === 'moodboard' && <span className="unav-dot" />}
       </button>
     </nav>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GENERATE SCREEN — Uber-style occasion search
+   ═══════════════════════════════════════════════════════════ */
+function GenerateScreen({ goToScreen }) {
+  const [searchValue, setSearchValue] = useState('')
+  const [selectedOccasion, setSelectedOccasion] = useState(null)
+  
+  const occasions = [
+    { id: 'work', label: 'Work', icon: '◼' },
+    { id: 'date', label: 'Date Night', icon: '♥' },
+    { id: 'party', label: 'Party', icon: '✦' },
+    { id: 'casual', label: 'Casual', icon: '○' },
+    { id: 'brunch', label: 'Brunch', icon: '◎' },
+    { id: 'wedding', label: 'Wedding', icon: '◇' },
+  ]
+  
+  const recentPlaces = [
+    { name: 'Dinner at Nobu', time: 'Last week' },
+    { name: 'Office - Downtown', time: '2 days ago' },
+  ]
+  
+  return (
+    <div className="screen generate">
+      {/* Header */}
+      <div className="gen-header">
+        <p className="gen-greeting">Good evening, Sarah</p>
+        <h1 className="gen-title">Where are you<br/>headed today?</h1>
+      </div>
+      
+      {/* Search Box - Uber style */}
+      <div className="gen-search-wrap">
+        <div className="gen-search">
+          <div className="gen-search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <input 
+            type="text"
+            className="gen-search-input"
+            placeholder="Search occasion or place..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
+      </div>
+      
+      {/* Quick Occasions */}
+      <div className="gen-occasions">
+        <p className="gen-section-label">Quick select</p>
+        <div className="gen-occasion-grid">
+          {occasions.map(o => (
+            <button 
+              key={o.id}
+              className={`gen-occasion${selectedOccasion === o.id ? ' on' : ''}`}
+              onClick={() => setSelectedOccasion(o.id)}
+            >
+              <span className="gen-occasion-icon">{o.icon}</span>
+              <span className="gen-occasion-label">{o.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      {/* Recent */}
+      <div className="gen-recent">
+        <p className="gen-section-label">Recent</p>
+        <div className="gen-recent-list">
+          {recentPlaces.map((place, i) => (
+            <button key={i} className="gen-recent-item">
+              <div className="gen-recent-dot" />
+              <div className="gen-recent-info">
+                <span className="gen-recent-name">{place.name}</span>
+                <span className="gen-recent-time">{place.time}</span>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      {/* Generate CTA */}
+      <button className="gen-cta">
+        <span>Generate Outfit</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+      
+      <UnifiedNav active="generate" onNavigate={goToScreen} />
+    </div>
   )
 }
 

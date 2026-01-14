@@ -563,6 +563,220 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
+   GENERATE SCREEN — Uber-style occasion search
+   ═══════════════════════════════════════════════════════════ */
+.screen.generate {
+  background: #fff;
+  padding: 0 0 70px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gen-header {
+  padding: 52px 20px 24px;
+  background: linear-gradient(180deg, #FAFAF9 0%, #fff 100%);
+}
+
+.gen-greeting {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--stone);
+  margin: 0 0 8px;
+}
+
+.gen-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* Search Box */
+.gen-search-wrap {
+  padding: 0 16px 20px;
+}
+
+.gen-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #F5F5F3;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.gen-search:focus-within {
+  background: #EFEFED;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.gen-search-icon {
+  color: var(--stone);
+  flex-shrink: 0;
+}
+
+.gen-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  outline: none;
+}
+
+.gen-search-input::placeholder {
+  color: var(--stone);
+}
+
+/* Occasion Grid */
+.gen-occasions {
+  padding: 0 16px 20px;
+}
+
+.gen-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0 0 12px;
+}
+
+.gen-occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.gen-occasion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 8px;
+  background: #FAFAF9;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gen-occasion:hover {
+  background: #F5F5F3;
+}
+
+.gen-occasion.on {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.gen-occasion.on .gen-occasion-icon,
+.gen-occasion.on .gen-occasion-label {
+  color: #fff;
+}
+
+.gen-occasion-icon {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.gen-occasion-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Recent List */
+.gen-recent {
+  padding: 0 16px;
+  flex: 1;
+}
+
+.gen-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gen-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #F0F0EE;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.gen-recent-item:hover {
+  background: #FAFAF9;
+  margin: 0 -16px;
+  padding: 14px 16px;
+}
+
+.gen-recent-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--stone);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gen-recent-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gen-recent-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.gen-recent-time {
+  font-size: 12px;
+  color: var(--stone);
+}
+
+.gen-recent-item svg {
+  color: var(--stone);
+  flex-shrink: 0;
+}
+
+/* Generate CTA */
+.gen-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 16px;
+  padding: 16px 24px;
+  background: var(--ink);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gen-cta:hover {
+  background: #000;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    HOME SCREEN
    ═══════════════════════════════════════════════════════════ */
 .home-hero {
