@@ -595,12 +595,12 @@
 }
 
 .home-tag {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
-  margin: 0 0 6px;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 8px;
 }
 
 .home-title {
