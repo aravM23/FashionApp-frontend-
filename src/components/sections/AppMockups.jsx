@@ -74,13 +74,7 @@ export default function AppMockups() {
     <section ref={ref} className={`mockup-section${visible ? ' in' : ''}`}>
       <div className="mockup-bg" />
       
-      <div className="mockup-container">
-        {/* Floating Text - Left */}
-        <div className="floating-text left">
-          <h3 className="float-title">{currentContent.title}</h3>
-          <p className="float-desc">{currentContent.desc}</p>
-        </div>
-
+      <div className="mockup-container-centered">
         {/* Phone Center */}
         <div className="phone-center">
           <p className="mockup-label">The App</p>
@@ -121,10 +115,10 @@ export default function AppMockups() {
           </nav>
         </div>
 
-        {/* Floating Text - Right */}
-        <div className="floating-text right">
-          <h3 className="float-title">{currentContent.title}</h3>
-          <p className="float-desc">{currentContent.desc}</p>
+        {/* Content Below Phone */}
+        <div className="content-below">
+          <h3 className="content-title">{currentContent.title}</h3>
+          <p className="content-desc">{currentContent.desc}</p>
         </div>
       </div>
     </section>
