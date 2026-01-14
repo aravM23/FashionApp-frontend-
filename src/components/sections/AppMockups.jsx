@@ -495,102 +495,88 @@ function ClosetScreen({ goToScreen }) {
    ═══════════════════════════════════════════════════════════ */
 function BudgetScreen({ goToScreen }) {
   const [budget, setBudget] = useState(250)
-  const [occasion, setOccasion] = useState('casual')
+  const [occasion, setOccasion] = useState('everyday')
   
-  const occasions = [
-    { id: 'casual', label: 'Casual', icon: '☀️' },
-    { id: 'work', label: 'Work', icon: '💼' },
-    { id: 'date', label: 'Date Night', icon: '✨' },
-    { id: 'event', label: 'Event', icon: '🥂' },
-  ]
+  const occasions = ['Everyday', 'Work', 'Evening', 'Special']
   
-  const suggestions = [
-    { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80', name: 'Cashmere Knit', brand: 'COS', price: '$145' },
-    { img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80', name: 'Wide Trousers', brand: 'ARKET', price: '$89' },
+  const curated = [
+    { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80', name: 'Wool Blend Coat', brand: 'COS', price: '$189' },
+    { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80', name: 'Merino Knit', brand: 'ARKET', price: '$95' },
+    { img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80', name: 'Pleated Trouser', brand: 'ZARA', price: '$69' },
   ]
   
   return (
     <div className="screen budget-screen">
-      <div className="budget-header">
-        <h1 className="budget-title">Set Budget</h1>
-        <p className="budget-sub">For your next outfit</p>
+      {/* Minimal Header */}
+      <div className="bgt-top">
+        <h1 className="bgt-title">Budget</h1>
       </div>
       
-      {/* Budget Amount Display */}
-      <div className="budget-display">
-        <span className="budget-currency">$</span>
-        <span className="budget-amount">{budget}</span>
-      </div>
-      
-      {/* Budget Slider */}
-      <div className="budget-slider-wrap">
-        <input 
-          type="range" 
-          className="budget-slider"
-          min="50"
-          max="1000"
-          step="25"
-          value={budget}
-          onChange={(e) => setBudget(Number(e.target.value))}
-        />
-        <div className="budget-range">
-          <span>$50</span>
-          <span>$1000</span>
+      {/* Budget Card */}
+      <div className="bgt-card">
+        <p className="bgt-label">Spend up to</p>
+        <div className="bgt-amount-row">
+          <span className="bgt-dollar">$</span>
+          <span className="bgt-value">{budget}</span>
+        </div>
+        
+        {/* Elegant Slider */}
+        <div className="bgt-slider-container">
+          <input 
+            type="range" 
+            className="bgt-slider"
+            min="50"
+            max="500"
+            step="10"
+            value={budget}
+            onChange={(e) => setBudget(Number(e.target.value))}
+          />
+          <div className="bgt-marks">
+            <span>$50</span>
+            <span>$500</span>
+          </div>
         </div>
       </div>
       
-      {/* Quick Presets */}
-      <div className="budget-presets">
-        {[100, 250, 500, 750].map(amt => (
-          <button 
-            key={amt}
-            className={`preset-btn${budget === amt ? ' on' : ''}`}
-            onClick={() => setBudget(amt)}
-          >
-            ${amt}
-          </button>
-        ))}
-      </div>
-      
-      {/* Occasion Selector */}
-      <div className="budget-occasion">
-        <p className="occasion-label">What's the occasion?</p>
-        <div className="occasion-grid">
+      {/* Occasion Pills */}
+      <div className="bgt-occasion">
+        <p className="bgt-occasion-label">Occasion</p>
+        <div className="bgt-pills">
           {occasions.map(o => (
             <button 
-              key={o.id}
-              className={`occasion-btn${occasion === o.id ? ' on' : ''}`}
-              onClick={() => setOccasion(o.id)}
+              key={o}
+              className={`bgt-pill${occasion === o.toLowerCase() ? ' active' : ''}`}
+              onClick={() => setOccasion(o.toLowerCase())}
             >
-              <span className="occasion-icon">{o.icon}</span>
-              <span className="occasion-text">{o.label}</span>
+              {o}
             </button>
           ))}
         </div>
       </div>
       
-      {/* Preview Suggestions */}
-      <div className="budget-preview">
-        <p className="preview-label">Within your budget</p>
-        <div className="preview-items">
-          {suggestions.map((item, i) => (
-            <div key={i} className="preview-item">
-              <img src={item.img} alt="" />
-              <div className="preview-info">
-                <span className="preview-brand">{item.brand}</span>
-                <span className="preview-price">{item.price}</span>
+      {/* Curated Picks */}
+      <div className="bgt-curated">
+        <div className="bgt-curated-head">
+          <span className="bgt-curated-title">Curated for you</span>
+          <button className="bgt-see-all">See all</button>
+        </div>
+        <div className="bgt-curated-scroll">
+          {curated.map((item, i) => (
+            <div key={i} className="bgt-item">
+              <div className="bgt-item-img">
+                <img src={item.img} alt="" />
               </div>
+              <p className="bgt-item-brand">{item.brand}</p>
+              <p className="bgt-item-name">{item.name}</p>
+              <p className="bgt-item-price">{item.price}</p>
             </div>
           ))}
         </div>
       </div>
       
-      {/* CTA Button */}
-      <button className="budget-cta">
-        <span>Find My Outfit</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+      {/* CTA */}
+      <button className="bgt-cta">
+        Build Outfit
       </button>
       
       <UnifiedNav active="budget" onNavigate={goToScreen} />
