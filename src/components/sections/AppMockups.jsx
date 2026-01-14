@@ -342,9 +342,9 @@ function HomeScreen({ goToScreen }) {
         <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80" alt="" />
         <div className="home-hero-fade" />
         <div className="home-hero-content">
-          <p className="home-tag">New Arrival</p>
-          <h1 className="home-title">The<br/>Winter<br/>Edit</h1>
-          <button className="home-cta">Shop Now</button>
+          <p className="home-tag">Good Morning</p>
+          <h1 className="home-title">Hi Sarah,<br/>what are you<br/>wearing today?</h1>
+          <button className="home-cta">Take a picture</button>
         </div>
       </div>
       
