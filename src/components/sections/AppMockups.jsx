@@ -143,24 +143,24 @@ function RunwayScreen({ goToScreen }) {
     {
       image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80',
       title: ['January', 'Runway'],
-      outfit: 'Wool Coat, Cashmere Knit, Wide Trousers',
+      outfit: 'Wide Top, Wide Trousers, Converse All Star, Red Sunglasses & Red Belt Bag',
       date: 'Look 1 of 4'
     },
     {
       image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
       title: ['Your', 'Best Looks'],
-      outfit: 'Silk Blouse, Tailored Pants, Leather Bag',
+      outfit: 'Cropped Sweatset & White Heels',
       date: 'Look 2 of 4'
     },
     {
       image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&q=80',
       title: ['OOTD,', 'Monday'],
-      outfit: 'Oversized Blazer, Midi Skirt',
+      outfit: 'Floral Sundress with Gold Jewelry',
       date: 'Look 3 of 4'
     },
     {
       image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&q=80',
-      title: ['Street', 'Style'],
+      title: ['Parisian', 'Chic'],
       outfit: 'Trench Coat, Denim, White Tee',
       date: 'Look 4 of 4'
     }
