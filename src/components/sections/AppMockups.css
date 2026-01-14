@@ -510,7 +510,8 @@
 
 .home .unified-nav,
 .shop .unified-nav,
-.closet .unified-nav {
+.closet .unified-nav,
+.generate .unified-nav {
   background: #fff;
 }
 
