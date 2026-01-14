@@ -29,53 +29,53 @@
   pointer-events: none;
 }
 
-/* Centered Container */
-.mockup-container-centered {
+/* Side-by-Side Container */
+.mockup-container-side {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  max-width: 1100px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 48px;
+  justify-content: center;
+  gap: 80px;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.mockup-section.in .mockup-container-centered {
+.mockup-section.in .mockup-container-side {
   opacity: 1;
   transform: none;
 }
 
-/* Content Below Phone */
-.content-below {
-  text-align: center;
-  max-width: 600px;
-  padding: 0 24px;
+/* Content Side */
+.content-side {
+  flex: 0 0 340px;
+  max-width: 340px;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateX(30px);
   transition: all 0.7s ease;
 }
 
-.mockup-section.in .content-below {
+.mockup-section.in .content-side {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
   transition-delay: 0.5s;
 }
 
 .content-title {
   font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.01em;
   color: var(--ink);
-  margin: 0 0 16px;
+  margin: 0 0 20px;
 }
 
 .content-desc {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.7;
   color: var(--stone);
   margin: 0;
@@ -974,13 +974,40 @@
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .mockup-container-side {
+    gap: 60px;
+  }
+  
+  .content-side {
+    flex: 0 0 300px;
+    max-width: 300px;
+  }
+  
   .content-title {
-    font-size: 28px;
+    font-size: 32px;
   }
   
   .content-desc {
-    font-size: 15px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .mockup-container-side {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .content-side {
+    flex: none;
+    max-width: 500px;
+    text-align: center;
+    transform: translateX(0);
+  }
+  
+  .mockup-section.in .content-side {
+    transform: translateY(0);
   }
 }
 
@@ -989,16 +1016,20 @@
     padding: 60px 20px;
   }
   
-  .mockup-container-centered {
+  .mockup-container-side {
     gap: 32px;
   }
   
+  .content-side {
+    padding: 0 20px;
+  }
+  
   .content-title {
-    font-size: 24px;
+    font-size: 26px;
   }
   
   .content-desc {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   .phone-body {

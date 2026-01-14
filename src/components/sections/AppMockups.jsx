@@ -74,8 +74,8 @@ export default function AppMockups() {
     <section ref={ref} className={`mockup-section${visible ? ' in' : ''}`}>
       <div className="mockup-bg" />
       
-      <div className="mockup-container-centered">
-        {/* Phone Center */}
+      <div className="mockup-container-side">
+        {/* Phone Left */}
         <div className="phone-center">
           <p className="mockup-label">The App</p>
           
@@ -115,8 +115,8 @@ export default function AppMockups() {
           </nav>
         </div>
 
-        {/* Content Below Phone */}
-        <div className="content-below">
+        {/* Content Right */}
+        <div className="content-side">
           <h3 className="content-title">{currentContent.title}</h3>
           <p className="content-desc">{currentContent.desc}</p>
         </div>
