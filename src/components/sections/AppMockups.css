@@ -499,78 +499,67 @@
   color: var(--ink);
 }
 
-/* Unified Navigation Bar - 5 items */
+/* Unified Navigation Bar - All Screens */
 .unified-nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: space-around;
-  align-items: flex-end;
-  padding: 6px 8px 8px;
+  align-items: center;
+  padding: 10px 16px 26px;
+  background: #000;
+}
+
+.home .unified-nav,
+.shop .unified-nav,
+.closet .unified-nav {
   background: #fff;
-  border-top: 1px solid #EBEBEB;
 }
 
-.runway .unified-nav {
-  background: rgba(0,0,0,0.9);
-  border-top-color: rgba(255,255,255,0.1);
-}
-
-.unav-btn {
+.unav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 4px 8px;
+  gap: 4px;
   background: none;
   border: none;
-  color: var(--stone);
+  color: rgba(0,0,0,0.35);
   cursor: pointer;
-  transition: color 0.15s ease;
+  transition: color 0.2s ease;
 }
 
-.unav-btn span {
-  font-size: 10px;
-  font-weight: 500;
+.runway .unav-item {
+  color: rgba(255,255,255,0.4);
 }
 
-.unav-btn.on {
+.unav-item:hover { 
+  color: rgba(0,0,0,0.6); 
+}
+
+.runway .unav-item:hover {
+  color: rgba(255,255,255,0.7);
+}
+
+.unav-text {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.unav-item.on {
   color: var(--ink);
 }
 
-.runway .unav-btn {
-  color: rgba(255,255,255,0.5);
-}
-
-.runway .unav-btn.on {
+.runway .unav-item.on {
   color: #fff;
 }
 
-/* Center Generate Button */
-.unav-btn.unav-center {
-  padding: 0;
-}
-
-.unav-gen-icon {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.unav-dot {
+  width: 4px;
+  height: 4px;
   background: var(--ink);
   border-radius: 50%;
-  color: #fff;
-  transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.unav-btn.unav-center:hover .unav-gen-icon {
-  transform: scale(1.05);
-}
-
-.unav-btn.unav-center.on .unav-gen-icon {
-  background: var(--gold);
+.runway .unav-dot {
+  background: #fff;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -578,10 +567,9 @@
    ═══════════════════════════════════════════════════════════ */
 .screen.generate {
   background: #fff;
-  padding: 0 0 60px;
+  padding: 0 0 70px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 .gen-header {
@@ -748,7 +736,7 @@
 
 /* Generate CTA */
 .gen-cta {
-  margin: 12px 16px 8px;
+  margin: auto 16px 16px;
   padding: 14px 24px;
   background: var(--ink);
   border: none;
@@ -758,7 +746,6 @@
   letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex-shrink: 0;
 }
 
 .gen-cta:hover {
