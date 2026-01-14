@@ -5,6 +5,7 @@ const screens = [
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
   { id: 'closet', label: 'Closet' },
+  { id: 'moodboard', label: 'Moodboard' },
   { id: 'runway', label: 'Runway' }
 ]
 
@@ -20,6 +21,10 @@ const screenContent = {
   closet: {
     title: "Your closet, remembered.",
     desc: "Upload your outfits. Oro learns what you own and how you actually dress."
+  },
+  moodboard: {
+    title: "Curate your vision.",
+    desc: "Attach your moodboards, Pinterest boards, or inspiration images. Oro analyzes your taste for perfect style recs."
   },
   runway: {
     title: "Outfits for every context.",
@@ -98,6 +103,7 @@ export default function AppMockups() {
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
+                    <MoodboardScreen goToScreen={goToScreen} />
                     <RunwayScreen goToScreen={goToScreen} />
                   </div>
                 </div>
@@ -310,11 +316,15 @@ function UnifiedNav({ active, onNavigate }) {
         Runway
         {active === 'runway' && <span className="unav-dot" />}
       </button>
-      <button className="unav-item">
+      <button 
+        className={`unav-item${active === 'moodboard' ? ' on' : ''}`}
+        onClick={() => handleNav('moodboard')}
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
         </svg>
       </button>
     </nav>
@@ -460,6 +470,88 @@ function ClosetScreen({ goToScreen }) {
       </div>
       
       <UnifiedNav active="closet" onNavigate={goToScreen} />
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOODBOARD SCREEN — Your Style Vision
+   ═══════════════════════════════════════════════════════════ */
+function MoodboardScreen({ goToScreen }) {
+  const moodImages = [
+    { img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80' },
+    { img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80' },
+    { img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80' },
+  ]
+  
+  return (
+    <div className="screen moodboard">
+      <div className="mood-header">
+        <h1 className="mood-title">Moodboard</h1>
+        <p className="mood-sub">Curate your style vision</p>
+      </div>
+      
+      {/* Upload Zone */}
+      <div className="mood-upload">
+        <div className="upload-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="17,8 12,3 7,8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <p className="upload-text">Drop images or tap to upload</p>
+        <p className="upload-hint">PNG, JPG up to 10MB</p>
+      </div>
+      
+      {/* Pinterest Link */}
+      <div className="mood-link">
+        <div className="link-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0a12 12 0 00-4.37 23.17c-.1-.94-.2-2.4.04-3.44l1.4-5.96s-.35-.71-.35-1.78c0-1.67.97-2.92 2.17-2.92 1.02 0 1.52.77 1.52 1.7 0 1.03-.66 2.58-1 4.01-.28 1.2.6 2.17 1.78 2.17 2.14 0 3.78-2.26 3.78-5.52 0-2.89-2.08-4.9-5.05-4.9-3.44 0-5.46 2.58-5.46 5.25 0 1.04.4 2.16.9 2.77a.36.36 0 01.08.34l-.33 1.36c-.05.22-.18.27-.4.16-1.5-.7-2.44-2.89-2.44-4.65 0-3.78 2.75-7.26 7.93-7.26 4.16 0 7.4 2.97 7.4 6.93 0 4.14-2.6 7.46-6.22 7.46-1.21 0-2.36-.63-2.75-1.38l-.75 2.85c-.27 1.04-1 2.35-1.5 3.15A12 12 0 1012 0z"/>
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          className="link-input" 
+          placeholder="Paste Pinterest board link..."
+        />
+        <button className="link-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+      {/* Recent Uploads */}
+      <div className="mood-recent">
+        <div className="recent-head">
+          <span className="recent-title">Your Inspiration</span>
+          <span className="recent-count">3 images</span>
+        </div>
+        <div className="recent-grid">
+          {moodImages.map((m, i) => (
+            <div key={i} className="recent-img">
+              <img src={m.img} alt="" />
+            </div>
+          ))}
+          <button className="recent-add">
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M10 4v12M4 10h12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      {/* CTA */}
+      <button className="mood-cta">
+        <span>Analyze My Style</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+      
+      <UnifiedNav active="moodboard" onNavigate={goToScreen} />
     </div>
   )
 }
