@@ -729,6 +729,79 @@
   cursor: pointer;
 }
 
+/* Price Filter */
+.price-filter {
+  margin: 0 16px 14px;
+  padding: 12px 14px;
+  background: #FAFAF9;
+  border-radius: 8px;
+}
+
+.price-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.price-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.price-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.price-slider {
+  width: 100%;
+  height: 3px;
+  background: #E5E5E3;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--ink);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.price-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--ink);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--stone);
+  margin-top: 6px;
+}
+
 .shop-cats {
   display: flex;
   gap: 16px;

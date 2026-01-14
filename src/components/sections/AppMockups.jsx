@@ -4,7 +4,6 @@ import './AppMockups.css'
 const screens = [
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
-  { id: 'budget', label: 'Budget' },
   { id: 'closet', label: 'Closet' },
   { id: 'runway', label: 'Runway' },
   { id: 'moodboard', label: 'Moodboard' }
@@ -18,10 +17,6 @@ const screenContent = {
   shop: {
     title: "A wardrobe that fits.",
     desc: "Set a budget. Oro finds capsule pieces across the web that match your style and your price."
-  },
-  budget: {
-    title: "Shop smarter.",
-    desc: "Set your outfit budget. Oro curates pieces across brands that fit your style and your wallet."
   },
   closet: {
     title: "Your closet, remembered.",
@@ -107,7 +102,6 @@ export default function AppMockups() {
                   >
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
-                    <BudgetScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
                     <RunwayScreen goToScreen={goToScreen} />
                     <MoodboardScreen goToScreen={goToScreen} />
@@ -309,15 +303,6 @@ function UnifiedNav({ active, onNavigate }) {
         {active === 'shop' && <span className="unav-dot" />}
       </button>
       <button 
-        className={`unav-item${active === 'budget' ? ' on' : ''}`}
-        onClick={() => handleNav('budget')}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-        </svg>
-        {active === 'budget' && <span className="unav-dot" />}
-      </button>
-      <button 
         className={`unav-item unav-text${active === 'closet' ? ' on' : ''}`}
         onClick={() => handleNav('closet')}
       >
@@ -392,6 +377,10 @@ function HomeScreen({ goToScreen }) {
    SHOP SCREEN
    ═══════════════════════════════════════════════════════════ */
 function ShopScreen({ goToScreen }) {
+  const [maxPrice, setMaxPrice] = useState(300)
+  const [showFilter, setShowFilter] = useState(false)
+  const [activeCat, setActiveCat] = useState(0)
+  
   const items = [
     { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80', name: 'Tailored Wool Coat', brand: 'COS', price: '$350', sale: '$245' },
     { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&q=80', name: 'Relaxed Cashmere', brand: 'ARKET', price: '$189', sale: null },
@@ -403,14 +392,37 @@ function ShopScreen({ goToScreen }) {
     <div className="screen shop">
       <div className="shop-top">
         <h1 className="shop-title">Shop</h1>
-        <button className="shop-filter">
+        <button className="shop-filter" onClick={() => setShowFilter(!showFilter)}>
           <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 6h12M5 10h8M7 14h4"/></svg>
         </button>
       </div>
       
+      {/* Price Filter */}
+      {showFilter && (
+        <div className="price-filter">
+          <div className="price-filter-row">
+            <span className="price-label">Max budget</span>
+            <span className="price-value">${maxPrice}</span>
+          </div>
+          <input 
+            type="range" 
+            className="price-slider"
+            min="50"
+            max="500"
+            step="10"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(Number(e.target.value))}
+          />
+          <div className="price-range">
+            <span>$50</span>
+            <span>$500</span>
+          </div>
+        </div>
+      )}
+      
       <div className="shop-cats">
         {['All', 'Coats', 'Knitwear', 'Trousers', 'Bags'].map((c, i) => (
-          <button key={c} className={`cat${i === 0 ? ' on' : ''}`}>{c}</button>
+          <button key={c} className={`cat${i === activeCat ? ' on' : ''}`} onClick={() => setActiveCat(i)}>{c}</button>
         ))}
       </div>
       
@@ -486,57 +498,6 @@ function ClosetScreen({ goToScreen }) {
       </div>
       
       <UnifiedNav active="closet" onNavigate={goToScreen} />
-    </div>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BUDGET SCREEN — Shop by Budget (Aritzia/Zara style)
-   ═══════════════════════════════════════════════════════════ */
-function BudgetScreen({ goToScreen }) {
-  const [activeBudget, setActiveBudget] = useState(1)
-  
-  const budgets = ['Under $50', '$50-150', '$150-300', '$300+']
-  
-  const items = [
-    { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&q=80', name: 'Ribbed Knit Top', brand: 'H&M', price: '$34' },
-    { img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=80', name: 'Wide Leg Trouser', brand: 'ZARA', price: '$59' },
-    { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80', name: 'Oversized Blazer', brand: 'ARKET', price: '$129' },
-    { img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80', name: 'Leather Mini Bag', brand: 'COS', price: '$89' },
-  ]
-  
-  return (
-    <div className="screen shop">
-      <div className="shop-top">
-        <h1 className="shop-title">Shop by Budget</h1>
-        <button className="shop-filter">
-          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 6h12M5 10h8M7 14h4"/></svg>
-        </button>
-      </div>
-      
-      <div className="shop-cats">
-        {budgets.map((b, i) => (
-          <button key={b} className={`cat${i === activeBudget ? ' on' : ''}`} onClick={() => setActiveBudget(i)}>{b}</button>
-        ))}
-      </div>
-      
-      <div className="shop-grid">
-        {items.map((item, i) => (
-          <div key={i} className="product">
-            <div className="product-img">
-              <img src={item.img} alt="" />
-              <button className="product-heart">
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 13.7l-5.3-5.4a3.1 3.1 0 014.4-4.4L8 4.8l.9-.9a3.1 3.1 0 014.4 4.4L8 13.7z"/></svg>
-              </button>
-            </div>
-            <p className="product-brand">{item.brand}</p>
-            <p className="product-name">{item.name}</p>
-            <p className="product-price">{item.price}</p>
-          </div>
-        ))}
-      </div>
-      
-      <UnifiedNav active="budget" onNavigate={goToScreen} />
     </div>
   )
 }
