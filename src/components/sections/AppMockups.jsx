@@ -2,19 +2,14 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import './AppMockups.css'
 
 const screens = [
-  { id: 'generate', label: 'Generate' },
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
+  { id: 'generate', label: 'Generate' },
   { id: 'closet', label: 'Closet' },
   { id: 'runway', label: 'Runway' },
-  { id: 'moodboard', label: 'Moodboard' }
 ]
 
 const screenContent = {
-  generate: {
-    title: "Style for any moment.",
-    desc: "Tell Oro where you're headed. It builds the perfect outfit from your closet, tailored to the occasion."
-  },
   home: {
     title: "Your taste, decoded.",
     desc: "Upload moodboards. Oro learns what you like, using our own AI model, built to understand taste, not trends."
@@ -23,13 +18,13 @@ const screenContent = {
     title: "A wardrobe that fits.",
     desc: "Set a budget. Oro finds capsule pieces across the web that match your style and your price."
   },
+  generate: {
+    title: "Style for any moment.",
+    desc: "Tell Oro where you're headed. It builds the perfect outfit from your closet, tailored to the occasion."
+  },
   closet: {
     title: "Your closet, remembered.",
     desc: "Upload your outfits. Oro learns what you own and how you actually dress."
-  },
-  moodboard: {
-    title: "Curate your vision.",
-    desc: "Attach your moodboards, Pinterest boards, or inspiration images. Oro analyzes your taste for perfect style recs."
   },
   runway: {
     title: "Outfits for every context.",
@@ -105,12 +100,11 @@ export default function AppMockups() {
                       transition: dragging ? 'none' : 'transform 0.55s cubic-bezier(.4,.0,.2,1)'
                     }}
                   >
-                    <GenerateScreen goToScreen={goToScreen} />
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
+                    <GenerateScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
                     <RunwayScreen goToScreen={goToScreen} />
-                    <MoodboardScreen goToScreen={goToScreen} />
                   </div>
                 </div>
                 <div className="phone-bar" />
@@ -278,7 +272,7 @@ function RunwayScreen({ goToScreen }) {
   )
 }
 
-/* Unified Bottom Tab Bar */
+/* Unified Bottom Tab Bar - 5 items max */
 function UnifiedNav({ active, onNavigate }) {
   const handleNav = (screenId) => {
     const screenIndex = screens.findIndex(s => s.id === screenId)
@@ -290,53 +284,50 @@ function UnifiedNav({ active, onNavigate }) {
   return (
     <nav className="unified-nav">
       <button 
-        className={`unav-item${active === 'generate' ? ' on' : ''}`}
-        onClick={() => handleNav('generate')}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-        {active === 'generate' && <span className="unav-dot" />}
-      </button>
-      <button 
-        className={`unav-item unav-text${active === 'home' ? ' on' : ''}`}
+        className={`unav-btn${active === 'home' ? ' on' : ''}`}
         onClick={() => handleNav('home')}
       >
-        Home
-        {active === 'home' && <span className="unav-dot" />}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Home</span>
       </button>
       <button 
-        className={`unav-item unav-text${active === 'shop' ? ' on' : ''}`}
+        className={`unav-btn${active === 'shop' ? ' on' : ''}`}
         onClick={() => handleNav('shop')}
       >
-        Shop
-        {active === 'shop' && <span className="unav-dot" />}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span>Shop</span>
       </button>
       <button 
-        className={`unav-item unav-text${active === 'closet' ? ' on' : ''}`}
+        className={`unav-btn unav-center${active === 'generate' ? ' on' : ''}`}
+        onClick={() => handleNav('generate')}
+      >
+        <div className="unav-gen-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+      </button>
+      <button 
+        className={`unav-btn${active === 'closet' ? ' on' : ''}`}
         onClick={() => handleNav('closet')}
       >
-        You
-        {active === 'closet' && <span className="unav-dot" />}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        <span>Closet</span>
       </button>
       <button 
-        className={`unav-item unav-text${active === 'runway' ? ' on' : ''}`}
+        className={`unav-btn${active === 'runway' ? ' on' : ''}`}
         onClick={() => handleNav('runway')}
       >
-        Runway
-        {active === 'runway' && <span className="unav-dot" />}
-      </button>
-      <button 
-        className={`unav-item${active === 'moodboard' ? ' on' : ''}`}
-        onClick={() => handleNav('moodboard')}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="3" y="3" width="7" height="7" rx="1"/>
-          <rect x="14" y="3" width="7" height="7" rx="1"/>
-          <rect x="3" y="14" width="7" height="7" rx="1"/>
-          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="M7 2v20"/><path d="M17 2v20"/><path d="M2 12h20"/>
         </svg>
-        {active === 'moodboard' && <span className="unav-dot" />}
+        <span>Runway</span>
       </button>
     </nav>
   )
