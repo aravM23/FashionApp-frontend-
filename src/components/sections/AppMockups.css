@@ -563,7 +563,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   GENERATE SCREEN — Uber-style occasion search
+   GENERATE SCREEN — Clean occasion search
    ═══════════════════════════════════════════════════════════ */
 .screen.generate {
   background: #fff;
@@ -573,48 +573,54 @@
 }
 
 .gen-header {
-  padding: 52px 20px 24px;
-  background: linear-gradient(180deg, #FAFAF9 0%, #fff 100%);
+  padding: 52px 16px 20px;
 }
 
-.gen-greeting {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+.gen-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--stone);
   margin: 0 0 8px;
 }
 
 .gen-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 400;
   line-height: 1.15;
   color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.gen-sub {
+  font-size: 13px;
+  color: var(--stone);
   margin: 0;
 }
 
 /* Search Box */
 .gen-search-wrap {
-  padding: 0 16px 20px;
+  padding: 0 16px 16px;
 }
 
 .gen-search {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 12px 14px;
   background: #F5F5F3;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .gen-search:focus-within {
   background: #EFEFED;
-  box-shadow: 0 0 0 2px var(--ink);
+  box-shadow: 0 0 0 1.5px var(--ink);
 }
 
-.gen-search-icon {
+.gen-search svg {
   color: var(--stone);
   flex-shrink: 0;
 }
@@ -623,72 +629,51 @@
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--ink);
   outline: none;
+  min-width: 0;
 }
 
 .gen-search-input::placeholder {
   color: var(--stone);
 }
 
-/* Occasion Grid */
+/* Occasion Pills */
 .gen-occasions {
-  padding: 0 16px 20px;
-}
-
-.gen-section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin: 0 0 12px;
-}
-
-.gen-occasion-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.gen-occasion {
+  padding: 0 16px 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 16px 8px;
-  background: #FAFAF9;
-  border: 1px solid transparent;
-  border-radius: 12px;
+  gap: 8px;
+}
+
+.gen-occasion-row {
+  display: flex;
+  gap: 8px;
+}
+
+.gen-pill {
+  flex: 1;
+  padding: 12px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid #E5E5E3;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.gen-occasion:hover {
-  background: #F5F5F3;
-}
-
-.gen-occasion.on {
-  background: var(--ink);
+.gen-pill:hover {
   border-color: var(--ink);
 }
 
-.gen-occasion.on .gen-occasion-icon,
-.gen-occasion.on .gen-occasion-label {
+.gen-pill.on {
+  background: var(--ink);
+  border-color: var(--ink);
   color: #fff;
-}
-
-.gen-occasion-icon {
-  font-size: 16px;
-  color: var(--ink);
-}
-
-.gen-occasion-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--ink);
 }
 
 /* Recent List */
@@ -697,36 +682,37 @@
   flex: 1;
 }
 
-.gen-recent-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.gen-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0 0 10px;
 }
 
 .gen-recent-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 0;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
   background: transparent;
   border: none;
   border-bottom: 1px solid #F0F0EE;
   cursor: pointer;
   text-align: left;
-  transition: background 0.15s ease;
 }
 
-.gen-recent-item:hover {
-  background: #FAFAF9;
-  margin: 0 -16px;
-  padding: 14px 16px;
-}
-
-.gen-recent-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--stone);
+.gen-recent-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5F5F3;
   border-radius: 50%;
+  color: var(--stone);
   flex-shrink: 0;
 }
 
@@ -734,39 +720,30 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .gen-recent-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--ink);
 }
 
 .gen-recent-time {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--stone);
-}
-
-.gen-recent-item svg {
-  color: var(--stone);
-  flex-shrink: 0;
 }
 
 /* Generate CTA */
 .gen-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 16px;
-  padding: 16px 24px;
+  margin: auto 16px 16px;
+  padding: 14px 24px;
   background: var(--ink);
   border: none;
-  border-radius: 12px;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s ease;
 }

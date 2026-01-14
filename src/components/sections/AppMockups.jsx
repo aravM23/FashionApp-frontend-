@@ -350,12 +350,12 @@ function GenerateScreen({ goToScreen }) {
   const [selectedOccasion, setSelectedOccasion] = useState(null)
   
   const occasions = [
-    { id: 'work', label: 'Work', icon: '◼' },
-    { id: 'date', label: 'Date Night', icon: '♥' },
-    { id: 'party', label: 'Party', icon: '✦' },
-    { id: 'casual', label: 'Casual', icon: '○' },
-    { id: 'brunch', label: 'Brunch', icon: '◎' },
-    { id: 'wedding', label: 'Wedding', icon: '◇' },
+    { id: 'work', label: 'Work' },
+    { id: 'date', label: 'Date' },
+    { id: 'party', label: 'Party' },
+    { id: 'casual', label: 'Casual' },
+    { id: 'brunch', label: 'Brunch' },
+    { id: 'formal', label: 'Formal' },
   ]
   
   const recentPlaces = [
@@ -365,24 +365,23 @@ function GenerateScreen({ goToScreen }) {
   
   return (
     <div className="screen generate">
-      {/* Header */}
+      {/* Header with gradient */}
       <div className="gen-header">
-        <p className="gen-greeting">Good evening, Sarah</p>
-        <h1 className="gen-title">Where are you<br/>headed today?</h1>
+        <p className="gen-label">Generate</p>
+        <h1 className="gen-title">Where are you<br/>going, Sarah?</h1>
+        <p className="gen-sub">We'll style the perfect outfit</p>
       </div>
       
-      {/* Search Box - Uber style */}
+      {/* Search Box */}
       <div className="gen-search-wrap">
         <div className="gen-search">
-          <div className="gen-search-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
           <input 
             type="text"
             className="gen-search-input"
-            placeholder="Search occasion or place..."
+            placeholder="Type an occasion..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
@@ -391,16 +390,25 @@ function GenerateScreen({ goToScreen }) {
       
       {/* Quick Occasions */}
       <div className="gen-occasions">
-        <p className="gen-section-label">Quick select</p>
-        <div className="gen-occasion-grid">
-          {occasions.map(o => (
+        <div className="gen-occasion-row">
+          {occasions.slice(0, 3).map(o => (
             <button 
               key={o.id}
-              className={`gen-occasion${selectedOccasion === o.id ? ' on' : ''}`}
+              className={`gen-pill${selectedOccasion === o.id ? ' on' : ''}`}
               onClick={() => setSelectedOccasion(o.id)}
             >
-              <span className="gen-occasion-icon">{o.icon}</span>
-              <span className="gen-occasion-label">{o.label}</span>
+              {o.label}
+            </button>
+          ))}
+        </div>
+        <div className="gen-occasion-row">
+          {occasions.slice(3).map(o => (
+            <button 
+              key={o.id}
+              className={`gen-pill${selectedOccasion === o.id ? ' on' : ''}`}
+              onClick={() => setSelectedOccasion(o.id)}
+            >
+              {o.label}
             </button>
           ))}
         </div>
@@ -409,28 +417,24 @@ function GenerateScreen({ goToScreen }) {
       {/* Recent */}
       <div className="gen-recent">
         <p className="gen-section-label">Recent</p>
-        <div className="gen-recent-list">
-          {recentPlaces.map((place, i) => (
-            <button key={i} className="gen-recent-item">
-              <div className="gen-recent-dot" />
-              <div className="gen-recent-info">
-                <span className="gen-recent-name">{place.name}</span>
-                <span className="gen-recent-time">{place.time}</span>
-              </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 18l6-6-6-6"/>
+        {recentPlaces.map((place, i) => (
+          <button key={i} className="gen-recent-item">
+            <div className="gen-recent-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
               </svg>
-            </button>
-          ))}
-        </div>
+            </div>
+            <div className="gen-recent-info">
+              <span className="gen-recent-name">{place.name}</span>
+              <span className="gen-recent-time">{place.time}</span>
+            </div>
+          </button>
+        ))}
       </div>
       
       {/* Generate CTA */}
       <button className="gen-cta">
-        <span>Generate Outfit</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+        Generate Outfit
       </button>
       
       <UnifiedNav active="generate" onNavigate={goToScreen} />
