@@ -5,8 +5,8 @@ const screens = [
   { id: 'home', label: 'Home' },
   { id: 'shop', label: 'Shop' },
   { id: 'closet', label: 'Closet' },
-  { id: 'moodboard', label: 'Moodboard' },
-  { id: 'runway', label: 'Runway' }
+  { id: 'runway', label: 'Runway' },
+  { id: 'moodboard', label: 'Moodboard' }
 ]
 
 const screenContent = {
@@ -103,8 +103,8 @@ export default function AppMockups() {
                     <HomeScreen goToScreen={goToScreen} />
                     <ShopScreen goToScreen={goToScreen} />
                     <ClosetScreen goToScreen={goToScreen} />
-                    <MoodboardScreen goToScreen={goToScreen} />
                     <RunwayScreen goToScreen={goToScreen} />
+                    <MoodboardScreen goToScreen={goToScreen} />
                   </div>
                 </div>
                 <div className="phone-bar" />
