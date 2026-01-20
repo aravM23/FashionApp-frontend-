@@ -1,5 +1,5 @@
 import './WaitlistModal.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -11,88 +11,56 @@ export default function WaitlistModal({ onClose }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(null)
-  const [checkingAuth, setCheckingAuth] = useState(true)
+  const processedRef = useRef(false)
 
   useEffect(() => {
-    const processAuth = async () => {
-      // Check if we already processed this session
-      const alreadyProcessed = sessionStorage.getItem('waitlist_processed');
-      if (alreadyProcessed) {
-        setCheckingAuth(false);
-        return;
-      }
-
-      // Check URL for OAuth callback tokens
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get('access_token');
+    // Check if URL has OAuth tokens (means we just came back from Google)
+    const hasTokens = window.location.hash.includes('access_token');
+    
+    if (hasTokens && !processedRef.current) {
+      processedRef.current = true;
+      setLoading(true);
       
-      if (accessToken) {
-        // Clear the hash from URL
-        window.history.replaceState(null, '', window.location.pathname);
-      }
-
-      // Only process if we were waiting for OAuth
-      const isPending = localStorage.getItem('waitlist_pending');
+      // Clear hash from URL
+      window.history.replaceState(null, '', window.location.pathname);
       
-      if (isPending || accessToken) {
+      // Wait a moment for Supabase to process the tokens
+      setTimeout(async () => {
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user?.email) {
-          // Mark as processed to prevent loops
-          sessionStorage.setItem('waitlist_processed', 'true');
-          localStorage.removeItem('waitlist_pending');
-          
-          // Add to waitlist
           await addToWaitlist(session.user.email);
-          
-          // Sign out immediately
           await supabase.auth.signOut();
+        } else {
+          setError('Authentication failed. Please try again.');
+          setLoading(false);
         }
-      }
-      
-      setCheckingAuth(false);
-    };
-
-    processAuth();
+      }, 500);
+    }
   }, []);
 
   const addToWaitlist = async (email) => {
-    setLoading(true);
-    setError(null);
-
     const cleanEmail = email.trim().toLowerCase();
 
-    // Insert into supabase waitlist
     const { error: dbError } = await supabase
       .from('waitlist')
       .insert([{ email: cleanEmail }]);
 
-    if (dbError) {
-      if (dbError.code === '23505') {
-        // Already on waitlist - still show success
-        setSuccess(true);
-        setLoading(false);
-        return;
-      } else {
-        setError('Something went wrong.');
-        setLoading(false);
-        return;
-      }
+    if (dbError && dbError.code !== '23505') {
+      setError('Something went wrong.');
+      setLoading(false);
+      return;
     }
 
-    // Insert into google sheets
+    // Add to Google Sheets
     try {
-      const res = await fetch(import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL, {
+      await fetch(import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: cleanEmail }),
       });
-
-      if (!res.ok) {
-        console.error('Sheets error:', res.status);
-      }
     } catch (err) {
-      console.error('Error adding to Sheets:', err);
+      console.error('Sheets error:', err);
     }
 
     setSuccess(true);
@@ -103,36 +71,20 @@ export default function WaitlistModal({ onClose }) {
     setLoading(true);
     setError(null);
     
-    // Clear any previous processed state
-    sessionStorage.removeItem('waitlist_processed');
-    
-    // Store flag so we know to process after redirect
-    localStorage.setItem('waitlist_pending', 'true');
-    
-    const redirectUrl = window.location.origin;
-    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: redirectUrl,
+        redirectTo: window.location.origin,
       }
     });
 
     if (error) {
       setError('Failed to connect with Google.');
       setLoading(false);
-      localStorage.removeItem('waitlist_pending');
     }
   };
 
-  const handleClose = () => {
-    // Clear processed state when closing
-    sessionStorage.removeItem('waitlist_processed');
-    localStorage.removeItem('waitlist_pending');
-    onClose();
-  };
-
-  if (checkingAuth) {
+  if (loading) {
     return (
       <div className="modal-backdrop">
         <div className="modal">
@@ -144,14 +96,14 @@ export default function WaitlistModal({ onClose }) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={success ? handleClose : undefined}>
+    <div className="modal-backdrop" onClick={success ? onClose : undefined}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         {success ? (
           <>
             <div className="success-icon">✓</div>
             <h3>You're in!</h3>
             <p className="success-text">We'll be in touch soon.</p>
-            <button className="close-btn" onClick={handleClose}>Done</button>
+            <button className="close-btn" onClick={onClose}>Done</button>
           </>
         ) : (
           <>
@@ -174,7 +126,6 @@ export default function WaitlistModal({ onClose }) {
               </button>
             </div>
 
-            {loading && <p className="loading-text">Connecting...</p>}
             {error && <p className="error">{error}</p>}
           </>
         )}
