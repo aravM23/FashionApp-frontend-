@@ -8,6 +8,17 @@ export default function WaitlistSection() {
   const ref = useRef(null)
   
   useEffect(() => {
+    // Check if returning from OAuth redirect
+    const isPending = localStorage.getItem('waitlist_pending');
+    const hasAuthTokens = window.location.hash.includes('access_token');
+    
+    if (isPending || hasAuthTokens) {
+      // Auto-open modal to complete the flow
+      setOpen(true);
+    }
+  }, []);
+  
+  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

@@ -16,6 +16,15 @@ export default function WaitlistModal({ onClose }) {
   // Check if user just authenticated via OAuth
   useEffect(() => {
     const checkSession = async () => {
+      // Check URL for OAuth callback tokens
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get('access_token');
+      
+      if (accessToken) {
+        // Clear the hash from URL without reload
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session?.user?.email) {
@@ -50,12 +59,17 @@ export default function WaitlistModal({ onClose }) {
 
     if (dbError) {
       if (dbError.code === '23505') {
-        setError("You're already on the waitlist.");
+        // Already on waitlist - still show success since they're verified
+        setSuccess(true);
+        setLoading(false);
+        await supabase.auth.signOut();
+        localStorage.removeItem('waitlist_pending');
+        return;
       } else {
         setError('Something went wrong.');
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-      return;
     }
 
     // Insert into google sheets
@@ -76,6 +90,9 @@ export default function WaitlistModal({ onClose }) {
     // Sign out after adding to waitlist (cleanup)
     await supabase.auth.signOut();
     
+    // Clear the pending flag
+    localStorage.removeItem('waitlist_pending');
+    
     setSuccess(true);
     setLoading(false);
   };
@@ -84,36 +101,46 @@ export default function WaitlistModal({ onClose }) {
     setLoading(true);
     setError(null);
     
+    // Store flag so we know to open modal after redirect
+    localStorage.setItem('waitlist_pending', 'true');
+    
+    // Use the current origin (works for both localhost and production)
+    const redirectUrl = window.location.origin;
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.href,
+        redirectTo: redirectUrl,
       }
     });
 
     if (error) {
       setError('Failed to connect with Google.');
       setLoading(false);
+      localStorage.removeItem('waitlist_pending');
     }
   };
 
   if (checkingAuth) {
     return (
-      <div className="modal-backdrop" onClick={onClose}>
-        <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-backdrop">
+        <div className="modal">
           <div className="loading-spinner"></div>
+          <p className="loading-text">Verifying...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop" onClick={success ? onClose : undefined}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         {success ? (
           <>
-            <h3>You're in.</h3>
+            <div className="success-icon">✓</div>
+            <h3>You're in!</h3>
             <p className="success-text">We'll be in touch soon.</p>
+            <button className="close-btn" onClick={onClose}>Done</button>
           </>
         ) : (
           <>
