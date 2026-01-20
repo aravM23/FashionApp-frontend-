@@ -14,29 +14,52 @@ export default function WaitlistModal({ onClose }) {
   const processedRef = useRef(false)
 
   useEffect(() => {
-    // Check if URL has OAuth tokens (means we just came back from Google)
-    const hasTokens = window.location.hash.includes('access_token');
-    
-    if (hasTokens && !processedRef.current) {
-      processedRef.current = true;
-      setLoading(true);
+    const handleAuth = async () => {
+      // Check if URL has OAuth tokens
+      const hasTokens = window.location.hash.includes('access_token');
       
-      // Clear hash from URL
-      window.history.replaceState(null, '', window.location.pathname);
-      
-      // Wait a moment for Supabase to process the tokens
-      setTimeout(async () => {
-        const { data: { session } } = await supabase.auth.getSession();
+      if (hasTokens && !processedRef.current) {
+        processedRef.current = true;
+        setLoading(true);
         
-        if (session?.user?.email) {
-          await addToWaitlist(session.user.email);
+        // Let Supabase process the tokens from the URL
+        // This will automatically set up the session
+        const { data, error: authError } = await supabase.auth.getSession();
+        
+        if (authError) {
+          console.error('Auth error:', authError);
+          setError('Authentication failed. Please try again.');
+          setLoading(false);
+          return;
+        }
+        
+        if (data?.session?.user?.email) {
+          // Clear hash from URL after Supabase processed it
+          window.history.replaceState(null, '', window.location.pathname);
+          
+          await addToWaitlist(data.session.user.email);
           await supabase.auth.signOut();
         } else {
           setError('Authentication failed. Please try again.');
           setLoading(false);
         }
-      }, 500);
-    }
+      }
+    };
+
+    handleAuth();
+    
+    // Also listen for auth state changes as backup
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user?.email && !processedRef.current) {
+        processedRef.current = true;
+        setLoading(true);
+        window.history.replaceState(null, '', window.location.pathname);
+        await addToWaitlist(session.user.email);
+        await supabase.auth.signOut();
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const addToWaitlist = async (email) => {
