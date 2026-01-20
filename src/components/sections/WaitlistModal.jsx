@@ -13,37 +13,47 @@ export default function WaitlistModal({ onClose }) {
   const [error, setError] = useState(null)
   const [checkingAuth, setCheckingAuth] = useState(true)
 
-  // Check if user just authenticated via OAuth
   useEffect(() => {
-    const checkSession = async () => {
+    const processAuth = async () => {
+      // Check if we already processed this session
+      const alreadyProcessed = sessionStorage.getItem('waitlist_processed');
+      if (alreadyProcessed) {
+        setCheckingAuth(false);
+        return;
+      }
+
       // Check URL for OAuth callback tokens
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const accessToken = hashParams.get('access_token');
       
       if (accessToken) {
-        // Clear the hash from URL without reload
+        // Clear the hash from URL
         window.history.replaceState(null, '', window.location.pathname);
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
+      // Only process if we were waiting for OAuth
+      const isPending = localStorage.getItem('waitlist_pending');
       
-      if (session?.user?.email) {
-        // User authenticated, add to waitlist
-        await addToWaitlist(session.user.email);
+      if (isPending || accessToken) {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user?.email) {
+          // Mark as processed to prevent loops
+          sessionStorage.setItem('waitlist_processed', 'true');
+          localStorage.removeItem('waitlist_pending');
+          
+          // Add to waitlist
+          await addToWaitlist(session.user.email);
+          
+          // Sign out immediately
+          await supabase.auth.signOut();
+        }
       }
+      
       setCheckingAuth(false);
     };
 
-    checkSession();
-
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user?.email) {
-        await addToWaitlist(session.user.email);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    processAuth();
   }, []);
 
   const addToWaitlist = async (email) => {
@@ -59,11 +69,9 @@ export default function WaitlistModal({ onClose }) {
 
     if (dbError) {
       if (dbError.code === '23505') {
-        // Already on waitlist - still show success since they're verified
+        // Already on waitlist - still show success
         setSuccess(true);
         setLoading(false);
-        await supabase.auth.signOut();
-        localStorage.removeItem('waitlist_pending');
         return;
       } else {
         setError('Something went wrong.');
@@ -87,12 +95,6 @@ export default function WaitlistModal({ onClose }) {
       console.error('Error adding to Sheets:', err);
     }
 
-    // Sign out after adding to waitlist (cleanup)
-    await supabase.auth.signOut();
-    
-    // Clear the pending flag
-    localStorage.removeItem('waitlist_pending');
-    
     setSuccess(true);
     setLoading(false);
   };
@@ -101,10 +103,12 @@ export default function WaitlistModal({ onClose }) {
     setLoading(true);
     setError(null);
     
-    // Store flag so we know to open modal after redirect
+    // Clear any previous processed state
+    sessionStorage.removeItem('waitlist_processed');
+    
+    // Store flag so we know to process after redirect
     localStorage.setItem('waitlist_pending', 'true');
     
-    // Use the current origin (works for both localhost and production)
     const redirectUrl = window.location.origin;
     
     const { error } = await supabase.auth.signInWithOAuth({
@@ -121,6 +125,13 @@ export default function WaitlistModal({ onClose }) {
     }
   };
 
+  const handleClose = () => {
+    // Clear processed state when closing
+    sessionStorage.removeItem('waitlist_processed');
+    localStorage.removeItem('waitlist_pending');
+    onClose();
+  };
+
   if (checkingAuth) {
     return (
       <div className="modal-backdrop">
@@ -133,14 +144,14 @@ export default function WaitlistModal({ onClose }) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={success ? onClose : undefined}>
+    <div className="modal-backdrop" onClick={success ? handleClose : undefined}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         {success ? (
           <>
             <div className="success-icon">✓</div>
             <h3>You're in!</h3>
             <p className="success-text">We'll be in touch soon.</p>
-            <button className="close-btn" onClick={onClose}>Done</button>
+            <button className="close-btn" onClick={handleClose}>Done</button>
           </>
         ) : (
           <>

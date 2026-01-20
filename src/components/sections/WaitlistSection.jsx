@@ -6,14 +6,19 @@ export default function WaitlistSection() {
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(false)
   const ref = useRef(null)
+  const checkedRef = useRef(false)
   
   useEffect(() => {
+    // Only check once on mount
+    if (checkedRef.current) return;
+    checkedRef.current = true;
+    
     // Check if returning from OAuth redirect
     const isPending = localStorage.getItem('waitlist_pending');
     const hasAuthTokens = window.location.hash.includes('access_token');
+    const alreadyProcessed = sessionStorage.getItem('waitlist_processed');
     
-    if (isPending || hasAuthTokens) {
-      // Auto-open modal to complete the flow
+    if ((isPending || hasAuthTokens) && !alreadyProcessed) {
       setOpen(true);
     }
   }, []);
