@@ -10,6 +10,7 @@ const supabase = createClient(
 export default function WaitlistModal({ onClose }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [alreadyOnList, setAlreadyOnList] = useState(false)
   const [error, setError] = useState(null)
   const processedRef = useRef(false)
 
@@ -69,13 +70,19 @@ export default function WaitlistModal({ onClose }) {
       .from('waitlist')
       .insert([{ email: cleanEmail }]);
 
-    if (dbError && dbError.code !== '23505') {
+    if (dbError) {
+      if (dbError.code === '23505') {
+        // Email already exists
+        setAlreadyOnList(true);
+        setLoading(false);
+        return;
+      }
       setError('Something went wrong.');
       setLoading(false);
       return;
     }
 
-    // Add to Google Sheets
+    // Add to Google Sheets (only for new signups)
     try {
       await fetch(import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
@@ -119,7 +126,7 @@ export default function WaitlistModal({ onClose }) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={success ? onClose : undefined}>
+    <div className="modal-backdrop" onClick={(success || alreadyOnList) ? onClose : undefined}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         {success ? (
           <>
@@ -127,6 +134,13 @@ export default function WaitlistModal({ onClose }) {
             <h3>You're in!</h3>
             <p className="success-text">We'll be in touch soon.</p>
             <button className="close-btn" onClick={onClose}>Done</button>
+          </>
+        ) : alreadyOnList ? (
+          <>
+            <div className="success-icon">🎉</div>
+            <h3>You're already on the list!</h3>
+            <p className="success-text">We know you're excited, don't worry! You'll be one of the first to get access to Oro.</p>
+            <button className="close-btn" onClick={onClose}>Got it</button>
           </>
         ) : (
           <>
